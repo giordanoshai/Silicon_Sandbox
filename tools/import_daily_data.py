@@ -18,8 +18,9 @@ sys.stderr = io.TextIOWrapper(sys.stderr.buffer, encoding='utf-8')
 
 load_dotenv()
 
-# 基础文件目录定位
-BASE_DIR = os.path.dirname(os.path.abspath(__file__))
+# 基础文件目录定位 - 升级为识别根目录 (tools/ 的父级)
+CURRENT_DIR = os.path.dirname(os.path.abspath(__file__))
+BASE_DIR = os.path.dirname(CURRENT_DIR)
 sys.path.append(BASE_DIR)
 
 from database.db_manager import init_db, insert_daily_record, insert_model_metrics, get_available_dates, DB_PATH, get_model_history
@@ -49,13 +50,18 @@ def main():
     parser.add_argument("--day", type=int, default=None, help="手动指定项目阶段天数 (例如 12)，默认自增")
     
     args = parser.parse_args()
-    json_path = os.path.join(BASE_DIR, args.json)
     
+    # 智能解析 JSON 路径：如果是单纯文件名，默认从 .scratch 目录中寻找，保持根目录极致整洁
+    if not ("/" in args.json or "\\" in args.json):
+        json_path = os.path.join(BASE_DIR, ".scratch", args.json)
+    else:
+        json_path = os.path.abspath(args.json)
+        
     # 0. 检验 JSON 数据文件是否存在
     if not os.path.exists(json_path):
-        print(f"❌ 错误: 未能在项目根目录找到数据导入文件: {json_path}")
+        print(f"❌ 错误: 未能在项目目录中找到数据导入文件: {json_path}")
         print(f"💡 提示: 请在该位置放置一个包含 8 大模型每日物理指标的 JSON 数据。")
-        print(f"     我们已在同目录下为您生成了一个样本模板 [import_today_sample.json]，您可以直接参考修改！")
+        print(f"     我们已在 .scratch/ 目录下为您生成了一个样本模板 [.scratch/import_today_sample.json]，您可以直接参考修改！")
         generate_sample_json()
         sys.exit(1)
         
@@ -144,12 +150,12 @@ def main():
                 
         insert_model_metrics(m_data)
 
-    # 📊 自动将全局汇总图 [植物汇总.png] 复制归档至 logs/{date_str}/summary.png
-    global_summary_img = os.path.join(BASE_DIR, "植物汇总.png")
+    # 📊 自动将全局汇总图从 .scratch 目录归档至 logs/{date_str}/summary.png
+    global_summary_img = os.path.join(BASE_DIR, ".scratch", "植物汇总.png")
     if os.path.exists(global_summary_img):
         dest_summary_img = os.path.join(day_log_dir, "summary.png")
         shutil.copy(global_summary_img, dest_summary_img)
-        print(f"📊 自动将全局汇总图 [植物汇总.png] 复制归档至 logs/{date_str}/summary.png")
+        print(f"📊 自动将全局汇总图 [.scratch/植物汇总.png] 复制归档至 logs/{date_str}/summary.png")
         
     # 6. 获取得分排行并自动起草裁判长点评与配音
     if SOCIAL_MEDIA_AVAILABLE:
@@ -244,8 +250,8 @@ def main():
     print(f"==================================================")
 
 def generate_sample_json():
-    """在项目根目录下生成一个数据导入 JSON 样本模板"""
-    sample_path = os.path.join(BASE_DIR, "import_today_sample.json")
+    """在 .scratch 目录下生成一个数据导入 JSON 样本模板"""
+    sample_path = os.path.join(BASE_DIR, ".scratch", "import_today_sample.json")
     if os.path.exists(sample_path):
         return
         
@@ -263,12 +269,12 @@ def generate_sample_json():
                 "unpruned_sucker": False,
                 "worm_holes": 0,
                 "leaf_yellowing": False,
-                "leggy_growth": false,
-                "physical_damage": false,
+                "leggy_growth": False,
+                "physical_damage": False,
                 "stem_thickened": True,
-                "first_flower_bud": false,
-                "fruiting": false,
-                "healthy_new_leaves": true
+                "first_flower_bud": False,
+                "fruiting": False,
+                "healthy_new_leaves": True
             },
             "Claude": {
                 "height": 8.12,
@@ -276,22 +282,22 @@ def generate_sample_json():
                 "leaves_count": 4,
                 "side_buds": 0,
                 "snail_attack": True,
-                "unpruned_sucker": false,
+                "unpruned_sucker": False,
                 "worm_holes": 1,
                 "leaf_yellowing": False,
-                "leggy_growth": false,
-                "physical_damage": false,
-                "stem_thickened": false,
-                "first_flower_bud": false,
-                "fruiting": false,
-                "healthy_new_leaves": true
+                "leggy_growth": False,
+                "physical_damage": False,
+                "stem_thickened": False,
+                "first_flower_bud": False,
+                "fruiting": False,
+                "healthy_new_leaves": True
             }
         }
     }
     
     with open(sample_path, "w", encoding="utf-8") as f:
         json.dump(sample_data, f, indent=2, ensure_ascii=False)
-    print(f"💡 [样本模板已生成]: 在根目录创建了样本文件 [import_today_sample.json](file:///{sample_path})，您可以参考编写您的导入数据！")
+    print(f"💡 [样本模板已生成]: 在 .scratch 目录创建了样本文件 [.scratch/import_today_sample.json](file:///{sample_path})，您可以参考编写您的导入数据！")
 
 def update_import_changelog(date_str: str):
     """一键流水线数据物理落地后，强制自动增量更新 Changelog.md"""
@@ -305,7 +311,7 @@ def update_import_changelog(date_str: str):
 ## 时间：{utc_time_str} (UTC)
 
 ### 类型：[Feature]
-- **核心改动**：运行了 `import_daily_data.py` 导入工具，将用户自定义的 {date_str} 物理指标和模型生长参数精准导入数据库。
+- **核心改动**：运行了 `import_daily_data.py` 导入工具，将用户自定义的 {date_str} 物理指标和模型生长参数精密导入数据库。
 - **系统影响**：完成新数据物理落地入库，拉起自动化多卡片渲染截图和 Moviepy 快节奏短视频无缝融合，成功导出当日战报多媒体，极大扩展了系统在真实物理场景下的数据录入效率。
 
 """

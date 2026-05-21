@@ -10,6 +10,11 @@ REQUIRED_MODELS = [
     "Claude", "Qwen 3.6", "Gemini 3.5", "ChatGPT"
 ]
 
+# 基础文件目录定位 - 升级为识别根目录 (tools/ 的父级)
+CURRENT_DIR = os.path.dirname(os.path.abspath(__file__))
+BASE_DIR = os.path.dirname(CURRENT_DIR)
+sys.path.append(BASE_DIR)
+
 def extract_json_blocks(text):
     """
     使用极其健壮的方法在长文本中提取所有合法的 JSON 对象。
@@ -34,7 +39,6 @@ def extract_json_blocks(text):
             pass
             
     # 3. 扫描文本中所有的花括号结构（通过括号匹配寻找最外层 {}）
-    # 遍历文本，当括号计数器匹配到最外层花括号时尝试进行解析
     stack = []
     start_idx = -1
     for idx, char in enumerate(text):
@@ -56,14 +60,18 @@ def extract_json_blocks(text):
     return candidates
 
 def main():
-    base_dir = os.path.dirname(os.path.abspath(__file__))
-    replies_file = os.path.join(base_dir, "ai_replies.txt")
-    output_file = os.path.join(base_dir, "import_today.json")
+    replies_file = os.path.join(BASE_DIR, ".scratch", "ai_replies.txt")
+    output_file = os.path.join(BASE_DIR, ".scratch", "import_today.json")
     
     print("==================================================")
     print("🪐 硅基沙盒 (Silicon Sandbox) - AI 囚徒回复一键合并工具")
     print("==================================================")
     
+    # 如果 .scratch 目录不存在，先创建它
+    scratch_dir = os.path.dirname(replies_file)
+    if not os.path.exists(scratch_dir):
+        os.makedirs(scratch_dir)
+        
     # 如果 replies_file 不存在，自动创建并提示
     if not os.path.exists(replies_file):
         with open(replies_file, "w", encoding="utf-8") as f:
@@ -72,7 +80,7 @@ def main():
             f.write("# 👉 请在此处粘贴 8 大模型返回的对话回复或直接贴出 JSON 代码块。\n")
             f.write("# 👉 粘贴完毕并保存该文件后，请重新运行本脚本进行一键解析与拼装。\n")
             f.write("# --------------------------------------------------\n\n")
-        print(f"💡 首次运行提示：已在项目根目录下为您创建了临时数据收集文件 [ai_replies.txt]")
+        print(f"💡 首次运行提示：已在 .scratch/ 目录下为您创建了临时数据收集文件 [.scratch/ai_replies.txt]")
         print(f"👉 请依次把 8 大模型的对话回复粘入该文件中，保存后重新运行本脚本即可！")
         sys.exit(0)
         
@@ -81,8 +89,8 @@ def main():
         
     # 如果内容为空或仅包含默认注释
     if not content.replace("#", "").strip() or len(content.strip()) < 150:
-        print(f"⚠️ [ai_replies.txt] 似乎是空的，或者您还没有粘贴足够的 AI 回复内容。")
-        print(f"👉 请打开项目根目录下的 [ai_replies.txt](file:///{replies_file}) 粘贴 8 个 AI 大模型的回复，然后重新运行。")
+        print(f"⚠️ [.scratch/ai_replies.txt] 似乎是空的，或者您还没有粘贴足够的 AI 回复内容。")
+        print(f"👉 请打开 [.scratch/ai_replies.txt](file:///{replies_file}) 粘贴 8 个 AI 大模型的回复，然后重新运行。")
         sys.exit(0)
         
     # 解析抓取到的所有 JSON 对象
@@ -117,7 +125,7 @@ def main():
             if "weather" in data:
                 global_weather = data.get("weather")
                 
-    print(f"🔍 正在扫描 [ai_replies.txt]...")
+    print(f"🔍 正在扫描 [.scratch/ai_replies.txt]...")
     print(f"📊 已成功识别并解析 {len(parsed_models)} / {len(REQUIRED_MODELS)} 个模型的汇报数据。")
     if global_summary:
         print(f"🎬 已成功识别并解析今日全局总结：{global_summary[:30]}...")
@@ -166,14 +174,14 @@ def main():
                 del m_data["model_name"]
             merged_data["models"][m] = m_data
             
-    # 写入 import_today.json
+    # 写入 .scratch/import_today.json
     with open(output_file, "w", encoding="utf-8") as f:
         json.dump(merged_data, f, indent=2, ensure_ascii=False)
         
-    print(f"\n🎉 恭喜！一键合并完成！数据已保存至：[import_today.json](file:///{output_file})")
+    print(f"\n🎉 恭喜！一键合并完成！数据已保存至：[.scratch/import_today.json](file:///{output_file})")
     print(f"==================================================")
     print(f"👉 接下来，请在终端执行以下指令来运行流水线并生成短视频大屏：")
-    print(f"   python import_daily_data.py --json import_today.json")
+    print(f"   python tools/import_daily_data.py --json import_today.json")
     print(f"==================================================")
 
 if __name__ == "__main__":

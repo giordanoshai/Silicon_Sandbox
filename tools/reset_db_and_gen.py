@@ -1,9 +1,11 @@
 import os
 import sys
 
-# 定位基础项目目录
-BASE_DIR = os.path.dirname(os.path.abspath(__file__))
+# 定位基础项目目录 - 升级为识别根目录 (tools/ 的父级)
+CURRENT_DIR = os.path.dirname(os.path.abspath(__file__))
+BASE_DIR = os.path.dirname(CURRENT_DIR)
 sys.path.append(BASE_DIR)
+sys.path.append(CURRENT_DIR) # 同时把 tools/ 加入环境，方便导入 gen_today_prompts
 
 db_path = os.path.join(BASE_DIR, "database", "sandbox.db")
 
