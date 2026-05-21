@@ -1,0 +1,40 @@
+# =========================================================================
+# 🪐 Silicon Sandbox - 开源项目 Git 忽略配置文件 (.gitignore)
+# =========================================================================
+
+# 1. 敏感环境与本地开发工具
+.env
+.venv/
+venv/
+env/
+__pycache__/
+*.pyc
+*.pyo
+*.pyd
+.pytest_cache/
+.vscode/
+.idea/
+
+# 2. 本地数据库实例 (保留 database/db_manager.py，但忽略运行产生的 db 实体)
+database/*.db
+
+# 3. 社交媒体自动合成流系统代码 (闭源保留，不 PUSH 至 GitHub)
+audio_generator.py
+video_creator.py
+pipeline.py
+
+# 4. 日志与临时运行垃圾
+*.log
+logs/**/*.log
+
+# 5. 运行产物与历史照片物理隔离 (方案 A - 全量保留历史特写照片)
+# 允许所有的 .jpg 植物每日特写照片通过 Git 进行全量跟踪与 PUSH，以便开源展示完整的生长历史
+# 仅精确忽略视频、音频以及视频合成卡片截图等社交媒体产物
+logs/**/*.mp4
+logs/**/*.mp3
+logs/**/card_*.png
+logs/**/card_summary.png
+
+# 6. 其他系统与临时文件
+.DS_Store
+Thumbs.db

@@ -1,0 +1,1058 @@
+<!DOCTYPE html>
+<html lang="zh-CN">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>🪐 Silicon Sandbox - 赛博种植监控主控制台</title>
+    <!-- Google Fonts 引入 Outfit 与 Inter 字体 -->
+    <link href="https://fonts.googleapis.com/css2?family=Outfit:wght@300;400;600;800&family=Inter:wght@300;400;600;700&display=swap" rel="stylesheet">
+    <style>
+        :root {
+            --bg-base: #060913;
+            --bg-surface: #0c1224;
+            --bg-card: #121a36;
+            --border-glow: rgba(56, 189, 248, 0.15);
+            --text-primary: #f8fafc;
+            --text-secondary: #94a3b8;
+            --accent-blue: #38bdf8;
+            --accent-purple: #a855f7;
+            --accent-green: #22c55e;
+            --accent-red: #ef4444;
+            
+            /* 八个模型的 HSL 霓虹色定义 */
+            --glow-green: 0, 100%, 50%;
+            --glow-orange: 30, 100%, 50%;
+            --glow-white: 0, 0%, 100%;
+            --glow-red: 0, 100%, 50%;
+            --glow-pink: 330, 100%, 65%;
+            --glow-blue: 210, 100%, 50%;
+            --glow-purple: 270, 100%, 60%;
+            --glow-black: 240, 10%, 20%;
+        }
+
+        *, *::before, *::after {
+            box-sizing: border-box;
+            transition: background-color 0.3s, border-color 0.3s;
+        }
+
+        body {
+            font-family: 'Outfit', 'Inter', -apple-system, BlinkMacSystemFont, "Segoe UI", sans-serif;
+            color: var(--text-primary);
+            background-color: var(--bg-base);
+            background-image: radial-gradient(circle at 50% 50%, #151e3f 0%, #060913 80%);
+            margin: 0;
+            padding: 20px;
+            min-height: 100vh;
+            line-height: 1.5;
+        }
+
+        /* 顶部横幅 - 赛博渐变 */
+        .header {
+            background: linear-gradient(135deg, rgba(12, 18, 36, 0.8) 0%, rgba(6, 9, 19, 0.9) 100%);
+            border: 1px solid rgba(56, 189, 248, 0.25);
+            box-shadow: 0 0 25px rgba(56, 189, 248, 0.1);
+            padding: 15px 25px;
+            border-radius: 12px;
+            margin-bottom: 20px;
+            backdrop-filter: blur(10px);
+            display: flex;
+            justify-content: space-between;
+            align-items: center;
+        }
+
+        .header-left h1 {
+            font-size: 20pt;
+            font-weight: 800;
+            background: linear-gradient(to right, #38bdf8, #818cf8, #a855f7);
+            -webkit-background-clip: text;
+            -webkit-text-fill-color: transparent;
+            margin: 0;
+            letter-spacing: 1px;
+            display: flex;
+            align-items: center;
+            gap: 10px;
+        }
+
+        .header-meta {
+            font-size: 9.5pt;
+            color: var(--text-secondary);
+            margin-top: 5px;
+            font-weight: 300;
+        }
+
+        .header-right {
+            display: flex;
+            align-items: center;
+            gap: 10px;
+        }
+
+        .log-selector-wrapper {
+            position: relative;
+        }
+
+        .log-selector {
+            background: #121a36;
+            color: #38bdf8;
+            border: 1px solid #334155;
+            padding: 8px 16px;
+            border-radius: 8px;
+            font-size: 10pt;
+            font-weight: 600;
+            outline: none;
+            cursor: pointer;
+            box-shadow: 0 0 10px rgba(56, 189, 248, 0.15);
+            appearance: none;
+            -webkit-appearance: none;
+            padding-right: 35px;
+        }
+
+        .log-selector-wrapper::after {
+            content: "▼";
+            font-size: 8pt;
+            color: #38bdf8;
+            position: absolute;
+            right: 12px;
+            top: 50%;
+            transform: translateY(-50%);
+            pointer-events: none;
+        }
+
+        /* 裁判长总结卡片 - 玻璃拟态与紫色霓虹 */
+        .summary-card {
+            background: linear-gradient(135deg, rgba(26, 21, 62, 0.65) 0%, rgba(12, 18, 36, 0.8) 100%);
+            border: 1px solid rgba(168, 85, 247, 0.4);
+            box-shadow: 0 0 30px rgba(168, 85, 247, 0.15);
+            border-radius: 12px;
+            padding: 20px;
+            margin-bottom: 25px;
+            backdrop-filter: blur(10px);
+            position: relative;
+            overflow: hidden;
+        }
+
+        .summary-card::before {
+            content: "";
+            position: absolute;
+            top: 0;
+            left: 0;
+            width: 4px;
+            height: 100%;
+            background: linear-gradient(to bottom, #a855f7, #6366f1);
+        }
+
+        .summary-title {
+            font-size: 13pt;
+            font-weight: 800;
+            color: #c084fc;
+            margin-bottom: 10px;
+            display: flex;
+            justify-content: space-between;
+            align-items: center;
+        }
+
+        .summary-text {
+            font-size: 10.5pt;
+            color: #e2e8f0;
+            line-height: 1.6;
+            margin-bottom: 12px;
+        }
+
+        /* 吐槽音频播放控制器 */
+        .audio-container {
+            display: flex;
+            align-items: center;
+            gap: 15px;
+            background: rgba(15, 23, 42, 0.6);
+            border: 1px dashed rgba(168, 85, 247, 0.3);
+            border-radius: 8px;
+            padding: 10px 15px;
+            margin-top: 10px;
+        }
+
+        .audio-player-wrapper {
+            flex-grow: 1;
+        }
+
+        audio {
+            width: 100%;
+            height: 32px;
+            outline: none;
+        }
+
+        /* 八大模型矩阵 */
+        .grid-container {
+            display: grid;
+            grid-template-columns: repeat(4, 1fr);
+            gap: 20px;
+        }
+
+        /* AI 卡片样式 */
+        .card {
+            background: var(--bg-surface);
+            border: 1px solid rgba(255, 255, 255, 0.05);
+            border-radius: 12px;
+            padding: 15px;
+            display: flex;
+            flex-direction: column;
+            position: relative;
+            overflow: hidden;
+            box-shadow: 0 10px 30px rgba(0, 0, 0, 0.5);
+            transition: transform 0.3s ease, box-shadow 0.3s ease;
+        }
+
+        .card:hover {
+            transform: translateY(-4px);
+        }
+
+        /* 为各色彩卡片定制的霓虹发光样式 */
+        .card.color-green { border-color: rgba(34, 197, 94, 0.25); box-shadow: 0 0 20px rgba(34, 197, 94, 0.08); }
+        .card.color-orange { border-color: rgba(249, 115, 22, 0.25); box-shadow: 0 0 20px rgba(249, 115, 22, 0.08); }
+        .card.color-white { border-color: rgba(255, 255, 255, 0.2); box-shadow: 0 0 20px rgba(255, 255, 255, 0.05); }
+        .card.color-red { border-color: rgba(239, 68, 68, 0.25); box-shadow: 0 0 20px rgba(239, 68, 68, 0.08); }
+        .card.color-pink { border-color: rgba(244, 63, 94, 0.25); box-shadow: 0 0 20px rgba(244, 63, 94, 0.08); }
+        .card.color-blue { border-color: rgba(59, 130, 246, 0.25); box-shadow: 0 0 20px rgba(59, 130, 246, 0.08); }
+        .card.color-purple { border-color: rgba(168, 85, 247, 0.25); box-shadow: 0 0 20px rgba(168, 85, 247, 0.08); }
+        .card.color-black { border-color: rgba(51, 65, 85, 0.4); box-shadow: 0 0 20px rgba(0, 0, 0, 0.2); }
+
+        .card-header {
+            font-size: 11.5pt;
+            font-weight: 800;
+            display: flex;
+            justify-content: space-between;
+            align-items: center;
+            border-bottom: 1px solid rgba(255, 255, 255, 0.08);
+            padding-bottom: 8px;
+            margin-bottom: 10px;
+        }
+
+        .model-name {
+            display: flex;
+            align-items: center;
+            gap: 6px;
+        }
+
+        .badges-wrapper {
+            display: flex;
+            gap: 5px;
+        }
+
+        .badge {
+            display: inline-block;
+            padding: 2px 6px;
+            border-radius: 4px;
+            font-size: 8.5pt;
+            font-weight: 700;
+        }
+
+        .badge-score { background: #1e3a8a; color: #93c5fd; border: 1px solid rgba(147, 197, 253, 0.3); }
+        .badge-reward { background: #064e3b; color: #6ee7b7; border: 1px solid rgba(110, 231, 183, 0.3); }
+        .badge-penalty { background: #7f1d1d; color: #fca5a5; border: 1px solid rgba(252, 165, 165, 0.3); }
+
+        /* 卡片内容排版：分左右两部分，左侧数据文本，右侧特写图片 */
+        .card-body {
+            display: flex;
+            gap: 12px;
+            flex-grow: 1;
+        }
+
+        .card-body-left {
+            width: 60%;
+            display: flex;
+            flex-direction: column;
+            gap: 8px;
+        }
+
+        .card-body-right {
+            width: 40%;
+            display: flex;
+            flex-direction: column;
+            align-items: stretch;
+        }
+
+        .section-label {
+            font-size: 8pt;
+            font-weight: 800;
+            color: var(--text-secondary);
+            text-transform: uppercase;
+            letter-spacing: 0.5px;
+            margin-bottom: 2px;
+        }
+
+        .section-box {
+            background: rgba(6, 9, 19, 0.5);
+            border: 1px solid rgba(255, 255, 255, 0.04);
+            border-radius: 6px;
+            padding: 6px 8px;
+            font-size: 8.5pt;
+            color: #cbd5e1;
+            line-height: 1.4;
+            max-height: 80px;
+            overflow-y: auto;
+        }
+
+        .section-box.action-box {
+            border-left: 3px solid var(--accent-blue);
+            background: rgba(56, 189, 248, 0.03);
+        }
+
+        .section-box.reward-box {
+            font-style: italic;
+        }
+
+        /* 顶部特写物理照片 */
+        .photo-wrapper {
+            position: relative;
+            width: 100%;
+            height: 120px;
+            border-radius: 8px;
+            overflow: hidden;
+            border: 1px solid rgba(255, 255, 255, 0.08);
+            cursor: zoom-in;
+            background: #090d16;
+        }
+
+        .photo-wrapper img {
+            width: 100%;
+            height: 100%;
+            object-fit: cover;
+            transition: transform 0.3s;
+        }
+
+        .photo-wrapper:hover img {
+            transform: scale(1.08);
+        }
+
+        .photo-hint {
+            position: absolute;
+            bottom: 4px;
+            right: 4px;
+            background: rgba(0, 0, 0, 0.7);
+            color: #38bdf8;
+            font-size: 7pt;
+            font-weight: 800;
+            padding: 2px 4px;
+            border-radius: 3px;
+            border: 1px solid rgba(56, 189, 248, 0.3);
+            pointer-events: none;
+        }
+
+        /* WoW 发光进度图表及全宽同期对比面板 */
+        .wow-full-container {
+            margin-top: 12px;
+            border-top: 1px solid rgba(255, 255, 255, 0.08);
+            padding-top: 10px;
+            display: grid;
+            grid-template-columns: repeat(2, 1fr);
+            gap: 10px 14px;
+        }
+
+        .wow-bar-item-v2 {
+            display: flex;
+            flex-direction: column;
+            gap: 4px;
+        }
+
+        .wow-meta-info {
+            display: flex;
+            justify-content: space-between;
+            align-items: center;
+            font-size: 8.5pt;
+        }
+
+        .wow-label {
+            color: var(--text-primary);
+            font-weight: 600;
+        }
+
+        .wow-val-text {
+            font-weight: 800;
+        }
+
+        .wow-val-text.text-up {
+            color: #38bdf8;
+            text-shadow: 0 0 4px rgba(56, 189, 248, 0.3);
+        }
+
+        .wow-val-text.text-down {
+            color: #ef4444;
+            text-shadow: 0 0 4px rgba(239, 68, 68, 0.3);
+        }
+
+        .wow-bar-group {
+            position: relative;
+            display: flex;
+            flex-direction: column;
+            gap: 3px; /* 粗细线之间的间距 */
+            background: rgba(30, 41, 59, 0.3);
+            border-radius: 4px;
+            padding: 3px;
+            border: 1px solid rgba(255, 255, 255, 0.03);
+        }
+
+        /* 粗进度条 (当前值) */
+        .wow-bar-outer.current-bar {
+            height: 6px;
+            background: #0f172a;
+            border-radius: 3px;
+            overflow: hidden;
+            width: 100%;
+        }
+
+        .wow-bar-inner {
+            height: 100%;
+            border-radius: 3px;
+            transition: width 0.5s ease-out;
+        }
+
+        /* 细进度条 (上周同期) */
+        .wow-bar-outer.prev-bar {
+            height: 2.5px;
+            background: #0f172a;
+            border-radius: 1.25px;
+            overflow: hidden;
+            width: 100%;
+        }
+
+        .prev-inner {
+            height: 100%;
+            background: rgba(148, 163, 184, 0.45); /* 优雅的半透明灰色线 */
+            border-radius: 1.25px;
+            transition: width 0.5s ease-out;
+            box-shadow: 0 0 3px rgba(148, 163, 184, 0.2);
+        }
+
+        .wow-prev-label {
+            font-size: 7.5pt;
+            color: var(--text-secondary);
+            font-weight: 400;
+            text-align: right;
+            opacity: 0.8;
+        }
+
+        /* 统一的淡入淡出动画，让无刷新加载极其平滑 */
+        .fade-transition {
+            transition: opacity 0.25s ease-in-out;
+        }
+        .fade-out {
+            opacity: 0.15;
+        }
+
+        /* --- 玻璃拟态超高阶 Lightbox Modal 弹窗设计 --- */
+        .lightbox-modal {
+            position: fixed;
+            top: 0;
+            left: 0;
+            width: 100%;
+            height: 100%;
+            background: rgba(5, 7, 16, 0.85);
+            backdrop-filter: blur(12px);
+            -webkit-backdrop-filter: blur(12px);
+            z-index: 9999;
+            display: none;
+            justify-content: center;
+            align-items: center;
+            opacity: 0;
+            transition: opacity 0.3s ease;
+        }
+
+        .lightbox-modal.active {
+            display: flex;
+            opacity: 1;
+        }
+
+        .lightbox-content-wrapper {
+            position: relative;
+            background: rgba(18, 26, 54, 0.4);
+            border: 1px solid rgba(56, 189, 248, 0.3);
+            box-shadow: 0 0 50px rgba(56, 189, 248, 0.2);
+            border-radius: 16px;
+            padding: 20px;
+            width: 85%;
+            max-width: 900px;
+            height: 80vh;
+            display: flex;
+            flex-direction: column;
+            overflow: hidden;
+        }
+
+        .lightbox-header {
+            display: flex;
+            justify-content: space-between;
+            align-items: center;
+            border-bottom: 1px solid rgba(255, 255, 255, 0.1);
+            padding-bottom: 12px;
+            margin-bottom: 15px;
+        }
+
+        .lightbox-title {
+            font-size: 14pt;
+            font-weight: 800;
+            color: #38bdf8;
+        }
+
+        .lightbox-close-btn {
+            background: none;
+            border: none;
+            color: var(--text-secondary);
+            font-size: 18pt;
+            font-weight: bold;
+            cursor: pointer;
+            padding: 0;
+            line-height: 1;
+            transition: color 0.2s;
+        }
+
+        .lightbox-close-btn:hover {
+            color: var(--accent-red);
+        }
+
+        /* 电子缩放与拖拽视窗 */
+        .zoom-viewport {
+            flex-grow: 1;
+            position: relative;
+            overflow: hidden;
+            border-radius: 8px;
+            background: #030712;
+            cursor: grab;
+            border: 1px solid rgba(255, 255, 255, 0.05);
+        }
+
+        .zoom-viewport:active {
+            cursor: grabbing;
+        }
+
+        .zoom-image-container {
+            position: absolute;
+            left: 0;
+            top: 0;
+            width: 100%;
+            height: 100%;
+            display: flex;
+            justify-content: center;
+            align-items: center;
+            transform-origin: center center;
+        }
+
+        .zoom-viewport img {
+            max-width: 100%;
+            max-height: 100%;
+            object-fit: contain;
+            user-select: none;
+            -webkit-user-drag: none;
+        }
+
+        /* 科幻测量线层级 */
+        .hud-overlay {
+            position: absolute;
+            top: 0;
+            left: 0;
+            width: 100%;
+            height: 100%;
+            pointer-events: none;
+            border: 1px solid rgba(56, 189, 248, 0.1);
+        }
+
+        /* 电子十字准星 */
+        .hud-crosshair {
+            position: absolute;
+            left: 50%;
+            top: 50%;
+            width: 40px;
+            height: 40px;
+            border: 1px solid rgba(56, 189, 248, 0.3);
+            border-radius: 50%;
+            transform: translate(-50%, -50%);
+        }
+        .hud-crosshair::before, .hud-crosshair::after {
+            content: "";
+            position: absolute;
+            background: rgba(56, 189, 248, 0.4);
+        }
+        .hud-crosshair::before { left: -10px; top: 20px; width: 60px; height: 1px; }
+        .hud-crosshair::after { left: 20px; top: -10px; width: 1px; height: 60px; }
+
+        .hud-corner {
+            position: absolute;
+            width: 15px;
+            height: 15px;
+            border: 2px solid #38bdf8;
+        }
+        .hud-top-left { top: 10px; left: 10px; border-right: none; border-bottom: none; }
+        .hud-top-right { top: 10px; right: 10px; border-left: none; border-bottom: none; }
+        .hud-bottom-left { bottom: 10px; left: 10px; border-right: none; border-top: none; }
+        .hud-bottom-right { bottom: 10px; right: 10px; border-left: none; border-top: none; }
+
+        .hud-scale-bar {
+            position: absolute;
+            bottom: 20px;
+            left: 20px;
+            background: rgba(0,0,0,0.6);
+            border: 1px solid rgba(56, 189, 248, 0.4);
+            padding: 4px 8px;
+            border-radius: 4px;
+            font-size: 8pt;
+            color: #38bdf8;
+            font-weight: 800;
+        }
+
+        .lightbox-footer {
+            margin-top: 15px;
+            display: flex;
+            justify-content: space-between;
+            font-size: 9pt;
+            color: var(--text-secondary);
+            border-top: 1px solid rgba(255, 255, 255, 0.05);
+            padding-top: 12px;
+        }
+
+        /* 媒体查询 */
+        @media (max-width: 1200px) {
+            .grid-container {
+                grid-template-columns: repeat(2, 1fr);
+            }
+        }
+        @media (max-width: 768px) {
+            .grid-container {
+                grid-template-columns: 1fr;
+            }
+            .header {
+                flex-direction: column;
+                align-items: stretch;
+                gap: 15px;
+            }
+        }
+    </style>
+</head>
+<body>
+
+    <!-- 顶部横幅 -->
+    <div class="header">
+        <div class="header-left">
+            <h1 id="page-title">🪐 Silicon Sandbox 赛博植物监控中心</h1>
+            <div class="header-meta" id="header-meta-text">
+                当前天气：-- | 项目运行阶段：-- | 数据架构：SQLite3 + RL Reward System
+            </div>
+        </div>
+        <div class="header-right">
+            <span style="font-size: 9.5pt; color: var(--text-secondary); font-weight: 600;">历史日志:</span>
+            <div class="log-selector-wrapper">
+                <select class="log-selector" id="date-select" onchange="loadDailyReport(this.value)">
+                    <!-- 由后端和 JS 动态填充 -->
+                </select>
+            </div>
+        </div>
+    </div>
+
+    <!-- 裁判长中枢核心总结 -->
+    <div class="summary-card" id="summary-card">
+        <div class="summary-title">
+            <span>🎬 裁判长中枢核心总结</span>
+            <span style="font-size: 8.5pt; color: #a855f7; background: rgba(168, 85, 247, 0.15); padding: 2px 8px; border-radius: 4px; border: 1px solid rgba(168, 85, 247, 0.3)">ElevenLabs 吐槽配音已同步</span>
+        </div>
+        <div class="summary-text" id="summary-main-text">
+            正在载入裁判长当日点评大局数据...
+        </div>
+        
+        <!-- 音频控制器 -->
+        <div class="audio-container">
+            <span style="font-size: 9pt; color: #c084fc; font-weight: 800; display: flex; align-items: center; gap: 5px;">
+                🔊 吐槽播报:
+            </span>
+            <div class="audio-player-wrapper">
+                <audio id="tts-audio" controls src="">
+                    您的浏览器不支持 HTML5 音频播放器。
+                </audio>
+            </div>
+        </div>
+    </div>
+
+    <!-- 8个AI大模型卡片布局 -->
+    <div class="grid-container" id="cards-container">
+        <!-- 8 个卡片由 JavaScript 根据 Ajax 数据自动动态渲染，保障完全的无刷新单页切换体验 -->
+    </div>
+
+    <!-- --- 玻璃拟态电子缩放 Lightbox 弹窗 --- -->
+    <div class="lightbox-modal" id="lightbox-modal" onclick="closeLightbox(event)">
+        <div class="lightbox-content-wrapper" onclick="event.stopPropagation()">
+            <div class="lightbox-header">
+                <div class="lightbox-title" id="lightbox-model-title">模型植物特写监测</div>
+                <button class="lightbox-close-btn" onclick="closeLightbox()">×</button>
+            </div>
+            
+            <!-- 视窗容器 -->
+            <div class="zoom-viewport" id="zoom-viewport">
+                <div class="zoom-image-container" id="zoom-container">
+                    <img id="lightbox-img" src="" alt="植物特写" />
+                </div>
+                
+                <!-- HUD 测量线叠加层 -->
+                <div class="hud-overlay">
+                    <div class="hud-corner hud-top-left"></div>
+                    <div class="hud-top-right hud-corner"></div>
+                    <div class="hud-bottom-left hud-corner"></div>
+                    <div class="hud-bottom-right hud-corner"></div>
+                    <div class="hud-crosshair"></div>
+                    <div class="hud-scale-bar">📏 像素测量标尺对齐中 (1px = 0.08mm)</div>
+                </div>
+            </div>
+            
+            <div class="lightbox-footer">
+                <div>🖱️ 鼠标滚轮缩放 | 🖲️ 按住左键拖拽 | 双击还原</div>
+                <div id="lightbox-photo-path">路径：--</div>
+            </div>
+        </div>
+    </div>
+
+    <script>
+        // 保存从后端拉取的全部可用日期列表
+        let availableDates = [];
+        let currentSelectedDate = "";
+
+        // 页面初始化时执行
+        window.addEventListener("DOMContentLoaded", () => {
+            fetchDatesAndInitialize();
+            setupLightboxInteract();
+        });
+
+        // 1. 获取所有有记录的日期列表并渲染
+        function fetchDatesAndInitialize() {
+            fetch("/api/v1/sandbox/dates")
+                .then(res => res.json())
+                .then(dates => {
+                    availableDates = dates;
+                    if (dates && dates.length > 0) {
+                        const selectEl = document.getElementById("date-select");
+                        selectEl.innerHTML = "";
+                        dates.forEach((d, i) => {
+                            const option = document.createElement("option");
+                            option.value = d;
+                            option.innerText = i === 0 ? `${d} (今日战报)` : d;
+                            selectEl.appendChild(option);
+                        });
+                        
+                        // 默认加载最新一天的战报
+                        loadDailyReport(dates[0]);
+                    } else {
+                        document.getElementById("summary-main-text").innerText = "暂无数据库记录，请运行 Pipeline 流水线生成数据。";
+                    }
+                })
+                .catch(err => {
+                    console.error("加载日期列表失败:", err);
+                    document.getElementById("summary-main-text").innerText = "后端数据接口不可达，请检查 FastAPI 服务是否启动。";
+                });
+        }
+
+        // 2. 根据选定的日期加载聚合战报数据 (Ajax 局部刷新，极致丝滑)
+        function loadDailyReport(dateStr) {
+            currentSelectedDate = dateStr;
+            const container = document.getElementById("cards-container");
+            const summaryCard = document.getElementById("summary-card");
+            const headerMeta = document.getElementById("header-meta-text");
+            
+            // 为页面元素添加淡出特效，提示数据正在刷新
+            container.classList.add("fade-out");
+            summaryCard.classList.add("fade-out");
+            
+            fetch(`/api/v1/sandbox/daily?date=${dateStr}`)
+                .then(res => res.json())
+                .then(data => {
+                    setTimeout(() => {
+                        // 渲染顶部 Header Meta
+                        headerMeta.innerText = `当前天气：${data.weather} | 项目运行阶段：${data.stage} | 数据架构：SQLite3 + RL Reward System`;
+                        
+                        // 渲染总指挥总结
+                        document.getElementById("summary-main-text").innerHTML = `
+                            <strong>今日大局解析：</strong>${data.summary}<br>
+                            <span style="display: block; margin-top: 8px; color: #c084fc; font-style: italic;">
+                                📢 <strong>裁判长吐槽脚本：</strong>"${data.audio_script}"
+                            </span>
+                        `;
+                        
+                        // 渲染音频
+                        const audioEl = document.getElementById("tts-audio");
+                        if (data.audio_path) {
+                            // 加上时间戳防止浏览器缓存音频
+                            audioEl.src = `${data.audio_path}?t=${new Date().getTime()}`;
+                        } else {
+                            audioEl.src = "";
+                        }
+                        
+                        // 渲染 8 个大模型卡片
+                        renderModelCards(data.models);
+                        
+                        // 数据填充完毕后触发淡入
+                        container.classList.remove("fade-out");
+                        summaryCard.classList.remove("fade-out");
+                    }, 150); // 短暂延迟以获得更好的视觉平滑过渡
+                })
+                .catch(err => {
+                    console.error("加载聚合战报出错:", err);
+                    container.classList.remove("fade-out");
+                    summaryCard.classList.remove("fade-out");
+                });
+        }
+
+        // 3. 渲染 8 个卡片的 DOM 节点
+        function renderModelCards(models) {
+            const container = document.getElementById("cards-container");
+            container.innerHTML = "";
+            
+            if (!models || models.length === 0) {
+                container.innerHTML = "<div style='grid-column: span 4; text-align: center; color: var(--text-secondary); padding: 40px;'>暂无当天大模型指标数据。</div>";
+                return;
+            }
+            
+            // 按照模型评分降序排列，做自然竞技场排序
+            models.sort((a, b) => b.score - a.score);
+            
+            models.forEach(m => {
+                const card = document.createElement("div");
+                card.className = `card color-${m.color.toLowerCase()} fade-transition`;
+                
+                // RL 徽章判定
+                let rlBadge = "";
+                if (m.score_change > 0) {
+                    rlBadge = `<span class="badge badge-reward">RL: +${m.score_change}</span>`;
+                } else if (m.score_change < 0) {
+                    rlBadge = `<span class="badge badge-penalty">RL: ${m.score_change}</span>`;
+                } else {
+                    rlBadge = `<span class="badge" style="background:#475569; color:#cbd5e1;">RL: 0</span>`;
+                }
+                
+                // WoW 同比双轨进度条数据解析与渲染
+                // 1. 各个指标的极大上限值定义
+                const maxH = m.crop_type === 'Tomato' ? 80 : 120; // 高度最大值
+                const maxS = m.crop_type === 'Tomato' ? 12 : 9;   // 茎粗最大值
+                const maxL = 30;                                  // 叶片数最大值
+                const maxB = 6;                                   // 关节侧芽数最大值
+                
+                // 2. 根据当前值与 WoW 同比率，反推上周同期的绝对值 (若同比为 0 或 NaN 则退避为当前值)
+                const prevHeight = (m.height_wow !== undefined && m.height_wow !== null) ? (m.height / (1 + m.height_wow)) : m.height;
+                const prevStem = (m.stem_wow !== undefined && m.stem_wow !== null) ? (m.stem_diameter / (1 + m.stem_wow)) : m.stem_diameter;
+                const prevLeaves = (m.leaves_wow !== undefined && m.leaves_wow !== null) ? (m.leaves_count / (1 + m.leaves_wow)) : m.leaves_count;
+                const prevSideBuds = (m.side_buds_wow !== undefined && m.side_buds_wow !== null) ? ((m.side_buds || 0) / (1 + m.side_buds_wow)) : (m.side_buds || 0);
+                
+                // 3. 计算当前与历史百分比宽度
+                const heightCurrPercent = Math.min(100, Math.max(0, (m.height / maxH) * 100));
+                const heightPrevPercent = Math.min(100, Math.max(0, (prevHeight / maxH) * 100));
+                
+                const stemCurrPercent = Math.min(100, Math.max(0, (m.stem_diameter / maxS) * 100));
+                const stemPrevPercent = Math.min(100, Math.max(0, (prevStem / maxS) * 100));
+                
+                const leavesCurrPercent = Math.min(100, Math.max(0, (m.leaves_count / maxL) * 100));
+                const leavesPrevPercent = Math.min(100, Math.max(0, (prevLeaves / maxL) * 100));
+                
+                const budsCurrPercent = Math.min(100, Math.max(0, ((m.side_buds || 0) / maxB) * 100));
+                const budsPrevPercent = Math.min(100, Math.max(0, (prevSideBuds / maxB) * 100));
+                
+                // 4. 定制当前粗进度条的发光色彩
+                const heightBarColor = m.height_wow >= 0 ? "linear-gradient(to right, #0ea5e9, #38bdf8)" : "linear-gradient(to right, #ef4444, #f43f5e)";
+                const stemBarColor = m.stem_wow >= 0 ? "linear-gradient(to right, #10b981, #34d399)" : "linear-gradient(to right, #ef4444, #f43f5e)";
+                const leavesBarColor = (m.leaves_wow || 0) >= 0 ? "linear-gradient(to right, #d97706, #fbbf24)" : "linear-gradient(to right, #ef4444, #f43f5e)";
+                const budsBarColor = (m.side_buds_wow || 0) >= 0 ? "linear-gradient(to right, #7c3aed, #a78bfa)" : "linear-gradient(to right, #ef4444, #f43f5e)";
+                
+                const heightSign = m.height_wow >= 0 ? "+" : "";
+                const stemSign = m.stem_wow >= 0 ? "+" : "";
+                const leavesSign = (m.leaves_wow || 0) >= 0 ? "+" : "";
+                const budsSign = (m.side_buds_wow || 0) >= 0 ? "+" : "";
+                
+                // 动态构建 HTML
+                card.innerHTML = `
+                    <div class="card-header">
+                        <div class="model-name">
+                            <span>${m.crop_type === 'Tomato' ? '🍅' : '🍈'}</span>
+                            <span>${m.model_name}</span>
+                        </div>
+                        <div class="badges-wrapper">
+                            <span class="badge badge-score">Score: ${m.score}</span>
+                            ${rlBadge}
+                        </div>
+                    </div>
+                    
+                    <div class="card-body">
+                        <div class="card-body-left">
+                            <div class="section-label">State (植物状态)</div>
+                            <div class="section-box">${m.state_desc}</div>
+                            
+                            <div class="section-label" style="margin-top: 4px;">Action (维护指令)</div>
+                            <div class="section-box action-box">${m.action_desc || '物理动作已执行完毕，继续保持稳健环境。'}</div>
+                            
+                            <div class="section-label" style="margin-top: 4px;">RL Reward Judgment</div>
+                            <div class="section-box reward-box" style="color: ${m.score_change >= 0 ? '#22c55e' : '#ef4444'}">
+                                ${m.reward_judg}
+                            </div>
+                        </div>
+                        
+                        <div class="card-body-right">
+                            <div class="section-label">物理特写特写</div>
+                            <div class="photo-wrapper" onclick="openLightbox('${m.model_name}', '${m.photo_path}')">
+                                <img src="${m.photo_path}" alt="${m.model_name} 植物特写" onerror="this.src='/static/images/plants/default_plant.png'" />
+                                <span class="photo-hint">放大 🔍</span>
+                            </div>
+                        </div>
+                    </div>
+                    
+                    <!-- 4大核心参数同期双轨进度对比面板 (当前粗发光，上周细灰色) -->
+                    <div class="wow-full-container">
+                        <!-- 高度对比 -->
+                        <div class="wow-bar-item-v2">
+                            <div class="wow-meta-info">
+                                <span class="wow-label">高度: ${m.height.toFixed(1)} cm</span>
+                                <span class="wow-val-text ${m.height_wow >= 0 ? 'text-up' : 'text-down'}">${heightSign}${(m.height_wow*100).toFixed(1)}%</span>
+                            </div>
+                            <div class="wow-bar-group">
+                                <div class="wow-bar-outer current-bar">
+                                    <div class="wow-bar-inner" style="width: ${heightCurrPercent}%; background: ${heightBarColor}; box-shadow: 0 0 6px ${m.height_wow >= 0 ? 'rgba(56,189,248,0.5)' : 'rgba(239,68,68,0.5)'}"></div>
+                                </div>
+                                <div class="wow-bar-outer prev-bar">
+                                    <div class="wow-bar-inner prev-inner" style="width: ${heightPrevPercent}%;"></div>
+                                </div>
+                            </div>
+                            <div class="wow-prev-label">上周同期: ${prevHeight.toFixed(1)} cm</div>
+                        </div>
+                        
+                        <!-- 茎粗对比 -->
+                        <div class="wow-bar-item-v2">
+                            <div class="wow-meta-info">
+                                <span class="wow-label">茎粗: ${m.stem_diameter.toFixed(1)} mm</span>
+                                <span class="wow-val-text ${m.stem_wow >= 0 ? 'text-up' : 'text-down'}">${stemSign}${(m.stem_wow*100).toFixed(1)}%</span>
+                            </div>
+                            <div class="wow-bar-group">
+                                <div class="wow-bar-outer current-bar">
+                                    <div class="wow-bar-inner" style="width: ${stemCurrPercent}%; background: ${stemBarColor}; box-shadow: 0 0 6px ${m.stem_wow >= 0 ? 'rgba(52,211,153,0.5)' : 'rgba(239,68,68,0.5)'}"></div>
+                                </div>
+                                <div class="wow-bar-outer prev-bar">
+                                    <div class="wow-bar-inner prev-inner" style="width: ${stemPrevPercent}%;"></div>
+                                </div>
+                            </div>
+                            <div class="wow-prev-label">上周同期: ${prevStem.toFixed(1)} mm</div>
+                        </div>
+                        
+                        <!-- 叶片数量对比 -->
+                        <div class="wow-bar-item-v2">
+                            <div class="wow-meta-info">
+                                <span class="wow-label">叶片: ${m.leaves_count} 片</span>
+                                <span class="wow-val-text ${(m.leaves_wow || 0) >= 0 ? 'text-up' : 'text-down'}">${leavesSign}${((m.leaves_wow || 0)*100).toFixed(1)}%</span>
+                            </div>
+                            <div class="wow-bar-group">
+                                <div class="wow-bar-outer current-bar">
+                                    <div class="wow-bar-inner" style="width: ${leavesCurrPercent}%; background: ${leavesBarColor}; box-shadow: 0 0 6px ${(m.leaves_wow || 0) >= 0 ? 'rgba(251,191,36,0.5)' : 'rgba(239,68,68,0.5)'}"></div>
+                                </div>
+                                <div class="wow-bar-outer prev-bar">
+                                    <div class="wow-bar-inner prev-inner" style="width: ${leavesPrevPercent}%;"></div>
+                                </div>
+                            </div>
+                            <div class="wow-prev-label">上周同期: ${Math.round(prevLeaves)} 片</div>
+                        </div>
+                        
+                        <!-- 关节侧芽对比 -->
+                        <div class="wow-bar-item-v2">
+                            <div class="wow-meta-info">
+                                <span class="wow-label">侧芽: ${(m.side_buds || 0)} 个</span>
+                                <span class="wow-val-text ${(m.side_buds_wow || 0) >= 0 ? 'text-up' : 'text-down'}">${budsSign}${((m.side_buds_wow || 0)*100).toFixed(1)}%</span>
+                            </div>
+                            <div class="wow-bar-group">
+                                <div class="wow-bar-outer current-bar">
+                                    <div class="wow-bar-inner" style="width: ${budsCurrPercent}%; background: ${budsBarColor}; box-shadow: 0 0 6px ${(m.side_buds_wow || 0) >= 0 ? 'rgba(167,139,250,0.5)' : 'rgba(239,68,68,0.5)'}"></div>
+                                </div>
+                                <div class="wow-bar-outer prev-bar">
+                                    <div class="wow-bar-inner prev-inner" style="width: ${budsPrevPercent}%;"></div>
+                                </div>
+                            </div>
+                            <div class="wow-prev-label">上周同期: ${Math.round(prevSideBuds)} 个</div>
+                        </div>
+                    </div>
+                `;
+                
+                container.appendChild(card);
+            });
+        }
+
+        /* --- 玻璃拟态电子缩放 Lightbox 交互控制逻辑 --- */
+        let currentScale = 1;
+        let isDragging = false;
+        let startX, startY;
+        let offsetX = 0, offsetY = 0;
+        const zoomContainer = document.getElementById("zoom-container");
+        const lightboxImg = document.getElementById("lightbox-img");
+
+        function openLightbox(modelName, photoPath) {
+            document.getElementById("lightbox-model-title").innerText = `🔍 像素级物理对焦监控 - 模型: ${modelName}`;
+            document.getElementById("lightbox-photo-path").innerText = `物理路径：${photoPath}`;
+            
+            // 加上时间戳，防止浏览器图片缓存
+            lightboxImg.src = `${photoPath}?t=${new Date().getTime()}`;
+            
+            // 重置位置与缩放因子
+            currentScale = 1;
+            offsetX = 0;
+            offsetY = 0;
+            updateTransform();
+            
+            const modal = document.getElementById("lightbox-modal");
+            modal.style.display = "flex";
+            setTimeout(() => {
+                modal.classList.add("active");
+            }, 10);
+        }
+
+        function closeLightbox(event) {
+            const modal = document.getElementById("lightbox-modal");
+            modal.classList.remove("active");
+            setTimeout(() => {
+                modal.style.display = "none";
+            }, 300);
+        }
+
+        function updateTransform() {
+            zoomContainer.style.transform = `translate(${offsetX}px, ${offsetY}px) scale(${currentScale})`;
+        }
+
+        // 实现高阶鼠标缩放与拖动机制
+        function setupLightboxInteract() {
+            const viewport = document.getElementById("zoom-viewport");
+            
+            // 1. 鼠标滚轮缩放 (对焦)
+            viewport.addEventListener("wheel", (e) => {
+                e.preventDefault();
+                const zoomFactor = 0.12;
+                if (e.deltaY < 0) {
+                    currentScale = Math.min(6, currentScale + zoomFactor); // 最大缩放6倍
+                } else {
+                    currentScale = Math.max(0.6, currentScale - zoomFactor); // 最小缩放0.6倍
+                }
+                updateTransform();
+            });
+
+            // 2. 鼠标按住拖拽
+            viewport.addEventListener("mousedown", (e) => {
+                e.preventDefault();
+                isDragging = true;
+                startX = e.clientX - offsetX;
+                startY = e.clientY - offsetY;
+                viewport.style.cursor = "grabbing";
+            });
+
+            window.addEventListener("mousemove", (e) => {
+                if (!isDragging) return;
+                offsetX = e.clientX - startX;
+                offsetY = e.clientY - startY;
+                updateTransform();
+            });
+
+            window.addEventListener("mouseup", () => {
+                isDragging = false;
+                viewport.style.cursor = "grab";
+            });
+
+            // 3. 双击重置
+            viewport.addEventListener("dblclick", () => {
+                currentScale = 1;
+                offsetX = 0;
+                offsetY = 0;
+                updateTransform();
+            });
+        }
+    </script>
+</body>
+</html>
