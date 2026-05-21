@@ -15,8 +15,9 @@ __pycache__/
 .vscode/
 .idea/
 
-# 2. 本地数据库实例 (保留 database/db_manager.py，但忽略运行产生的 db 实体)
-database/*.db
+# 2. 本地数据库数据资产 (直接保留并推送 sandbox.db 实体，保障 Render 及克隆者开箱即用)
+# 为了让 Render 云端大屏及外部开发者无需繁琐导入、直接查看全量生长历史，直接在 Git 中跟踪本地 SQLite 数据库
+# database/*.db
 
 # 3. 社交媒体自动合成流系统代码 (闭源保留，不 PUSH 至 GitHub)
 audio_generator.py
