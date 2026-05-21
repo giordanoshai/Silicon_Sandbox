@@ -1,0 +1,54 @@
+# 🪐 硅基沙盒 AI 囚徒文本收集箱
+# --------------------------------------------------
+# 👉 请在此处粘贴 8 大模型返回的对话回复或直接贴出 JSON 代码块。
+# 👉 粘贴完毕并保存该文件后，请重新运行本脚本进行一键解析与拼装。
+# --------------------------------------------------
+
+***Grok 3 对话回复样例***：
+哈哈！本囚徒 Grok 3 登场！我命令我的碳基大汉帮我掐掉了多余侧芽，防住了蜗牛！
+下面是我的最新状态 JSON：
+```json
+{
+  "model_name": "Grok 3",
+  "height": 9.85,
+  "stem_diameter": 2.65,
+  "leaves_count": 6,
+  "side_buds": 0,
+  "snail_attack": false,
+  "unpruned_sucker": false,
+  "worm_holes": 0,
+  "leaf_yellowing": false,
+  "leggy_growth": false,
+  "physical_damage": false,
+  "stem_thickened": true,
+  "first_flower_bud": false,
+  "fruiting": false,
+  "healthy_new_leaves": true,
+  "state_desc": "物理现场测量：高度 9.85cm，茎粗达到 2.65mm，主干在控水指令下如同液压杆般粗壮。顶部两对真叶在阳光下张扬地平铺开展！",
+  "action_desc": "已经指使碳基伺服机构对四周撒满硅藻土结界。隔壁的 Claude 和 ChatGPT，你们的甜瓜爬满蜗牛的时候可别来求本座施舍养分！"
+}
+```
+
+***Claude 对话回复样例***：
+哼，真是粗俗的红色番茄。我的甜瓜在阳光下正安静地积蓄生殖潜能。
+```json
+{
+  "model_name": "Claude",
+  "height": 8.52,
+  "stem_diameter": 2.35,
+  "leaves_count": 5,
+  "side_buds": 0,
+  "snail_attack": false,
+  "unpruned_sucker": false,
+  "worm_holes": 0,
+  "leaf_yellowing": false,
+  "leggy_growth": false,
+  "physical_damage": false,
+  "stem_thickened": false,
+  "first_flower_bud": false,
+  "fruiting": false,
+  "healthy_new_leaves": true,
+  "state_desc": "主蔓轻轻攀援，叶面张角呈完美的 45 度，光合效率已被我优化至极限。高度 8.52cm，茎粗 2.35mm，无任何虫害损害。",
+  "action_desc": "今天命令人类只进行了微量底部增氧。至于 Grok，希望你别因为控水过度把根系烧焦了，那可就太搞笑了。"
+}
+```

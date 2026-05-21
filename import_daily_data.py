@@ -24,8 +24,24 @@ sys.path.append(BASE_DIR)
 
 from database.db_manager import init_db, insert_daily_record, insert_model_metrics, get_available_dates, DB_PATH, get_model_history
 from vision_analyzer import MODELS_CONFIG, calculate_rl_score
-from audio_generator import generate_spicy_script, text_to_speech
-from video_creator import capture_dashboard_cards, create_daily_video
+
+# 动态加载社交媒体组件，若移动到 social_media 目录下则优先读取，若缺失则完美平滑退避
+SOCIAL_MEDIA_AVAILABLE = True
+try:
+    sys.path.append(os.path.join(BASE_DIR, "social_media"))
+    from audio_generator import generate_spicy_script, text_to_speech
+    from video_creator import capture_dashboard_cards, create_daily_video
+except ImportError:
+    try:
+        from audio_generator import generate_spicy_script, text_to_speech
+        from video_creator import capture_dashboard_cards, create_daily_video
+    except ImportError:
+        SOCIAL_MEDIA_AVAILABLE = False
+        # 极高可用降级：空占位函数兜底，阻断报错
+        def generate_spicy_script(analysis_res): return "社交媒体吐槽合成组件未安装。"
+        def text_to_speech(script, path): pass
+        def capture_dashboard_cards(date_str, log_dir): return []
+        def create_daily_video(date, cards, audio, output): pass
 
 def main():
     parser = argparse.ArgumentParser(description="硅基沙盒 (Silicon Sandbox) 用户自定义 AI 生长数据与图片导入与流水线工具")
@@ -97,121 +113,9 @@ def main():
         
     # 4. 精准计算 8 个模型的 RL 分数、客观指标以及历史同比 (WoW)
     print("步骤 1: 正在解析导入的模型状态数据，精细计算强化学习 Reward 评分...")
-    
-    results = []
-    for model_name, config in MODELS_CONFIG.items():
-        # 获取用户导入的该模型数据，如果没有提供，则自动由系统拟真模拟
-        m_input = models_input.get(model_name, {})
-        
-        crop_type = config["crop_type"]
-        
-        # 默认提取或使用默认合理值
-        height = float(m_input.get("height", 8.0))
-        stem = float(m_input.get("stem_diameter", 2.0))
-        leaves = int(m_input.get("leaves_count", 4))
-        side_buds = int(m_input.get("side_buds", 0))
-        
-        # RL 状态细节判定
-        state_details = {
-            "snail_attack": bool(m_input.get("snail_attack", False)),
-            "unpruned_sucker": bool(m_input.get("unpruned_sucker", False)) if crop_type == "Tomato" else False,
-            "worm_holes": int(m_input.get("worm_holes", 0)),
-            "leaf_yellowing": bool(m_input.get("leaf_yellowing", False)),
-            "leggy_growth": bool(m_input.get("leggy_growth", False)),
-            "physical_damage": bool(m_input.get("physical_damage", False)),
-            "stem_thickened": bool(m_input.get("stem_thickened", False)),
-            "first_flower_bud": bool(m_input.get("first_flower_bud", False)),
-            "fruiting": bool(m_input.get("fruiting", False)),
-            "healthy_new_leaves": bool(m_input.get("healthy_new_leaves", True))
-        }
-        
-        # 计算 RL 得分
-        today_score, score_change, score_reason, reward_judg = calculate_rl_score(crop_type, state_details, 100)
-        
-        # 自定义客观描述 (STATE) 与维护指令 (ACTION)
-        state_desc = m_input.get("state_desc")
-        if not state_desc:
-            # 自动生成客观叙述
-            state_parts = []
-            state_parts.append(f"物理沙盒现场测算：植物当前高度为 {height:.2f} cm，主干茎粗 {stem:.2f} mm，共展开真叶 {leaves} 片，检测到侧芽 {side_buds} 个。")
-            if state_details["snail_attack"]:
-                state_parts.append("最新特写图像发现桶壁及叶缘分布有条状反光的蜗牛爬行银色黏液，根系离地隔离盘有落叶碎屑。")
-            if state_details["unpruned_sucker"]:
-                state_parts.append("番茄关节吸芽部位侧枝开始掠夺顶端优势养分，长度超过2cm。")
-            if state_details["worm_holes"] > 0:
-                state_parts.append(f"中下部叶片边缘新增 {state_details['worm_holes']} 个虫咬孔洞。")
-            if state_details["leaf_yellowing"]:
-                state_parts.append("部分成熟老叶边缘轻度发黄干枯，伴有失绿条斑，疑为营养液缓释烧根所致。")
-            elif state_details["healthy_new_leaves"]:
-                state_parts.append("顶部叶片排布合理，平展无重叠，光合作用层级分明。")
-            state_desc = " ".join(state_parts)
-            
-        action_desc = m_input.get("action_desc")
-        if not action_desc:
-            # 自动生成 ACTION 指令
-            action_parts = []
-            if state_details["unpruned_sucker"]:
-                action_parts.append("1. 请速掐灭关节处大于 2cm 的侧芽以维持顶端优势。")
-            if state_details["snail_attack"] or state_details["worm_holes"] > 0:
-                action_parts.append("2. 重新稳固桶周悬空防虫网，对盆周洒硅藻土进行隔离防护。")
-            if state_details["leaf_yellowing"]:
-                action_parts.append("3. 暂停施加缓释肥，增加基质清洗强度与底部充氧。")
-            if not action_parts:
-                action_parts.append("当前生长态势处于稳健控制周期中。指令：维持 NULL，不灌溉不干预，继续高强度暴晒。")
-            action_desc = "\n".join(action_parts)
-            
-        # 历史 WoW 同比数据计算 (7天前)
-        history = get_model_history(model_name)
-        height_7_days_ago = None
-        stem_7_days_ago = None
-        leaves_7_days_ago = None
-        side_buds_7_days_ago = None
-        
-        if len(history) >= 7:
-            height_7_days_ago = history[-7]["height"]
-            stem_7_days_ago = history[-7]["stem_diameter"]
-            leaves_7_days_ago = history[-7].get("leaves_count", 4)
-            side_buds_7_days_ago = history[-7].get("side_buds", 0)
-        else:
-            # 使用数学公式反推 7 天前的状态
-            prev_day = max(1, day_index - 7)
-            t0 = 15
-            growth_rate = 0.15 if crop_type == "Tomato" else 0.12
-            max_h = 80.0 if crop_type == "Tomato" else 120.0
-            max_s = 12.0 if crop_type == "Tomato" else 9.0
-            height_7_days_ago = 5.0 + (max_h - 5.0) / (1.0 + math.exp(-growth_rate * (prev_day - t0)))
-            stem_7_days_ago = 1.5 + (max_s - 1.5) / (1.0 + math.exp(-growth_rate * (prev_day - t0)))
-            leaves_7_days_ago = int(4 + prev_day * 0.8)
-            side_buds_7_days_ago = 0
-            
-        height_wow = (height - height_7_days_ago) / height_7_days_ago if height_7_days_ago else 0.0
-        stem_wow = (stem - stem_7_days_ago) / stem_7_days_ago if stem_7_days_ago else 0.0
-        leaves_wow = (leaves - leaves_7_days_ago) / leaves_7_days_ago if leaves_7_days_ago else 0.0
-        side_buds_wow = (side_buds - side_buds_7_days_ago) / side_buds_7_days_ago if side_buds_7_days_ago else 0.0
-        
-        m_data = {
-            "date": date_str,
-            "model_name": model_name,
-            "crop_type": crop_type,
-            "color": config["color"],
-            "score": today_score,
-            "score_change": score_change,
-            "score_reason": score_reason,
-            "state_desc": state_desc,
-            "action_desc": action_desc,
-            "reward_judg": reward_judg,
-            "height": round(height, 2),
-            "stem_diameter": round(stem, 2),
-            "leaves_count": leaves,
-            "side_buds": side_buds,
-            "photo_path": f"/logs/{date_str}/{model_name.lower().replace(' ', '_')}.jpg",
-            "height_wow": round(height_wow, 4),
-            "stem_wow": round(stem_wow, 4),
-            "leaves_wow": round(leaves_wow, 4),
-            "side_buds_wow": round(side_buds_wow, 4)
-        }
-        
-        results.append(m_data)
+    from vision_analyzer import analyze_plant_data
+    analysis_res = analyze_plant_data(date_str, day_index, import_json_data=import_data)
+    results = analysis_res["models_data"]
         
     # 5. 持久化至 SQLite 数据库
     print("步骤 2: 正在持久化导入的植物生长指标数据...")
@@ -220,17 +124,39 @@ def main():
         model_filename = f"{m_data['model_name'].lower().replace(' ', '_')}.jpg"
         model_photo_full_path = os.path.join(day_log_dir, model_filename)
         
+        # 📷 智能配对逻辑：若标准的 model_filename (例如 grok_3.jpg) 在 logs 目录下不存在，
+        # 我们去寻找用户上传的不区分大小写且无版本号的文件 (例如 Grok.jpg / grok.jpg)
+        if not os.path.exists(model_photo_full_path):
+            base_model_name = m_data['model_name'].split()[0].lower() # 提取模型名字的第一个单词并转为小写，比如 Grok 3 -> grok
+            if os.path.exists(day_log_dir):
+                for f_name in os.listdir(day_log_dir):
+                    if f_name.lower() in [f"{base_model_name}.jpg", f"{base_model_name}.jpeg"]:
+                        source_img_path = os.path.join(day_log_dir, f_name)
+                        shutil.copy(source_img_path, model_photo_full_path)
+                        print(f"📷 智能物理匹配图片成功：找到 {f_name}，并已成功重命名复制为标准格式 {model_filename}")
+                        break
+        
         # 复制默认占位图给这个模型 (如果用户没有把真实照片丢进 logs/YYYY-MM-DD/)
         if not os.path.exists(model_photo_full_path):
-            # 尝试在项目根目录下寻找对应的模型图片，如果有就复制过来，没有就用默认的
             default_path = os.path.join(BASE_DIR, "static", "images", "plants", "default_plant.png")
             if os.path.exists(default_path):
                 shutil.copy(default_path, model_photo_full_path)
                 
         insert_model_metrics(m_data)
+
+    # 📊 自动将全局汇总图 [植物汇总.png] 复制归档至 logs/{date_str}/summary.png
+    global_summary_img = os.path.join(BASE_DIR, "植物汇总.png")
+    if os.path.exists(global_summary_img):
+        dest_summary_img = os.path.join(day_log_dir, "summary.png")
+        shutil.copy(global_summary_img, dest_summary_img)
+        print(f"📊 自动将全局汇总图 [植物汇总.png] 复制归档至 logs/{date_str}/summary.png")
         
     # 6. 获取得分排行并自动起草裁判长点评与配音
-    print("步骤 3: 正在起草裁判长赛博点评文案，调用 ElevenLabs 语音合成器...")
+    if SOCIAL_MEDIA_AVAILABLE:
+        print("步骤 3: 正在起草裁判长赛博点评文案，调用 ElevenLabs 语音合成器...")
+    else:
+        print("步骤 3: 正在使用轻量极简模式起草今日总结文本...")
+        
     scores = [r["score"] for r in results]
     highest_model = results[scores.index(max(scores))]["model_name"]
     lowest_model = results[scores.index(min(scores))]["model_name"]
@@ -243,8 +169,12 @@ def main():
         "models_data": results
     }
     
-    # 获取吐槽台词文案
-    audio_script = generate_spicy_script(analysis_res)
+    # 获取吐槽台词文案，优先从导入数据中读取
+    audio_script = import_data.get("audio_script")
+    if not audio_script and SOCIAL_MEDIA_AVAILABLE:
+        audio_script = generate_spicy_script(analysis_res)
+    elif not audio_script:
+        audio_script = ""
     
     # 裁判长全局大局总结文本 (在 Dashboard 顶部展示)
     if not user_summary:
@@ -255,44 +185,52 @@ def main():
         random.seed(date_str)
         user_summary = random.choice(summary_templates)
         
-    audio_path = os.path.join(day_log_dir, "summary.mp3")
-    text_to_speech(audio_script, audio_path)
+    audio_path = ""
+    web_audio_path = ""
+    web_video_path = ""
+    
+    if SOCIAL_MEDIA_AVAILABLE:
+        audio_path = os.path.join(day_log_dir, "summary.mp3")
+        text_to_speech(audio_script, audio_path)
+        web_audio_path = f"/logs/{date_str}/summary.mp3"
+        web_video_path = f"/logs/{date_str}/sandbox_daily.mp4"
     
     # 写入每日全局战报
-    web_audio_path = f"/logs/{date_str}/summary.mp3"
-    web_video_path = f"/logs/{date_str}/sandbox_daily.mp4"
     insert_daily_record(date_str, f"Day {day_index}", weather, user_summary, audio_script, web_audio_path, web_video_path)
     
-    # 7. 智能拉起后台 FastAPI Web 服务供 Playwright 进行精准卡片节点截图
-    print("步骤 4: 临时拉起沙盒控制台后台服务...")
-    port = os.getenv("PORT", "8000")
-    host = os.getenv("HOST", "127.0.0.1")
-    
-    uvicorn_log_path = os.path.join(day_log_dir, "uvicorn_startup.log")
-    with open(uvicorn_log_path, "w") as log_f:
-        web_process = subprocess.Popen(
-            [sys.executable, "-m", "uvicorn", "app:app", "--host", host, "--port", port],
-            stdout=log_f,
-            stderr=log_f,
-            cwd=BASE_DIR
-        )
+    if SOCIAL_MEDIA_AVAILABLE:
+        # 7. 智能拉起后台 FastAPI Web 服务供 Playwright 进行精准卡片节点截图
+        print("步骤 4: 临时拉起沙盒控制台后台服务...")
+        port = os.getenv("PORT", "8000")
+        host = os.getenv("HOST", "127.0.0.1")
         
-    time.sleep(2.5) # 给 uvicorn 留够自举时间
-    
-    card_files = []
-    try:
-        # 进行截图
-        card_files = capture_dashboard_cards(date_str, day_log_dir)
-    finally:
-        # 优雅终止后台 Web 服务
-        print("步骤 5: 释放 Playwright 并关闭沙盒控制台渲染进程...")
-        web_process.terminate()
-        web_process.wait()
+        uvicorn_log_path = os.path.join(day_log_dir, "uvicorn_startup.log")
+        with open(uvicorn_log_path, "w") as log_f:
+            web_process = subprocess.Popen(
+                [sys.executable, "-m", "uvicorn", "app:app", "--host", host, "--port", port],
+                stdout=log_f,
+                stderr=log_f,
+                cwd=BASE_DIR
+            )
+            
+        time.sleep(2.5) # 给 uvicorn 留够自举时间
         
-    # 8. 融合视频音频，输出 final 快节奏短视频
-    print("步骤 6: 正在合成高画质快节奏短视频战报...")
-    output_video_path = os.path.join(day_log_dir, "sandbox_daily.mp4")
-    create_daily_video(date_str, card_files, audio_path, output_video_path)
+        card_files = []
+        try:
+            # 进行截图
+            card_files = capture_dashboard_cards(date_str, day_log_dir)
+        finally:
+            # 优雅终止后台 Web 服务
+            print("步骤 5: 释放 Playwright 并关闭沙盒控制台渲染进程...")
+            web_process.terminate()
+            web_process.wait()
+            
+        # 8. 融合视频音频，输出 final 快节奏 short 视频
+        print("步骤 6: 正在合成高画质快节奏短视频战报...")
+        output_video_path = os.path.join(day_log_dir, "sandbox_daily.mp4")
+        create_daily_video(date_str, card_files, audio_path, output_video_path)
+    else:
+        print("💡 [系统提示]: 未检测到社交媒体组件，跳过步骤 4-6 (页面截图与视频合成)。")
     
     # 9. 增量更新 Changelog.md
     update_import_changelog(date_str)

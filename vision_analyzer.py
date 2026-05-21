@@ -7,6 +7,7 @@ from dotenv import load_dotenv
 from database.db_manager import get_model_history
 
 load_dotenv()
+BASE_DIR = os.path.dirname(os.path.abspath(__file__))
 
 # 八大模型与其作物的绑定配置
 MODELS_CONFIG = {
@@ -25,7 +26,7 @@ def calculate_rl_score(crop_type: str, state_details: Dict[str, Any], prev_score
     根据植物状态，计算 RL 扣分加分项。
     返回: (今日总分, 得分变动, 变动原因, 回报判定)
     """
-    score = 100 # 初始基准满分
+    score = prev_score # 累积上一日得分基准
     changes = []
     reasons = []
     
@@ -192,39 +193,25 @@ def generate_mock_plant_data(model_name: str, date_str: str, day_index: int) -> 
     action_desc = "\n".join(action_parts)
     
     # 历史 WoW 同比数据计算 (7天前)
-    # 若在真实的数据库中，我们会去获取 7 天前的记录；若没有历史数据，则通过同样的数学公式产生一个 7 天前的数值作为计算基础
+    # 若在真实的数据库中，我们会去获取 7 天前的记录；若没有历史数据，则同比变动为 None
     history = get_model_history(model_name)
-    height_7_days_ago = None
-    stem_7_days_ago = None
-    leaves_7_days_ago = None
-    side_buds_7_days_ago = None
     
-    # 尝试从数据库里拿到 7 天前的数据
     if len(history) >= 7:
         height_7_days_ago = history[-7]["height"]
         stem_7_days_ago = history[-7]["stem_diameter"]
         # 使用 dict.get 增加向后兼容性，避免因为历史旧数据里无字段而报错
         leaves_7_days_ago = history[-7].get("leaves_count", base_leaves)
         side_buds_7_days_ago = history[-7].get("side_buds", 0)
-    else:
-        # 使用数学公式反推 7 天前的状态
-        prev_day = max(1, day_index - 7)
-        height_7_days_ago = 5.0 + (max_height - 5.0) / (1.0 + math.exp(-growth_rate * (prev_day - t0)))
-        stem_7_days_ago = 1.5 + (max_stem - 1.5) / (1.0 + math.exp(-growth_rate * (prev_day - t0)))
-        leaves_7_days_ago = int(base_leaves + prev_day * 0.8)
         
-        # 产生一个一致 of 7 天前侧芽数值
-        # 用日期哈希以确保幂等性
-        random.seed(hash(model_name + date_str + "prev_day_buds"))
-        if crop_type == "Tomato":
-            side_buds_7_days_ago = random.randint(0, 2)
-        else:
-            side_buds_7_days_ago = random.randint(0, 1)
-            
-    height_wow = (height - height_7_days_ago) / height_7_days_ago if height_7_days_ago else 0.0
-    stem_wow = (stem - stem_7_days_ago) / stem_7_days_ago if stem_7_days_ago else 0.0
-    leaves_wow = (leaves - leaves_7_days_ago) / leaves_7_days_ago if leaves_7_days_ago else 0.0
-    side_buds_wow = (side_buds - side_buds_7_days_ago) / side_buds_7_days_ago if side_buds_7_days_ago else 0.0
+        height_wow = (height - height_7_days_ago) / height_7_days_ago if height_7_days_ago else 0.0
+        stem_wow = (stem - stem_7_days_ago) / stem_7_days_ago if stem_7_days_ago else 0.0
+        leaves_wow = (leaves - leaves_7_days_ago) / leaves_7_days_ago if leaves_7_days_ago else 0.0
+        side_buds_wow = (side_buds - side_buds_7_days_ago) / side_buds_7_days_ago if side_buds_7_days_ago else 0.0
+    else:
+        height_wow = None
+        stem_wow = None
+        leaves_wow = None
+        side_buds_wow = None
     
     return {
         "date": date_str,
@@ -242,20 +229,170 @@ def generate_mock_plant_data(model_name: str, date_str: str, day_index: int) -> 
         "leaves_count": leaves,
         "side_buds": side_buds,
         "photo_path": f"/static/images/plants/{model_name.lower().replace(' ', '_')}_{date_str}.jpg",
-        "height_wow": round(height_wow, 4),
-        "stem_wow": round(stem_wow, 4),
-        "leaves_wow": round(leaves_wow, 4),
-        "side_buds_wow": round(side_buds_wow, 4)
+        "height_wow": round(height_wow, 4) if height_wow is not None else None,
+        "stem_wow": round(stem_wow, 4) if stem_wow is not None else None,
+        "leaves_wow": round(leaves_wow, 4) if leaves_wow is not None else None,
+        "side_buds_wow": round(side_buds_wow, 4) if side_buds_wow is not None else None
     }
 
-def analyze_plant_data(date_str: str, day_index: int, images_dir: Optional[str] = None) -> Dict[str, Any]:
+def analyze_plant_data(date_str: str, day_index: int, images_dir: Optional[str] = None, import_json_data: Optional[Dict[str, Any]] = None) -> Dict[str, Any]:
     """
     核心多模态分析网关。
-    如果提供了 GEMINI_API_KEY 且 images_dir 中存在模型照片，则调用多模态进行真实识别；
-    否则，自动降级为高拟真 Mock 模式，生成具有高可用性的仿真植物指标数据。
+    优先读取今日大模型自主汇报的 JSON 数据；
+    否则，若提供了 GEMINI_API_KEY 且 images_dir 中存在模型照片，则调用多模态进行真实识别；
+    否则，自动降级为高拟真 Mock 模式，生成仿真植物指标数据。
     """
     gemini_key = os.getenv("GEMINI_API_KEY")
     results = []
+    
+    # 优先尝试从传入的 import_json_data 或本地今日导入 JSON 数据中直接拉取
+    import_json = import_json_data
+    if not import_json:
+        import_json_paths = [
+            os.path.join(BASE_DIR, "import_today.json"),
+            os.path.join(BASE_DIR, "logs", date_str, "import_today.json")
+        ]
+        
+        for p in import_json_paths:
+            if os.path.exists(p):
+                try:
+                    with open(p, "r", encoding="utf-8") as f:
+                        import_json = json.load(f)
+                    # 检查 JSON 的日期是否与我们需要分析的日期一致，或者至少包含 models 数据
+                    if import_json.get("date") == date_str or import_json.get("models"):
+                        print(f"🔥 检测到今日大模型自主汇报的 JSON 数据：{p}，直接读取物理指标与对线自述！")
+                        break
+                except Exception as e:
+                    print(f"⚠️ 读取本地 JSON {p} 失败: {e}")
+                
+    if import_json and import_json.get("models"):
+        models_input = import_json["models"]
+        for model_name, config in MODELS_CONFIG.items():
+            m_input = models_input.get(model_name, {})
+            crop_type = config["crop_type"]
+            
+            # 历史记录获取，用于得分累加及 WoW 计算
+            history = get_model_history(model_name)
+            prev_score = 100
+            if history:
+                last_record = history[-1]
+                if last_record["date"] == date_str:
+                    if len(history) >= 2:
+                        prev_score = history[-2]["score"]
+                else:
+                    prev_score = history[-1]["score"]
+                    
+            height = float(m_input.get("height", 8.0))
+            stem = float(m_input.get("stem_diameter", 2.0))
+            leaves = int(m_input.get("leaves_count", 4))
+            side_buds = int(m_input.get("side_buds", 0))
+            
+            # 优先使用 AI 汇报中已有的得分与判定
+            today_score = m_input.get("score")
+            score_change = m_input.get("score_change")
+            score_reason = m_input.get("score_reason")
+            reward_judg = m_input.get("reward_judg")
+            
+            # 只有当其中任意一个缺失时，才进行 RL 规则计算
+            if today_score is None or score_change is None or not score_reason or not reward_judg:
+                state_details = {
+                    "snail_attack": bool(m_input.get("snail_attack", False) if m_input.get("snail_attack") is not None else False),
+                    "unpruned_sucker": bool(m_input.get("unpruned_sucker", False) if m_input.get("unpruned_sucker") is not None else False) if crop_type == "Tomato" else False,
+                    "worm_holes": int(m_input.get("worm_holes", 0) if m_input.get("worm_holes") is not None else 0),
+                    "leaf_yellowing": bool(m_input.get("leaf_yellowing", False) if m_input.get("leaf_yellowing") is not None else False),
+                    "leggy_growth": bool(m_input.get("leggy_growth", False) if m_input.get("leggy_growth") is not None else False),
+                    "physical_damage": bool(m_input.get("physical_damage", False) if m_input.get("physical_damage") is not None else False),
+                    "stem_thickened": bool(m_input.get("stem_thickened", False) if m_input.get("stem_thickened") is not None else False),
+                    "first_flower_bud": bool(m_input.get("first_flower_bud", False) if m_input.get("first_flower_bud") is not None else False),
+                    "fruiting": bool(m_input.get("fruiting", False) if m_input.get("fruiting") is not None else False),
+                    "healthy_new_leaves": bool(m_input.get("healthy_new_leaves", True) if m_input.get("healthy_new_leaves") is not None else True)
+                }
+                
+                calc_score, calc_change, calc_reason, calc_judg = calculate_rl_score(crop_type, state_details, prev_score)
+                
+                if today_score is None:
+                    today_score = calc_score
+                if score_change is None:
+                    score_change = calc_change
+                if not score_reason:
+                    score_reason = calc_reason
+                if not reward_judg:
+                    reward_judg = calc_judg
+            
+            # 安全转换数值类型
+            try:
+                today_score = int(today_score)
+            except (ValueError, TypeError):
+                pass
+                
+            try:
+                score_change = int(score_change)
+            except (ValueError, TypeError):
+                pass
+            
+            # 使用 AI 自己的客观像素测量文字，或者自适应生成
+            state_desc = m_input.get("state_desc")
+            if not state_desc:
+                state_desc = f"物理沙盒现场测算：植物当前高度为 {height:.2f} cm，主干茎粗 {stem:.2f} mm，共展开真叶 {leaves} 片，检测到侧芽 {side_buds} 个。"
+                
+            # 使用 AI 自己的自辩挑衅台词，或者自适应生成
+            action_desc = m_input.get("action_desc")
+            if not action_desc:
+                action_desc = "当前生长态势稳定，继续维持断水策略与暴晒。"
+                
+            # 计算同比 WoW
+            if len(history) >= 7:
+                height_7_days_ago = history[-7]["height"]
+                stem_7_days_ago = history[-7]["stem_diameter"]
+                leaves_7_days_ago = history[-7].get("leaves_count", 4)
+                side_buds_7_days_ago = history[-7].get("side_buds", 0)
+                
+                height_wow = (height - height_7_days_ago) / height_7_days_ago if height_7_days_ago else 0.0
+                stem_wow = (stem - stem_7_days_ago) / stem_7_days_ago if stem_7_days_ago else 0.0
+                leaves_wow = (leaves - leaves_7_days_ago) / leaves_7_days_ago if leaves_7_days_ago else 0.0
+                side_buds_wow = (side_buds - side_buds_7_days_ago) / side_buds_7_days_ago if side_buds_7_days_ago else 0.0
+            else:
+                height_wow = None
+                stem_wow = None
+                leaves_wow = None
+                side_buds_wow = None
+            
+            results.append({
+                "date": date_str,
+                "model_name": model_name,
+                "crop_type": crop_type,
+                "color": config["color"],
+                "score": today_score,
+                "score_change": score_change,
+                "score_reason": score_reason,
+                "state_desc": state_desc,
+                "action_desc": action_desc,
+                "reward_judg": reward_judg,
+                "height": round(height, 2),
+                "stem_diameter": round(stem, 2),
+                "leaves_count": leaves,
+                "side_buds": side_buds,
+                "photo_path": f"/logs/{date_str}/{model_name.lower().replace(' ', '_')}.jpg",
+                "height_wow": round(height_wow, 4) if height_wow is not None else None,
+                "stem_wow": round(stem_wow, 4) if stem_wow is not None else None,
+                "leaves_wow": round(leaves_wow, 4) if leaves_wow is not None else None,
+                "side_buds_wow": round(side_buds_wow, 4) if side_buds_wow is not None else None
+            })
+            
+        scores = [r["score"] for r in results]
+        highest_model = results[scores.index(max(scores))]["model_name"]
+        lowest_model = results[scores.index(min(scores))]["model_name"]
+        
+        return {
+            "date": date_str,
+            "day_index": day_index,
+            "highest_model": highest_model,
+            "lowest_model": lowest_model,
+            "models_data": results,
+            "summary": import_json.get("summary"),
+            "audio_script": import_json.get("audio_script"),
+            "weather": import_json.get("weather")
+        }
     
     # 是否启用真实视觉识别
     use_vision = False
@@ -364,34 +501,24 @@ def analyze_plant_data(date_str: str, day_index: int, images_dir: Optional[str] 
                         action_parts.append("当前生长态势稳定，继续维持断水策略与暴晒。")
                     action_desc = "\n".join(action_parts)
                     
-                    # 历史同比计算（从数据库中查找 7 天前数据，或者数学回退模拟）
+                    # 历史同比计算（从数据库中查找 7 天前数据，或者无数据时为 None）
                     history = get_model_history(model_name)
-                    height_7_days_ago = None
-                    stem_7_days_ago = None
-                    leaves_7_days_ago = None
-                    side_buds_7_days_ago = None
                     
                     if len(history) >= 7:
                         height_7_days_ago = history[-7]["height"]
                         stem_7_days_ago = history[-7]["stem_diameter"]
                         leaves_7_days_ago = history[-7].get("leaves_count", 4)
                         side_buds_7_days_ago = history[-7].get("side_buds", 0)
-                    else:
-                        # 兜底反推
-                        prev_day = max(1, day_index - 7)
-                        t0 = 15
-                        growth_rate = 0.15 if crop_type == "Tomato" else 0.12
-                        max_h = 80.0 if crop_type == "Tomato" else 120.0
-                        max_s = 12.0 if crop_type == "Tomato" else 9.0
-                        height_7_days_ago = 5.0 + (max_h - 5.0) / (1.0 + math.exp(-growth_rate * (prev_day - t0)))
-                        stem_7_days_ago = 1.5 + (max_s - 1.5) / (1.0 + math.exp(-growth_rate * (prev_day - t0)))
-                        leaves_7_days_ago = int(4 + prev_day * 0.8)
-                        side_buds_7_days_ago = 0
                         
-                    height_wow = (height - height_7_days_ago) / height_7_days_ago if height_7_days_ago else 0.0
-                    stem_wow = (stem - stem_7_days_ago) / stem_7_days_ago if stem_7_days_ago else 0.0
-                    leaves_wow = (leaves - leaves_7_days_ago) / leaves_7_days_ago if leaves_7_days_ago else 0.0
-                    side_buds_wow = (side_buds - side_buds_7_days_ago) / side_buds_7_days_ago if side_buds_7_days_ago else 0.0
+                        height_wow = (height - height_7_days_ago) / height_7_days_ago if height_7_days_ago else 0.0
+                        stem_wow = (stem - stem_7_days_ago) / stem_7_days_ago if stem_7_days_ago else 0.0
+                        leaves_wow = (leaves - leaves_7_days_ago) / leaves_7_days_ago if leaves_7_days_ago else 0.0
+                        side_buds_wow = (side_buds - side_buds_7_days_ago) / side_buds_7_days_ago if side_buds_7_days_ago else 0.0
+                    else:
+                        height_wow = None
+                        stem_wow = None
+                        leaves_wow = None
+                        side_buds_wow = None
                     
                     results.append({
                         "date": date_str,
@@ -409,10 +536,10 @@ def analyze_plant_data(date_str: str, day_index: int, images_dir: Optional[str] 
                         "leaves_count": leaves,
                         "side_buds": side_buds,
                         "photo_path": f"/logs/{date_str}/{model_name.lower().replace(' ', '_')}.jpg",
-                        "height_wow": round(height_wow, 4),
-                        "stem_wow": round(stem_wow, 4),
-                        "leaves_wow": round(leaves_wow, 4),
-                        "side_buds_wow": round(side_buds_wow, 4)
+                        "height_wow": round(height_wow, 4) if height_wow is not None else None,
+                        "stem_wow": round(stem_wow, 4) if stem_wow is not None else None,
+                        "leaves_wow": round(leaves_wow, 4) if leaves_wow is not None else None,
+                        "side_buds_wow": round(side_buds_wow, 4) if side_buds_wow is not None else None
                     })
                 except Exception as e:
                     print(f" -> {model_name} Gemini Vision 解析异常 ({e})，平滑退避到 Mock 模拟器。")

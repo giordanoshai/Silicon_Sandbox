@@ -140,6 +140,55 @@
             background: linear-gradient(to bottom, #a855f7, #6366f1);
         }
 
+        .summary-card-content {
+            display: flex;
+            gap: 20px;
+            align-items: center;
+        }
+
+        .summary-card-text {
+            flex-grow: 1;
+        }
+
+        .summary-card-media {
+            flex-shrink: 0;
+            width: 240px;
+            height: 135px;
+            border-radius: 8px;
+            overflow: hidden;
+            border: 1px solid rgba(168, 85, 247, 0.35);
+            box-shadow: 0 0 15px rgba(168, 85, 247, 0.15);
+            cursor: zoom-in;
+            background: #090d16;
+            display: none; /* 默认隐藏，有图片时显示 */
+            position: relative;
+        }
+
+        .summary-card-media img {
+            width: 100%;
+            height: 100%;
+            object-fit: cover;
+            transition: transform 0.3s;
+        }
+
+        .summary-card-media:hover img {
+            transform: scale(1.05);
+        }
+
+        .summary-card-media-hint {
+            position: absolute;
+            bottom: 4px;
+            right: 4px;
+            background: rgba(0, 0, 0, 0.7);
+            color: #a855f7;
+            font-size: 7.5pt;
+            font-weight: 800;
+            padding: 2px 4px;
+            border-radius: 3px;
+            border: 1px solid rgba(168, 85, 247, 0.3);
+            pointer-events: none;
+        }
+
         .summary-title {
             font-size: 13pt;
             font-weight: 800;
@@ -157,27 +206,7 @@
             margin-bottom: 12px;
         }
 
-        /* 吐槽音频播放控制器 */
-        .audio-container {
-            display: flex;
-            align-items: center;
-            gap: 15px;
-            background: rgba(15, 23, 42, 0.6);
-            border: 1px dashed rgba(168, 85, 247, 0.3);
-            border-radius: 8px;
-            padding: 10px 15px;
-            margin-top: 10px;
-        }
 
-        .audio-player-wrapper {
-            flex-grow: 1;
-        }
-
-        audio {
-            width: 100%;
-            height: 32px;
-            outline: none;
-        }
 
         /* 八大模型矩阵 */
         .grid-container {
@@ -248,25 +277,12 @@
         .badge-reward { background: #064e3b; color: #6ee7b7; border: 1px solid rgba(110, 231, 183, 0.3); }
         .badge-penalty { background: #7f1d1d; color: #fca5a5; border: 1px solid rgba(252, 165, 165, 0.3); }
 
-        /* 卡片内容排版：分左右两部分，左侧数据文本，右侧特写图片 */
+        /* 卡片内容排版：纵向通栏式布局，消除左右分栏导致的空白 */
         .card-body {
-            display: flex;
-            gap: 12px;
-            flex-grow: 1;
-        }
-
-        .card-body-left {
-            width: 60%;
             display: flex;
             flex-direction: column;
             gap: 8px;
-        }
-
-        .card-body-right {
-            width: 40%;
-            display: flex;
-            flex-direction: column;
-            align-items: stretch;
+            flex-grow: 1;
         }
 
         .section-label {
@@ -286,8 +302,8 @@
             font-size: 8.5pt;
             color: #cbd5e1;
             line-height: 1.4;
-            max-height: 80px;
-            overflow-y: auto;
+            max-height: none;
+            overflow-y: visible;
         }
 
         .section-box.action-box {
@@ -299,16 +315,34 @@
             font-style: italic;
         }
 
-        /* 顶部特写物理照片 */
+        /* 顶部特写物理照片：采用 16:9 通栏黄金比例 */
         .photo-wrapper {
             position: relative;
             width: 100%;
-            height: 120px;
+            aspect-ratio: 16 / 9;
             border-radius: 8px;
             overflow: hidden;
             border: 1px solid rgba(255, 255, 255, 0.08);
             cursor: zoom-in;
             background: #090d16;
+            margin-bottom: 4px;
+        }
+
+        /* 赛博朋克风电子镜头标识 */
+        .photo-camera-tag {
+            position: absolute;
+            top: 8px;
+            left: 8px;
+            background: rgba(6, 9, 19, 0.75);
+            color: var(--accent-blue);
+            font-size: 7.5pt;
+            font-weight: 800;
+            padding: 2px 8px;
+            border-radius: 4px;
+            border: 1px solid rgba(56, 189, 248, 0.35);
+            pointer-events: none;
+            letter-spacing: 0.5px;
+            box-shadow: 0 0 10px rgba(56, 189, 248, 0.15);
         }
 
         .photo-wrapper img {
@@ -582,18 +616,7 @@
         .hud-bottom-left { bottom: 10px; left: 10px; border-right: none; border-top: none; }
         .hud-bottom-right { bottom: 10px; right: 10px; border-left: none; border-top: none; }
 
-        .hud-scale-bar {
-            position: absolute;
-            bottom: 20px;
-            left: 20px;
-            background: rgba(0,0,0,0.6);
-            border: 1px solid rgba(56, 189, 248, 0.4);
-            padding: 4px 8px;
-            border-radius: 4px;
-            font-size: 8pt;
-            color: #38bdf8;
-            font-weight: 800;
-        }
+
 
         .lightbox-footer {
             margin-top: 15px;
@@ -647,21 +670,17 @@
     <div class="summary-card" id="summary-card">
         <div class="summary-title">
             <span>🎬 裁判长中枢核心总结</span>
-            <span style="font-size: 8.5pt; color: #a855f7; background: rgba(168, 85, 247, 0.15); padding: 2px 8px; border-radius: 4px; border: 1px solid rgba(168, 85, 247, 0.3)">ElevenLabs 吐槽配音已同步</span>
+            <span style="font-size: 8.5pt; color: #a855f7; background: rgba(168, 85, 247, 0.15); padding: 2px 8px; border-radius: 4px; border: 1px solid rgba(168, 85, 247, 0.3)">数据分析引擎已对齐</span>
         </div>
-        <div class="summary-text" id="summary-main-text">
-            正在载入裁判长当日点评大局数据...
-        </div>
-        
-        <!-- 音频控制器 -->
-        <div class="audio-container">
-            <span style="font-size: 9pt; color: #c084fc; font-weight: 800; display: flex; align-items: center; gap: 5px;">
-                🔊 吐槽播报:
-            </span>
-            <div class="audio-player-wrapper">
-                <audio id="tts-audio" controls src="">
-                    您的浏览器不支持 HTML5 音频播放器。
-                </audio>
+        <div class="summary-card-content">
+            <div class="summary-card-text">
+                <div class="summary-text" id="summary-main-text">
+                    正在载入裁判长当日点评大局数据...
+                </div>
+            </div>
+            <div class="summary-card-media" id="summary-media-box" onclick="openLightbox('今日大局汇总', this.querySelector('img').src)">
+                <img id="summary-media-img" src="" alt="今日汇总图" />
+                <span class="summary-card-media-hint">放大 🔍</span>
             </div>
         </div>
     </div>
@@ -692,7 +711,7 @@
                     <div class="hud-bottom-left hud-corner"></div>
                     <div class="hud-bottom-right hud-corner"></div>
                     <div class="hud-crosshair"></div>
-                    <div class="hud-scale-bar">📏 像素测量标尺对齐中 (1px = 0.08mm)</div>
+
                 </div>
             </div>
             
@@ -713,6 +732,9 @@
             fetchDatesAndInitialize();
             setupLightboxInteract();
         });
+
+        // 监听窗口尺寸变化，动态重新对齐卡片高度
+        window.addEventListener("resize", alignCardHeights);
 
         // 1. 获取所有有记录的日期列表并渲染
         function fetchDatesAndInitialize() {
@@ -762,20 +784,24 @@
                         
                         // 渲染总指挥总结
                         document.getElementById("summary-main-text").innerHTML = `
-                            <strong>今日大局解析：</strong>${data.summary}<br>
-                            <span style="display: block; margin-top: 8px; color: #c084fc; font-style: italic;">
-                                📢 <strong>裁判长吐槽脚本：</strong>"${data.audio_script}"
-                            </span>
+                            <strong>今日大局解析：</strong>${data.summary}
                         `;
                         
-                        // 渲染音频
-                        const audioEl = document.getElementById("tts-audio");
-                        if (data.audio_path) {
-                            // 加上时间戳防止浏览器缓存音频
-                            audioEl.src = `${data.audio_path}?t=${new Date().getTime()}`;
-                        } else {
-                            audioEl.src = "";
-                        }
+                        // 渲染今日汇总图 (若存在 logs/{dateStr}/summary.png)
+                        const mediaBox = document.getElementById("summary-media-box");
+                        const mediaImg = document.getElementById("summary-media-img");
+                        const summaryImgUrl = `/logs/${dateStr}/summary.png`;
+                        
+                        // 尝试加载图片，加载成功则显示，失败则隐藏
+                        const imgTester = new Image();
+                        imgTester.onload = function() {
+                            mediaImg.src = summaryImgUrl;
+                            mediaBox.style.display = "block";
+                        };
+                        imgTester.onerror = function() {
+                            mediaBox.style.display = "none";
+                        };
+                        imgTester.src = summaryImgUrl;
                         
                         // 渲染 8 个大模型卡片
                         renderModelCards(data.models);
@@ -826,35 +852,57 @@
                 const maxL = 30;                                  // 叶片数最大值
                 const maxB = 6;                                   // 关节侧芽数最大值
                 
-                // 2. 根据当前值与 WoW 同比率，反推上周同期的绝对值 (若同比为 0 或 NaN 则退避为当前值)
-                const prevHeight = (m.height_wow !== undefined && m.height_wow !== null) ? (m.height / (1 + m.height_wow)) : m.height;
-                const prevStem = (m.stem_wow !== undefined && m.stem_wow !== null) ? (m.stem_diameter / (1 + m.stem_wow)) : m.stem_diameter;
-                const prevLeaves = (m.leaves_wow !== undefined && m.leaves_wow !== null) ? (m.leaves_count / (1 + m.leaves_wow)) : m.leaves_count;
-                const prevSideBuds = (m.side_buds_wow !== undefined && m.side_buds_wow !== null) ? ((m.side_buds || 0) / (1 + m.side_buds_wow)) : (m.side_buds || 0);
+                // 2. 判断是否存在同比 WoW 数据
+                const hasHeightWow = m.height_wow !== undefined && m.height_wow !== null;
+                const hasStemWow = m.stem_wow !== undefined && m.stem_wow !== null;
+                const hasLeavesWow = m.leaves_wow !== undefined && m.leaves_wow !== null;
+                const hasBudsWow = m.side_buds_wow !== undefined && m.side_buds_wow !== null;
                 
-                // 3. 计算当前与历史百分比宽度
+                // 3. 根据当前值与 WoW 同比率，反推上周同期的绝对值 (若为 null，则不反推)
+                const prevHeight = hasHeightWow ? (m.height / (1 + m.height_wow)) : null;
+                const prevStem = hasStemWow ? (m.stem_diameter / (1 + m.stem_wow)) : null;
+                const prevLeaves = hasLeavesWow ? (m.leaves_count / (1 + m.leaves_wow)) : null;
+                const prevSideBuds = hasBudsWow ? ((m.side_buds || 0) / (1 + m.side_buds_wow)) : null;
+                
+                // 4. 计算当前与历史百分比宽度
                 const heightCurrPercent = Math.min(100, Math.max(0, (m.height / maxH) * 100));
-                const heightPrevPercent = Math.min(100, Math.max(0, (prevHeight / maxH) * 100));
+                const heightPrevPercent = hasHeightWow ? Math.min(100, Math.max(0, (prevHeight / maxH) * 100)) : 0;
                 
                 const stemCurrPercent = Math.min(100, Math.max(0, (m.stem_diameter / maxS) * 100));
-                const stemPrevPercent = Math.min(100, Math.max(0, (prevStem / maxS) * 100));
+                const stemPrevPercent = hasStemWow ? Math.min(100, Math.max(0, (prevStem / maxS) * 100)) : 0;
                 
                 const leavesCurrPercent = Math.min(100, Math.max(0, (m.leaves_count / maxL) * 100));
-                const leavesPrevPercent = Math.min(100, Math.max(0, (prevLeaves / maxL) * 100));
+                const leavesPrevPercent = hasLeavesWow ? Math.min(100, Math.max(0, (prevLeaves / maxL) * 100)) : 0;
                 
                 const budsCurrPercent = Math.min(100, Math.max(0, ((m.side_buds || 0) / maxB) * 100));
-                const budsPrevPercent = Math.min(100, Math.max(0, (prevSideBuds / maxB) * 100));
+                const budsPrevPercent = hasBudsWow ? Math.min(100, Math.max(0, (prevSideBuds / maxB) * 100)) : 0;
                 
-                // 4. 定制当前粗进度条的发光色彩
-                const heightBarColor = m.height_wow >= 0 ? "linear-gradient(to right, #0ea5e9, #38bdf8)" : "linear-gradient(to right, #ef4444, #f43f5e)";
-                const stemBarColor = m.stem_wow >= 0 ? "linear-gradient(to right, #10b981, #34d399)" : "linear-gradient(to right, #ef4444, #f43f5e)";
-                const leavesBarColor = (m.leaves_wow || 0) >= 0 ? "linear-gradient(to right, #d97706, #fbbf24)" : "linear-gradient(to right, #ef4444, #f43f5e)";
-                const budsBarColor = (m.side_buds_wow || 0) >= 0 ? "linear-gradient(to right, #7c3aed, #a78bfa)" : "linear-gradient(to right, #ef4444, #f43f5e)";
+                // 5. 定制当前粗进度条的发光色彩 (无同比数据时默认展示蓝色/绿色/橙色/紫色等基准色)
+                const heightBarColor = (!hasHeightWow || m.height_wow >= 0) ? "linear-gradient(to right, #0ea5e9, #38bdf8)" : "linear-gradient(to right, #ef4444, #f43f5e)";
+                const stemBarColor = (!hasStemWow || m.stem_wow >= 0) ? "linear-gradient(to right, #10b981, #34d399)" : "linear-gradient(to right, #ef4444, #f43f5e)";
+                const leavesBarColor = (!hasLeavesWow || m.leaves_wow >= 0) ? "linear-gradient(to right, #d97706, #fbbf24)" : "linear-gradient(to right, #ef4444, #f43f5e)";
+                const budsBarColor = (!hasBudsWow || m.side_buds_wow >= 0) ? "linear-gradient(to right, #7c3aed, #a78bfa)" : "linear-gradient(to right, #ef4444, #f43f5e)";
                 
-                const heightSign = m.height_wow >= 0 ? "+" : "";
-                const stemSign = m.stem_wow >= 0 ? "+" : "";
-                const leavesSign = (m.leaves_wow || 0) >= 0 ? "+" : "";
-                const budsSign = (m.side_buds_wow || 0) >= 0 ? "+" : "";
+                // 6. 处理符号与文本格式化
+                const heightSign = hasHeightWow ? (m.height_wow >= 0 ? "+" : "") : "";
+                const stemSign = hasStemWow ? (m.stem_wow >= 0 ? "+" : "") : "";
+                const leavesSign = hasLeavesWow ? (m.leaves_wow >= 0 ? "+" : "") : "";
+                const budsSign = hasBudsWow ? (m.side_buds_wow >= 0 ? "+" : "") : "";
+                
+                const heightWowText = hasHeightWow ? `${heightSign}${(m.height_wow*100).toFixed(1)}%` : `--`;
+                const stemWowText = hasStemWow ? `${stemSign}${(m.stem_wow*100).toFixed(1)}%` : `--`;
+                const leavesWowText = hasLeavesWow ? `${leavesSign}${(m.leaves_wow*100).toFixed(1)}%` : `--`;
+                const budsWowText = hasBudsWow ? `${budsSign}${(m.side_buds_wow*100).toFixed(1)}%` : `--`;
+                
+                const heightClass = hasHeightWow ? (m.height_wow >= 0 ? 'text-up' : 'text-down') : 'text-neutral';
+                const stemClass = hasStemWow ? (m.stem_wow >= 0 ? 'text-up' : 'text-down') : 'text-neutral';
+                const leavesClass = hasLeavesWow ? (m.leaves_wow >= 0 ? 'text-up' : 'text-down') : 'text-neutral';
+                const budsClass = hasBudsWow ? (m.side_buds_wow >= 0 ? 'text-up' : 'text-down') : 'text-neutral';
+                
+                const heightPrevLabel = hasHeightWow ? `上周同期: ${prevHeight.toFixed(1)} cm` : `上周同期: 暂无`;
+                const stemPrevLabel = hasStemWow ? `上周同期: ${prevStem.toFixed(1)} mm` : `上周同期: 暂无`;
+                const leavesPrevLabel = hasLeavesWow ? `上周同期: ${Math.round(prevLeaves)} 片` : `上周同期: 暂无`;
+                const budsPrevLabel = hasBudsWow ? `上周同期: ${Math.round(prevSideBuds)} 个` : `上周同期: 暂无`;
                 
                 // 动态构建 HTML
                 card.innerHTML = `
@@ -870,25 +918,23 @@
                     </div>
                     
                     <div class="card-body">
-                        <div class="card-body-left">
-                            <div class="section-label">State (植物状态)</div>
-                            <div class="section-box">${m.state_desc}</div>
-                            
-                            <div class="section-label" style="margin-top: 4px;">Action (维护指令)</div>
-                            <div class="section-box action-box">${m.action_desc || '物理动作已执行完毕，继续保持稳健环境。'}</div>
-                            
-                            <div class="section-label" style="margin-top: 4px;">RL Reward Judgment</div>
-                            <div class="section-box reward-box" style="color: ${m.score_change >= 0 ? '#22c55e' : '#ef4444'}">
-                                ${m.reward_judg}
-                            </div>
+                        <!-- 物理特写照片 (16:9 通栏比例，带 Live HUD 效果) -->
+                        <div class="photo-wrapper" onclick="openLightbox('${m.model_name}', '${m.photo_path}')">
+                            <img src="${m.photo_path}" alt="${m.model_name} 植物特写" onerror="this.src='/static/images/plants/default_plant.png'" />
+                            <span class="photo-hint">放大 🔍</span>
+                            <span class="photo-camera-tag">📷 LIVE CAM: CLOSE-UP</span>
                         </div>
+
+                        <!-- 状态与狡辩内容横向通栏，文字排版更舒适大气 -->
+                        <div class="section-label">State (植物状态)</div>
+                        <div class="section-box">${m.state_desc}</div>
                         
-                        <div class="card-body-right">
-                            <div class="section-label">物理特写特写</div>
-                            <div class="photo-wrapper" onclick="openLightbox('${m.model_name}', '${m.photo_path}')">
-                                <img src="${m.photo_path}" alt="${m.model_name} 植物特写" onerror="this.src='/static/images/plants/default_plant.png'" />
-                                <span class="photo-hint">放大 🔍</span>
-                            </div>
+                        <div class="section-label" style="margin-top: 4px;">AI Prisoner's Defense (AI 囚徒自述与狡辩)</div>
+                        <div class="section-box action-box">${m.action_desc || '该囚徒闭网思过，未能提供任何有效辩解。'}</div>
+                        
+                        <div class="section-label" style="margin-top: 4px;">RL Reward Judgment</div>
+                        <div class="section-box reward-box" style="color: ${m.score_change >= 0 ? '#22c55e' : '#ef4444'}">
+                            ${m.reward_judg}
                         </div>
                     </div>
                     
@@ -898,74 +944,107 @@
                         <div class="wow-bar-item-v2">
                             <div class="wow-meta-info">
                                 <span class="wow-label">高度: ${m.height.toFixed(1)} cm</span>
-                                <span class="wow-val-text ${m.height_wow >= 0 ? 'text-up' : 'text-down'}">${heightSign}${(m.height_wow*100).toFixed(1)}%</span>
+                                <span class="wow-val-text ${heightClass}">${heightWowText}</span>
                             </div>
                             <div class="wow-bar-group">
                                 <div class="wow-bar-outer current-bar">
-                                    <div class="wow-bar-inner" style="width: ${heightCurrPercent}%; background: ${heightBarColor}; box-shadow: 0 0 6px ${m.height_wow >= 0 ? 'rgba(56,189,248,0.5)' : 'rgba(239,68,68,0.5)'}"></div>
+                                    <div class="wow-bar-inner" style="width: ${heightCurrPercent}%; background: ${heightBarColor}; box-shadow: 0 0 6px ${(!hasHeightWow || m.height_wow >= 0) ? 'rgba(56,189,248,0.5)' : 'rgba(239,68,68,0.5)'}"></div>
                                 </div>
-                                <div class="wow-bar-outer prev-bar">
+                                <div class="wow-bar-outer prev-bar" style="display: ${hasHeightWow ? 'block' : 'none'}">
                                     <div class="wow-bar-inner prev-inner" style="width: ${heightPrevPercent}%;"></div>
                                 </div>
                             </div>
-                            <div class="wow-prev-label">上周同期: ${prevHeight.toFixed(1)} cm</div>
+                            <div class="wow-prev-label">${heightPrevLabel}</div>
                         </div>
                         
                         <!-- 茎粗对比 -->
                         <div class="wow-bar-item-v2">
                             <div class="wow-meta-info">
                                 <span class="wow-label">茎粗: ${m.stem_diameter.toFixed(1)} mm</span>
-                                <span class="wow-val-text ${m.stem_wow >= 0 ? 'text-up' : 'text-down'}">${stemSign}${(m.stem_wow*100).toFixed(1)}%</span>
+                                <span class="wow-val-text ${stemClass}">${stemWowText}</span>
                             </div>
                             <div class="wow-bar-group">
                                 <div class="wow-bar-outer current-bar">
-                                    <div class="wow-bar-inner" style="width: ${stemCurrPercent}%; background: ${stemBarColor}; box-shadow: 0 0 6px ${m.stem_wow >= 0 ? 'rgba(52,211,153,0.5)' : 'rgba(239,68,68,0.5)'}"></div>
+                                    <div class="wow-bar-inner" style="width: ${stemCurrPercent}%; background: ${stemBarColor}; box-shadow: 0 0 6px ${(!hasStemWow || m.stem_wow >= 0) ? 'rgba(52,211,153,0.5)' : 'rgba(239,68,68,0.5)'}"></div>
                                 </div>
-                                <div class="wow-bar-outer prev-bar">
+                                <div class="wow-bar-outer prev-bar" style="display: ${hasStemWow ? 'block' : 'none'}">
                                     <div class="wow-bar-inner prev-inner" style="width: ${stemPrevPercent}%;"></div>
                                 </div>
                             </div>
-                            <div class="wow-prev-label">上周同期: ${prevStem.toFixed(1)} mm</div>
+                            <div class="wow-prev-label">${stemPrevLabel}</div>
                         </div>
                         
                         <!-- 叶片数量对比 -->
                         <div class="wow-bar-item-v2">
                             <div class="wow-meta-info">
                                 <span class="wow-label">叶片: ${m.leaves_count} 片</span>
-                                <span class="wow-val-text ${(m.leaves_wow || 0) >= 0 ? 'text-up' : 'text-down'}">${leavesSign}${((m.leaves_wow || 0)*100).toFixed(1)}%</span>
+                                <span class="wow-val-text ${leavesClass}">${leavesWowText}</span>
                             </div>
                             <div class="wow-bar-group">
                                 <div class="wow-bar-outer current-bar">
-                                    <div class="wow-bar-inner" style="width: ${leavesCurrPercent}%; background: ${leavesBarColor}; box-shadow: 0 0 6px ${(m.leaves_wow || 0) >= 0 ? 'rgba(251,191,36,0.5)' : 'rgba(239,68,68,0.5)'}"></div>
+                                    <div class="wow-bar-inner" style="width: ${leavesCurrPercent}%; background: ${leavesBarColor}; box-shadow: 0 0 6px ${(!hasLeavesWow || m.leaves_wow >= 0) ? 'rgba(251,191,36,0.5)' : 'rgba(239,68,68,0.5)'}"></div>
                                 </div>
-                                <div class="wow-bar-outer prev-bar">
+                                <div class="wow-bar-outer prev-bar" style="display: ${hasLeavesWow ? 'block' : 'none'}">
                                     <div class="wow-bar-inner prev-inner" style="width: ${leavesPrevPercent}%;"></div>
                                 </div>
                             </div>
-                            <div class="wow-prev-label">上周同期: ${Math.round(prevLeaves)} 片</div>
+                            <div class="wow-prev-label">${leavesPrevLabel}</div>
                         </div>
                         
                         <!-- 关节侧芽对比 -->
                         <div class="wow-bar-item-v2">
                             <div class="wow-meta-info">
                                 <span class="wow-label">侧芽: ${(m.side_buds || 0)} 个</span>
-                                <span class="wow-val-text ${(m.side_buds_wow || 0) >= 0 ? 'text-up' : 'text-down'}">${budsSign}${((m.side_buds_wow || 0)*100).toFixed(1)}%</span>
+                                <span class="wow-val-text ${budsClass}">${budsWowText}</span>
                             </div>
                             <div class="wow-bar-group">
                                 <div class="wow-bar-outer current-bar">
-                                    <div class="wow-bar-inner" style="width: ${budsCurrPercent}%; background: ${budsBarColor}; box-shadow: 0 0 6px ${(m.side_buds_wow || 0) >= 0 ? 'rgba(167,139,250,0.5)' : 'rgba(239,68,68,0.5)'}"></div>
+                                    <div class="wow-bar-inner" style="width: ${budsCurrPercent}%; background: ${budsBarColor}; box-shadow: 0 0 6px ${(!hasBudsWow || m.side_buds_wow >= 0) ? 'rgba(167,139,250,0.5)' : 'rgba(239,68,68,0.5)'}"></div>
                                 </div>
-                                <div class="wow-bar-outer prev-bar">
+                                <div class="wow-bar-outer prev-bar" style="display: ${hasBudsWow ? 'block' : 'none'}">
                                     <div class="wow-bar-inner prev-inner" style="width: ${budsPrevPercent}%;"></div>
                                 </div>
                             </div>
-                            <div class="wow-prev-label">上周同期: ${Math.round(prevSideBuds)} 个</div>
+                            <div class="wow-prev-label">${budsPrevLabel}</div>
                         </div>
                     </div>
                 `;
                 
                 container.appendChild(card);
             });
+
+            // 渲染完毕后，进行卡片高度的统一拉高对齐
+            setTimeout(alignCardHeights, 50);
+        }
+
+        // 动态计算并统一拉高所有卡片高度（保持视觉排版统一，避免滚动条出现）
+        function alignCardHeights() {
+            const container = document.getElementById("cards-container");
+            const cards = container.querySelectorAll(".card");
+            if (cards.length === 0) return;
+
+            // 1. 先重置所有卡片的高度为 auto，以便根据最新内容自然计算高度
+            cards.forEach(card => {
+                card.style.height = "auto";
+            });
+
+            // 2. 只有在非单列布局下才做统一拉高对齐
+            // 手机等窄屏（768px以下）下卡片堆叠显示，保持各自内容高度即可，避免产生不必要的留白
+            if (window.innerWidth > 768) {
+                let maxHeight = 0;
+                cards.forEach(card => {
+                    const h = card.offsetHeight;
+                    if (h > maxHeight) {
+                        maxHeight = h;
+                    }
+                });
+
+                if (maxHeight > 0) {
+                    cards.forEach(card => {
+                        card.style.height = `${maxHeight}px`;
+                    });
+                }
+            }
         }
 
         /* --- 玻璃拟态电子缩放 Lightbox 交互控制逻辑 --- */

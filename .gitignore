@@ -23,6 +23,7 @@ __pycache__/
 audio_generator.py
 video_creator.py
 pipeline.py
+social_media/
 
 # 4. 日志与临时运行垃圾
 *.log
