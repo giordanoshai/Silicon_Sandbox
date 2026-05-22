@@ -54,6 +54,8 @@ def init_db():
         side_buds INTEGER DEFAULT 0,
         leaves_wow REAL DEFAULT 0.0,
         side_buds_wow REAL DEFAULT 0.0,
+        state_desc_en TEXT,
+        action_desc_en TEXT,
         PRIMARY KEY (date, model_name)
     )
     """)
@@ -67,6 +69,10 @@ def init_db():
         cursor.execute("ALTER TABLE model_metrics ADD COLUMN leaves_wow REAL DEFAULT 0.0")
     if "side_buds_wow" not in columns:
         cursor.execute("ALTER TABLE model_metrics ADD COLUMN side_buds_wow REAL DEFAULT 0.0")
+    if "state_desc_en" not in columns:
+        cursor.execute("ALTER TABLE model_metrics ADD COLUMN state_desc_en TEXT")
+    if "action_desc_en" not in columns:
+        cursor.execute("ALTER TABLE model_metrics ADD COLUMN action_desc_en TEXT")
         
     conn.commit()
     conn.close()
@@ -92,17 +98,23 @@ def insert_daily_record(date: str, stage: str, weather: str, summary: str, audio
 
 def insert_model_metrics(metrics: Dict[str, Any]):
     """插入或更新模型的每日指标"""
+    # 兜底英文字段防爆，以防传入数据未带此字段
+    metrics.setdefault("state_desc_en", None)
+    metrics.setdefault("action_desc_en", None)
+    
     conn = get_db_connection()
     cursor = conn.cursor()
     cursor.execute("""
     INSERT INTO model_metrics (
         date, model_name, crop_type, color, score, score_change, score_reason,
         state_desc, action_desc, reward_judg, height, stem_diameter, leaves_count,
-        photo_path, height_wow, stem_wow, side_buds, leaves_wow, side_buds_wow
+        photo_path, height_wow, stem_wow, side_buds, leaves_wow, side_buds_wow,
+        state_desc_en, action_desc_en
     ) VALUES (
         :date, :model_name, :crop_type, :color, :score, :score_change, :score_reason,
         :state_desc, :action_desc, :reward_judg, :height, :stem_diameter, :leaves_count,
-        :photo_path, :height_wow, :stem_wow, :side_buds, :leaves_wow, :side_buds_wow
+        :photo_path, :height_wow, :stem_wow, :side_buds, :leaves_wow, :side_buds_wow,
+        :state_desc_en, :action_desc_en
     ) ON CONFLICT(date, model_name) DO UPDATE SET
         crop_type=excluded.crop_type,
         color=excluded.color,
@@ -120,7 +132,9 @@ def insert_model_metrics(metrics: Dict[str, Any]):
         stem_wow=excluded.stem_wow,
         side_buds=excluded.side_buds,
         leaves_wow=excluded.leaves_wow,
-        side_buds_wow=excluded.side_buds_wow
+        side_buds_wow=excluded.side_buds_wow,
+        state_desc_en=excluded.state_desc_en,
+        action_desc_en=excluded.action_desc_en
     """, metrics)
     conn.commit()
     conn.close()

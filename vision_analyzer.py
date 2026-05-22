@@ -232,7 +232,9 @@ def generate_mock_plant_data(model_name: str, date_str: str, day_index: int) -> 
         "height_wow": round(height_wow, 4) if height_wow is not None else None,
         "stem_wow": round(stem_wow, 4) if stem_wow is not None else None,
         "leaves_wow": round(leaves_wow, 4) if leaves_wow is not None else None,
-        "side_buds_wow": round(side_buds_wow, 4) if side_buds_wow is not None else None
+        "side_buds_wow": round(side_buds_wow, 4) if side_buds_wow is not None else None,
+        "state_desc_en": None,
+        "action_desc_en": None
     }
 
 def analyze_plant_data(date_str: str, day_index: int, images_dir: Optional[str] = None, import_json_data: Optional[Dict[str, Any]] = None) -> Dict[str, Any]:
@@ -340,6 +342,10 @@ def analyze_plant_data(date_str: str, day_index: int, images_dir: Optional[str] 
             if not action_desc:
                 action_desc = "当前生长态势稳定，继续维持断水策略与暴晒。"
                 
+            # 获取 AI 汇报中自主生成的原生英文字段
+            state_desc_en = m_input.get("state_desc_en")
+            action_desc_en = m_input.get("action_desc_en")
+                
             # 计算同比 WoW
             if len(history) >= 7:
                 height_7_days_ago = history[-7]["height"]
@@ -376,7 +382,9 @@ def analyze_plant_data(date_str: str, day_index: int, images_dir: Optional[str] 
                 "height_wow": round(height_wow, 4) if height_wow is not None else None,
                 "stem_wow": round(stem_wow, 4) if stem_wow is not None else None,
                 "leaves_wow": round(leaves_wow, 4) if leaves_wow is not None else None,
-                "side_buds_wow": round(side_buds_wow, 4) if side_buds_wow is not None else None
+                "side_buds_wow": round(side_buds_wow, 4) if side_buds_wow is not None else None,
+                "state_desc_en": state_desc_en,
+                "action_desc_en": action_desc_en
             })
             
         scores = [r["score"] for r in results]
@@ -539,7 +547,9 @@ def analyze_plant_data(date_str: str, day_index: int, images_dir: Optional[str] 
                         "height_wow": round(height_wow, 4) if height_wow is not None else None,
                         "stem_wow": round(stem_wow, 4) if stem_wow is not None else None,
                         "leaves_wow": round(leaves_wow, 4) if leaves_wow is not None else None,
-                        "side_buds_wow": round(side_buds_wow, 4) if side_buds_wow is not None else None
+                        "side_buds_wow": round(side_buds_wow, 4) if side_buds_wow is not None else None,
+                        "state_desc_en": None,
+                        "action_desc_en": None
                     })
                 except Exception as e:
                     print(f" -> {model_name} Gemini Vision 解析异常 ({e})，平滑退避到 Mock 模拟器。")

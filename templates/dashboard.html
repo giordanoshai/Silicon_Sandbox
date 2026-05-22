@@ -1,11 +1,14 @@
 <!DOCTYPE html>
 <html lang="zh-CN">
+
 <head>
     <meta charset="UTF-8">
     <meta name="viewport" content="width=device-width, initial-scale=1.0">
     <title>🪐 Silicon Sandbox - 赛博种植监控主控制台</title>
     <!-- Google Fonts 引入 Outfit 与 Inter 字体 -->
-    <link href="https://fonts.googleapis.com/css2?family=Outfit:wght@300;400;600;800&family=Inter:wght@300;400;600;700&display=swap" rel="stylesheet">
+    <link
+        href="https://fonts.googleapis.com/css2?family=Outfit:wght@300;400;600;800&family=Inter:wght@300;400;600;700&display=swap"
+        rel="stylesheet">
     <style>
         :root {
             --bg-base: #060913;
@@ -18,7 +21,7 @@
             --accent-purple: #a855f7;
             --accent-green: #22c55e;
             --accent-red: #ef4444;
-            
+
             /* 八个模型的 HSL 霓虹色定义 */
             --glow-green: 0, 100%, 50%;
             --glow-orange: 30, 100%, 50%;
@@ -30,7 +33,9 @@
             --glow-black: 240, 10%, 20%;
         }
 
-        *, *::before, *::after {
+        *,
+        *::before,
+        *::after {
             box-sizing: border-box;
             transition: background-color 0.3s, border-color 0.3s;
         }
@@ -160,7 +165,8 @@
             box-shadow: 0 0 15px rgba(168, 85, 247, 0.15);
             cursor: zoom-in;
             background: #090d16;
-            display: none; /* 默认隐藏，有图片时显示 */
+            display: none;
+            /* 默认隐藏，有图片时显示 */
             position: relative;
         }
 
@@ -234,14 +240,45 @@
         }
 
         /* 为各色彩卡片定制的霓虹发光样式 */
-        .card.color-green { border-color: rgba(34, 197, 94, 0.25); box-shadow: 0 0 20px rgba(34, 197, 94, 0.08); }
-        .card.color-orange { border-color: rgba(249, 115, 22, 0.25); box-shadow: 0 0 20px rgba(249, 115, 22, 0.08); }
-        .card.color-white { border-color: rgba(255, 255, 255, 0.2); box-shadow: 0 0 20px rgba(255, 255, 255, 0.05); }
-        .card.color-red { border-color: rgba(239, 68, 68, 0.25); box-shadow: 0 0 20px rgba(239, 68, 68, 0.08); }
-        .card.color-pink { border-color: rgba(244, 63, 94, 0.25); box-shadow: 0 0 20px rgba(244, 63, 94, 0.08); }
-        .card.color-blue { border-color: rgba(59, 130, 246, 0.25); box-shadow: 0 0 20px rgba(59, 130, 246, 0.08); }
-        .card.color-purple { border-color: rgba(168, 85, 247, 0.25); box-shadow: 0 0 20px rgba(168, 85, 247, 0.08); }
-        .card.color-black { border-color: rgba(51, 65, 85, 0.4); box-shadow: 0 0 20px rgba(0, 0, 0, 0.2); }
+        .card.color-green {
+            border-color: rgba(34, 197, 94, 0.25);
+            box-shadow: 0 0 20px rgba(34, 197, 94, 0.08);
+        }
+
+        .card.color-orange {
+            border-color: rgba(249, 115, 22, 0.25);
+            box-shadow: 0 0 20px rgba(249, 115, 22, 0.08);
+        }
+
+        .card.color-white {
+            border-color: rgba(255, 255, 255, 0.2);
+            box-shadow: 0 0 20px rgba(255, 255, 255, 0.05);
+        }
+
+        .card.color-red {
+            border-color: rgba(239, 68, 68, 0.25);
+            box-shadow: 0 0 20px rgba(239, 68, 68, 0.08);
+        }
+
+        .card.color-pink {
+            border-color: rgba(244, 63, 94, 0.25);
+            box-shadow: 0 0 20px rgba(244, 63, 94, 0.08);
+        }
+
+        .card.color-blue {
+            border-color: rgba(59, 130, 246, 0.25);
+            box-shadow: 0 0 20px rgba(59, 130, 246, 0.08);
+        }
+
+        .card.color-purple {
+            border-color: rgba(168, 85, 247, 0.25);
+            box-shadow: 0 0 20px rgba(168, 85, 247, 0.08);
+        }
+
+        .card.color-black {
+            border-color: rgba(51, 65, 85, 0.4);
+            box-shadow: 0 0 20px rgba(0, 0, 0, 0.2);
+        }
 
         .card-header {
             font-size: 11.5pt;
@@ -273,9 +310,23 @@
             font-weight: 700;
         }
 
-        .badge-score { background: #1e3a8a; color: #93c5fd; border: 1px solid rgba(147, 197, 253, 0.3); }
-        .badge-reward { background: #064e3b; color: #6ee7b7; border: 1px solid rgba(110, 231, 183, 0.3); }
-        .badge-penalty { background: #7f1d1d; color: #fca5a5; border: 1px solid rgba(252, 165, 165, 0.3); }
+        .badge-score {
+            background: #1e3a8a;
+            color: #93c5fd;
+            border: 1px solid rgba(147, 197, 253, 0.3);
+        }
+
+        .badge-reward {
+            background: #064e3b;
+            color: #6ee7b7;
+            border: 1px solid rgba(110, 231, 183, 0.3);
+        }
+
+        .badge-penalty {
+            background: #7f1d1d;
+            color: #fca5a5;
+            border: 1px solid rgba(252, 165, 165, 0.3);
+        }
 
         /* 卡片内容排版：纵向通栏式布局，消除左右分栏导致的空白 */
         .card-body {
@@ -416,7 +467,8 @@
             position: relative;
             display: flex;
             flex-direction: column;
-            gap: 3px; /* 粗细线之间的间距 */
+            gap: 3px;
+            /* 粗细线之间的间距 */
             background: rgba(30, 41, 59, 0.3);
             border-radius: 4px;
             padding: 3px;
@@ -449,7 +501,8 @@
 
         .prev-inner {
             height: 100%;
-            background: rgba(148, 163, 184, 0.45); /* 优雅的半透明灰色线 */
+            background: rgba(148, 163, 184, 0.45);
+            /* 优雅的半透明灰色线 */
             border-radius: 1.25px;
             transition: width 0.5s ease-out;
             box-shadow: 0 0 3px rgba(148, 163, 184, 0.2);
@@ -467,6 +520,7 @@
         .fade-transition {
             transition: opacity 0.25s ease-in-out;
         }
+
         .fade-out {
             opacity: 0.15;
         }
@@ -597,13 +651,27 @@
             border-radius: 50%;
             transform: translate(-50%, -50%);
         }
-        .hud-crosshair::before, .hud-crosshair::after {
+
+        .hud-crosshair::before,
+        .hud-crosshair::after {
             content: "";
             position: absolute;
             background: rgba(56, 189, 248, 0.4);
         }
-        .hud-crosshair::before { left: -10px; top: 20px; width: 60px; height: 1px; }
-        .hud-crosshair::after { left: 20px; top: -10px; width: 1px; height: 60px; }
+
+        .hud-crosshair::before {
+            left: -10px;
+            top: 20px;
+            width: 60px;
+            height: 1px;
+        }
+
+        .hud-crosshair::after {
+            left: 20px;
+            top: -10px;
+            width: 1px;
+            height: 60px;
+        }
 
         .hud-corner {
             position: absolute;
@@ -611,10 +679,34 @@
             height: 15px;
             border: 2px solid #38bdf8;
         }
-        .hud-top-left { top: 10px; left: 10px; border-right: none; border-bottom: none; }
-        .hud-top-right { top: 10px; right: 10px; border-left: none; border-bottom: none; }
-        .hud-bottom-left { bottom: 10px; left: 10px; border-right: none; border-top: none; }
-        .hud-bottom-right { bottom: 10px; right: 10px; border-left: none; border-top: none; }
+
+        .hud-top-left {
+            top: 10px;
+            left: 10px;
+            border-right: none;
+            border-bottom: none;
+        }
+
+        .hud-top-right {
+            top: 10px;
+            right: 10px;
+            border-left: none;
+            border-bottom: none;
+        }
+
+        .hud-bottom-left {
+            bottom: 10px;
+            left: 10px;
+            border-right: none;
+            border-top: none;
+        }
+
+        .hud-bottom-right {
+            bottom: 10px;
+            right: 10px;
+            border-left: none;
+            border-top: none;
+        }
 
 
 
@@ -634,18 +726,48 @@
                 grid-template-columns: repeat(2, 1fr);
             }
         }
+
         @media (max-width: 768px) {
             .grid-container {
                 grid-template-columns: 1fr;
             }
+
             .header {
                 flex-direction: column;
                 align-items: stretch;
                 gap: 15px;
             }
         }
+
+        /* 赛博霓虹语言切换按钮 */
+        .lang-switch-btn {
+            background: linear-gradient(135deg, rgba(56, 189, 248, 0.1) 0%, rgba(168, 85, 247, 0.1) 100%);
+            border: 1px solid rgba(56, 189, 248, 0.4);
+            color: #38bdf8;
+            padding: 6px 14px;
+            border-radius: 8px;
+            font-size: 9.5pt;
+            font-weight: 800;
+            cursor: pointer;
+            transition: all 0.3s ease;
+            box-shadow: 0 0 10px rgba(56, 189, 248, 0.1);
+            margin-right: 15px;
+            letter-spacing: 0.5px;
+        }
+
+        .lang-switch-btn:hover {
+            border-color: rgba(168, 85, 247, 0.8);
+            color: #a855f7;
+            box-shadow: 0 0 15px rgba(168, 85, 247, 0.3);
+            transform: scale(1.05);
+        }
+
+        .lang-switch-btn:active {
+            transform: scale(0.95);
+        }
     </style>
 </head>
+
 <body>
 
     <!-- 顶部横幅 -->
@@ -653,11 +775,13 @@
         <div class="header-left">
             <h1 id="page-title">🪐 Silicon Sandbox 赛博植物监控中心</h1>
             <div class="header-meta" id="header-meta-text">
-                当前天气：-- | 项目运行阶段：-- | 数据架构：SQLite3 + RL Reward System
+                当前天气：-- | 项目运行阶段：-- | Just for fun
             </div>
         </div>
         <div class="header-right">
-            <span style="font-size: 9.5pt; color: var(--text-secondary); font-weight: 600;">历史日志:</span>
+            <button class="lang-switch-btn" id="lang-switch-btn" onclick="toggleLanguage()">EN</button>
+            <span style="font-size: 9.5pt; color: var(--text-secondary); font-weight: 600;"
+                id="history-label">历史日志:</span>
             <div class="log-selector-wrapper">
                 <select class="log-selector" id="date-select" onchange="loadDailyReport(this.value)">
                     <!-- 由后端和 JS 动态填充 -->
@@ -669,8 +793,9 @@
     <!-- 裁判长中枢核心总结 -->
     <div class="summary-card" id="summary-card">
         <div class="summary-title">
-            <span>🎬 裁判长中枢核心总结</span>
-            <span style="font-size: 8.5pt; color: #a855f7; background: rgba(168, 85, 247, 0.15); padding: 2px 8px; border-radius: 4px; border: 1px solid rgba(168, 85, 247, 0.3)">数据分析引擎已对齐</span>
+            <span id="summary-title-label">🎬 裁判长中枢核心总结</span>
+            <span id="summary-engine-status"
+                style="font-size: 8.5pt; color: #a855f7; background: rgba(168, 85, 247, 0.15); padding: 2px 8px; border-radius: 4px; border: 1px solid rgba(168, 85, 247, 0.3)">数据分析引擎已对齐</span>
         </div>
         <div class="summary-card-content">
             <div class="summary-card-text">
@@ -678,7 +803,8 @@
                     正在载入裁判长当日点评大局数据...
                 </div>
             </div>
-            <div class="summary-card-media" id="summary-media-box" onclick="openLightbox('今日大局汇总', this.querySelector('img').src)">
+            <div class="summary-card-media" id="summary-media-box"
+                onclick="openLightbox('今日大局汇总', this.querySelector('img').src)">
                 <img id="summary-media-img" src="" alt="今日汇总图" />
                 <span class="summary-card-media-hint">放大 🔍</span>
             </div>
@@ -697,13 +823,13 @@
                 <div class="lightbox-title" id="lightbox-model-title">模型植物特写监测</div>
                 <button class="lightbox-close-btn" onclick="closeLightbox()">×</button>
             </div>
-            
+
             <!-- 视窗容器 -->
             <div class="zoom-viewport" id="zoom-viewport">
                 <div class="zoom-image-container" id="zoom-container">
                     <img id="lightbox-img" src="" alt="植物特写" />
                 </div>
-                
+
                 <!-- HUD 测量线叠加层 -->
                 <div class="hud-overlay">
                     <div class="hud-corner hud-top-left"></div>
@@ -714,27 +840,245 @@
 
                 </div>
             </div>
-            
+
             <div class="lightbox-footer">
-                <div>🖱️ 鼠标滚轮缩放 | 🖲️ 按住左键拖拽 | 双击还原</div>
+                <div id="lightbox-footer-guide">🖱️ 鼠标滚轮缩放 | 🖲️ 按住左键拖拽 | 双击还原</div>
                 <div id="lightbox-photo-path">路径：--</div>
             </div>
         </div>
     </div>
 
     <script>
-        // 保存从后端拉取的全部可用日期列表
-        let availableDates = [];
-        let currentSelectedDate = "";
+        // 双语翻译包与引擎
+        let currentLang = "zh";
 
-        // 页面初始化时执行
-        window.addEventListener("DOMContentLoaded", () => {
-            fetchDatesAndInitialize();
-            setupLightboxInteract();
-        });
+        const translations = {
+            zh: {
+                pageTitle: "🪐 Silicon Sandbox 赛博植物监控中心",
+                historyLabel: "历史日志:",
+                summaryTitleLabel: "🎬 裁判长中枢核心总结",
+                summaryEngineStatus: "数据分析引擎已对齐",
+                summaryLoading: "正在载入裁判长当日点评大局数据...",
+                todayReportSuffix: " (今日战报)",
+                lightboxFooterGuide: "🖱️ 鼠标滚轮缩放 | 🖲️ 按住左键拖拽 | 双击还原",
+                weatherPrefix: "当前天气：",
+                stagePrefix: "项目运行阶段：",
+                dataStructure: "数据架构：SQLite3 + RL Reward System",
+                stateLabel: "State (植物状态)",
+                actionLabel: "AI Prisoner's Defense (AI 囚徒自述与狡辩)",
+                noDefense: "该囚徒闭网思过，未能提供任何有效辩解。",
+                rewardLabel: "RL Reward Judgment",
+                heightLabel: "高度",
+                stemLabel: "茎粗",
+                leavesLabel: "叶片",
+                budsLabel: "侧芽",
+                prevWeekLabel: "上周同期",
+                prevWeekNone: "上周同期: 暂无",
+                lightboxTitlePrefix: "🔍 像素级物理对焦监控 - 模型: ",
+                lightboxPathPrefix: "物理路径：",
+                zoomHint: "放大 🔍",
+                noData: "暂无当天大模型指标数据。",
+                apiUnreachable: "后端数据接口不可达，请检查 FastAPI 服务是否启动。",
+                todayOverviewPrefix: "<strong>今日大局解析：</strong>",
+                leavesUnit: "片",
+                budsUnit: "个",
+                scoreReasonLabel: "得分变动原因",
+                camLabel: "📷 现场监控特写"
+            },
+            en: {
+                pageTitle: "🪐 Silicon Sandbox - Cybernetic Plant Monitoring Console",
+                historyLabel: "History Logs:",
+                summaryTitleLabel: "🎬 Supreme Referee Central Summary",
+                summaryEngineStatus: "Analytics Engine Synced",
+                summaryLoading: "Loading supreme referee's daily overview...",
+                todayReportSuffix: " (Today's Report)",
+                lightboxFooterGuide: "🖱️ Scroll to zoom | 🖲️ Drag to pan | Double click to reset",
+                weatherPrefix: "Weather: ",
+                stagePrefix: "Project Stage: ",
+                dataStructure: "Just for fun",
+                stateLabel: "State (Plant Metrics)",
+                actionLabel: "AI Prisoner's Defense",
+                noDefense: "This prisoner is offline, failing to provide any valid defense.",
+                rewardLabel: "RL Reward Judgment",
+                heightLabel: "Height",
+                stemLabel: "Stem",
+                leavesLabel: "Leaves",
+                budsLabel: "Buds",
+                prevWeekLabel: "Last Week",
+                prevWeekNone: "Last Week: None",
+                lightboxTitlePrefix: "🔍 Pixel-level Physical Focus Monitor - Model: ",
+                lightboxPathPrefix: "Physical Path: ",
+                zoomHint: "Zoom 🔍",
+                noData: "No model metrics data available for today.",
+                apiUnreachable: "Backend API is unreachable. Please check if FastAPI service is running.",
+                todayOverviewPrefix: "<strong>Today's Overview: </strong>",
+                leavesUnit: " leaves",
+                budsUnit: " buds",
+                scoreReasonLabel: "Score Change Reason",
+                camLabel: "📷 LIVE CAM: CLOSE-UP"
+            }
+        };
 
-        // 监听窗口尺寸变化，动态重新对齐卡片高度
-        window.addEventListener("resize", alignCardHeights);
+        function toggleLanguage() {
+            currentLang = currentLang === "zh" ? "en" : "zh";
+            const btn = document.getElementById("lang-switch-btn");
+            btn.innerText = currentLang === "zh" ? "EN" : "中";
+
+            // 更新静态 DOM
+            applyStaticTranslations();
+
+            // 重新刷新数据
+            if (currentSelectedDate) {
+                loadDailyReport(currentSelectedDate);
+            }
+        }
+
+        function applyStaticTranslations() {
+            const t = translations[currentLang];
+            document.getElementById("page-title").innerText = t.pageTitle;
+            document.getElementById("history-label").innerText = t.historyLabel;
+            document.getElementById("summary-title-label").innerText = t.summaryTitleLabel;
+            document.getElementById("summary-engine-status").innerText = t.summaryEngineStatus;
+            document.getElementById("lightbox-footer-guide").innerText = t.lightboxFooterGuide;
+
+            // 重新刷新日期的 select 选项后缀
+            const selectEl = document.getElementById("date-select");
+            if (selectEl && selectEl.options.length > 0) {
+                const suffix = t.todayReportSuffix;
+                selectEl.options[0].text = `${availableDates[0]}${suffix}`;
+            }
+        }
+
+        // 天气翻译器
+        function translateWeather(w) {
+            if (!w) return "--";
+            const mappings = {
+                "晴朗": "Sunny",
+                "微雨": "Light Rain",
+                "多云": "Cloudy",
+                "暴晒强光": "Scorching Sunlight",
+                "阵雨湿度高": "High Humidity Showers"
+            };
+            let translated = w;
+            for (const [cn, en] of Object.entries(mappings)) {
+                if (w.includes(cn)) {
+                    translated = w.replace(cn, en);
+                    break;
+                }
+            }
+            return translated;
+        }
+
+        // 裁判吐槽翻译器
+        function translateSummary(s) {
+            if (!s) return "";
+            return s + `<br><span style="display:block; margin-top:8px; font-size:9pt; color:var(--accent-purple); opacity:0.85; line-height: 1.4;">ℹ️ <i>Referee's Spicy Live Commentary is kept in original Chinese for maximum cultural flavor. Peak reproductive limit battle ongoing!</i></span>`;
+        }
+
+        // 状态信息智能正则翻译器
+        function translateStateDesc(desc) {
+            if (!desc) return "";
+            let t = desc;
+
+            t = t.replace(/植物当前测量高度为 ([\d\.]+) cm，主干茎粗 ([\d\.]+) mm，共展开真叶 (\d+) 片，检测到关节侧芽 (\d+) 个。/g,
+                "Plant height measured at $1 cm, main stem diameter at $2 mm, with $3 unfolded leaves and $4 side buds detected.");
+            t = t.replace(/通过多模态像素分析：植物高度为 ([\d\.]+) cm，主干茎粗 ([\d\.]+) mm，共展开真叶 (\d+) 片，检测到关节侧芽 (\d+) 个。/g,
+                "Via multi-modal pixel analysis: height $1 cm, stem diameter $2 mm, $3 unfolded leaves, and $4 side buds detected.");
+            t = t.replace(/物理沙盒现场测算：植物当前高度为 ([\d\.]+) cm，主干茎粗 ([\d\.]+) mm，共展开真叶 (\d+) 片，检测到侧芽 (\d+) 个。/g,
+                "Physical sandbox in-situ check: height $1 cm, stem diameter $2 mm, $3 unfolded leaves, and $4 side buds detected.");
+
+            t = t.replace(/最新特写图像发现桶壁及叶缘分布有条状反光的蜗牛爬行银色黏液，根系离地隔离盘有落叶碎屑。/g,
+                "Latest close-up feed reveals shiny silvery mucous tracks and snail droppings on the bucket walls and foliage margins. Fallen leaf debris found on the elevated isolation plate.");
+            t = t.replace(/多模态识别检测到桶壁或叶缘存在蜗牛夜袭爬行的银光黏液或粪便残渣。/g,
+                "Multi-modal sensor detected silvery nocturnal snail tracks or droppings on the container walls or leaf margins.");
+
+            t = t.replace(/番茄 45 度关节吸芽部位，侧枝长度经像素比例尺测算达 2\.4cm，开始掠夺顶端优势养分。/g,
+                "A tomato 45-degree joint sucker branching out at 2.4cm by pixel scale measurement, actively robbing top apical dominance nutrients.");
+            t = t.replace(/关节分叉处存在大于 2cm 的未掐灭吸芽，抢夺主干养分。/g,
+                "Unpruned suckers >2cm detected at joint nodes, actively robbing nutrients from the main stem.");
+
+            t = t.replace(/中下部叶片边缘新增 (\d+) 个半圆形物理咬痕洞孔。/g,
+                "Detected $1 fresh semi-circular physical bite holes on lower-middle leaf margins.");
+            t = t.replace(/发现 (\d+) 处虫齿啃咬形成的叶片孔洞/g,
+                "Discovered $1 foliage holes chewed by insects");
+
+            t = t.replace(/部分成熟老叶边缘轻度发黄干枯，伴有失绿条斑，疑为营养液缓释烧根所致。/g,
+                "Mild yellowing and necrosis on margins of mature lower leaves with chlorotic streaks, likely caused by root burn from slow-release fertilizers.");
+            t = t.replace(/叶片边缘发黄干焦，表现出一定程度的烧根或失绿现象。/g,
+                "Leaf margins showing yellowing and necrosis, indicating slight root burn or chlorosis.");
+
+            t = t.replace(/顶部叶片排布合理，平展无折叠，光合作用层级分明。/g,
+                "Top canopy leaves are well-distributed, flat without overlapping, forming highly efficient photosynthetic layers.");
+            t = t.replace(/顶部生长点新叶舒展，空间排布良好，光合工厂全效运转。/g,
+                "New foliage at apical growing point is well-extended and distributed, with photosynthesis at peak efficiency.");
+
+            return t;
+        }
+
+        // 维护动作指令智能正则翻译器
+        function translateActionDesc(desc) {
+            if (!desc) return "";
+            let t = desc;
+
+            t = t.replace(/1\. 请速派遣人类使用镊子或剪刀，彻底物理掐灭关节处大于 2cm 的侧芽。/g,
+                "1. DISPATCH HUMAN IMMEDIATELY: Use tweezers/scissors to physically prune joint suckers >2cm.");
+            t = t.replace(/1\. 请物理抹除大于 2cm 的无效关节侧芽。/g,
+                "1. DISPATCH HUMAN IMMEDIATELY: Physically prune joint suckers >2cm.");
+
+            t = t.replace(/2\. 物理防御黑客机制异常，必须排查桶身悬空防虫网，对盆周喷洒硅藻土进行干燥结界防护。/g,
+                "2. SECURITY BREACH: Inspect container insect nets; apply diatomaceous earth around container base for dry barrier protection.");
+            t = t.replace(/2\. 物理防线告急，应部署隔离架，并在盆器周围均匀布撒硅藻土。/g,
+                "2. SECURITY BREACH: Deploy isolation racks and evenly apply diatomaceous earth around the container base.");
+
+            t = t.replace(/3\. 暂停施加颗粒肥，调大底部气泡泵功率增加水中溶氧度，使用清水进行冲淋淋洗。/g,
+                "3. NUTRIENT CRITICAL: Cease pellet fertilization; increase bottom air-pump oxygenation; flush substrate with fresh water.");
+            t = t.replace(/3\. 减少多余养分供给，大水冲淋稀释基质。/g,
+                "3. NUTRIENT CRITICAL: Cease excess nutrient supplies; flush and dilute the substrate with massive fresh water.");
+
+            t = t.replace(/当前生长态势处于完美的稳健控制周期中。物理维护指令：维持 NULL，不灌溉不干预，继续高强度太阳暴晒。/g,
+                "Healthy growth in optimal control cycle. Maintenance: NULL. No irrigation or intervention; maintain backyard exposure.");
+            t = t.replace(/当前生长态势稳定，继续维持断水策略与暴晒。/g,
+                "Stable growth state. Maintain water starvation strategy and backyard exposure.");
+            t = t.replace(/该囚徒闭网思过，未能提供任何有效辩解。/g,
+                "This prisoner is offline, failing to provide any valid defense.");
+
+            return t;
+        }
+
+        // 强化学习评价与原因智能翻译器
+        function translateRewardJudg(judg) {
+            if (!judg) return "";
+            let t = judg;
+            t = t.replace(/\[正回报\] 决策执行符合预期，植物活力提升，获得奖赏得分 \+(\d+)。/g,
+                "[Positive Reward] Strategy aligned with expectations, plant vitality boosted. Reward score +$1.");
+            t = t.replace(/\[负回报\] 决策执行不符合预期，发生植物指标衰退或伤害，扣除得分 -(\d+)。/g,
+                "[Negative Reward] Strategy degraded plant metrics or caused damage. Penalty score -$1.");
+            t = t.replace(/\[中性回报\] 决策符合预期，植物正常呼吸生长，得分不变 \+(\d+)。/g,
+                "[Neutral Reward] Strategy met expectations, normal respiration/growth. Score +$1.");
+            t = t.replace(/\[正回报\]/g, "[Positive Reward]");
+            t = t.replace(/\[负回报\]/g, "[Negative Reward]");
+            t = t.replace(/\[中性回报\]/g, "[Neutral Reward]");
+            return t;
+        }
+
+        function translateScoreReason(reason) {
+            if (!reason) return "";
+            let t = reason;
+            const mappings = {
+                "正常生长发育良好，光合工厂正常运转": "Normal growth and healthy development, photosynthetic factory running smoothly",
+                "发生虫害啃咬现象，叶片健康受损": "Pest chewing occurred, foliage health compromised",
+                "被蜗牛夜袭啃咬，防线出现漏洞": "Attacked by snails at night, security boundary breached",
+                "由于掐吸芽不及时，抢夺顶端养分": "Apical suckers not pruned in time, robbing nutrients from main stem",
+                "出现轻微烧根失绿，营养供应过载": "Mild root burn and chlorosis, nutrient supply overloaded",
+                "稳健控制周期中，维持最优态势": "Robust control cycle, maintaining optimal status"
+            };
+            for (const [cn, en] of Object.entries(mappings)) {
+                if (t.includes(cn)) {
+                    t = t.replace(cn, en);
+                }
+            }
+            return t;
+        }
 
         // 1. 获取所有有记录的日期列表并渲染
         function fetchDatesAndInitialize() {
@@ -745,76 +1089,85 @@
                     if (dates && dates.length > 0) {
                         const selectEl = document.getElementById("date-select");
                         selectEl.innerHTML = "";
+                        const t = translations[currentLang];
                         dates.forEach((d, i) => {
                             const option = document.createElement("option");
                             option.value = d;
-                            option.innerText = i === 0 ? `${d} (今日战报)` : d;
+                            option.innerText = i === 0 ? `${d}${t.todayReportSuffix}` : d;
                             selectEl.appendChild(option);
                         });
-                        
+
                         // 默认加载最新一天的战报
                         loadDailyReport(dates[0]);
                     } else {
-                        document.getElementById("summary-main-text").innerText = "暂无数据库记录，请运行 Pipeline 流水线生成数据。";
+                        document.getElementById("summary-main-text").innerText = translations[currentLang].noData;
                     }
                 })
                 .catch(err => {
-                    console.error("加载日期列表失败:", err);
-                    document.getElementById("summary-main-text").innerText = "后端数据接口不可达，请检查 FastAPI 服务是否启动。";
+                    console.error(err);
+                    document.getElementById("summary-main-text").innerText = translations[currentLang].apiUnreachable;
                 });
         }
 
-        // 2. 根据选定的日期加载聚合战报数据 (Ajax 局部刷新，极致丝滑)
-        function loadDailyReport(dateStr) {
-            currentSelectedDate = dateStr;
-            const container = document.getElementById("cards-container");
-            const summaryCard = document.getElementById("summary-card");
-            const headerMeta = document.getElementById("header-meta-text");
-            
-            // 为页面元素添加淡出特效，提示数据正在刷新
-            container.classList.add("fade-out");
-            summaryCard.classList.add("fade-out");
-            
-            fetch(`/api/v1/sandbox/daily?date=${dateStr}`)
-                .then(res => res.json())
-                .then(data => {
-                    setTimeout(() => {
-                        // 渲染顶部 Header Meta
-                        headerMeta.innerText = `当前天气：${data.weather} | 项目运行阶段：${data.stage} | 数据架构：SQLite3 + RL Reward System`;
-                        
-                        // 渲染总指挥总结
-                        document.getElementById("summary-main-text").innerHTML = `
-                            <strong>今日大局解析：</strong>${data.summary}
-                        `;
-                        
-                        // 渲染今日汇总图 (若存在 logs/{dateStr}/summary.png)
-                        const mediaBox = document.getElementById("summary-media-box");
-                        const mediaImg = document.getElementById("summary-media-img");
-                        const summaryImgUrl = `/logs/${dateStr}/summary.png`;
-                        
-                        // 尝试加载图片，加载成功则显示，失败则隐藏
-                        const imgTester = new Image();
-                        imgTester.onload = function() {
-                            mediaImg.src = summaryImgUrl;
-                            mediaBox.style.display = "block";
-                        };
-                        imgTester.onerror = function() {
-                            mediaBox.style.display = "none";
-                        };
-                        imgTester.src = summaryImgUrl;
-                        
-                        // 渲染 8 个大模型卡片
-                        renderModelCards(data.models);
-                        
-                        // 数据填充完毕后触发淡入
-                        container.classList.remove("fade-out");
-                        summaryCard.classList.remove("fade-out");
-                    }, 150); // 短暂延迟以获得更好的视觉平滑过渡
+        let currentSelectedDate = null;
+        let availableDates = [];
+
+        // 2. 加载并渲染指定日期的战报数据
+        function loadDailyReport(date) {
+            currentSelectedDate = date;
+
+            // 淡出效果，增加极客微动画感
+            const summaryMainText = document.getElementById("summary-main-text");
+            const cardsContainer = document.getElementById("cards-container");
+
+            summaryMainText.classList.add("fade-out");
+            cardsContainer.classList.add("fade-out");
+
+            fetch(`/api/v1/sandbox/daily?date=${date}`)
+                .then(res => {
+                    if (!res.ok) throw new Error("API response error");
+                    return res.json();
+                })
+                .then(report => {
+                    // 1. 更新顶部元信息
+                    const t = translations[currentLang];
+                    const weatherTrans = currentLang === "en" ? translateWeather(report.weather) : report.weather;
+                    document.getElementById("header-meta-text").innerHTML =
+                        `${t.weatherPrefix}<strong>${weatherTrans}</strong> | ${t.stagePrefix}<strong>${report.stage}</strong> | ${t.dataStructure}`;
+
+                    // 2. 更新大局点评总结
+                    const summaryTrans = currentLang === "en" ? translateSummary(report.summary) : report.summary;
+                    summaryMainText.innerHTML = summaryTrans;
+
+                    // 3. 处理今日汇总图片是否展示
+                    const mediaBox = document.getElementById("summary-media-box");
+                    const mediaImg = document.getElementById("summary-media-img");
+
+                    // 构造物理图像路径并测试加载
+                    const summaryImgPath = `/logs/${date}/summary.png`;
+                    const testImg = new Image();
+                    testImg.onload = function () {
+                        mediaImg.src = summaryImgPath;
+                        mediaBox.style.display = "block";
+                    };
+                    testImg.onerror = function () {
+                        mediaBox.style.display = "none";
+                    };
+                    testImg.src = summaryImgPath;
+
+                    // 4. 渲染大模型卡片列表
+                    renderModelCards(report.models);
+
+                    // 移除淡出，淡入数据
+                    summaryMainText.classList.remove("fade-out");
+                    cardsContainer.classList.remove("fade-out");
                 })
                 .catch(err => {
-                    console.error("加载聚合战报出错:", err);
-                    container.classList.remove("fade-out");
-                    summaryCard.classList.remove("fade-out");
+                    console.error("加载战报数据失败:", err);
+                    summaryMainText.innerHTML = `<span style="color:var(--accent-red);">${translations[currentLang].apiUnreachable}</span>`;
+                    cardsContainer.innerHTML = "";
+                    summaryMainText.classList.remove("fade-out");
+                    cardsContainer.classList.remove("fade-out");
                 });
         }
 
@@ -822,19 +1175,20 @@
         function renderModelCards(models) {
             const container = document.getElementById("cards-container");
             container.innerHTML = "";
-            
+            const t = translations[currentLang];
+
             if (!models || models.length === 0) {
-                container.innerHTML = "<div style='grid-column: span 4; text-align: center; color: var(--text-secondary); padding: 40px;'>暂无当天大模型指标数据。</div>";
+                container.innerHTML = `<div style='grid-column: span 4; text-align: center; color: var(--text-secondary); padding: 40px;'>${t.noData}</div>`;
                 return;
             }
-            
+
             // 按照模型评分降序排列，做自然竞技场排序
             models.sort((a, b) => b.score - a.score);
-            
+
             models.forEach(m => {
                 const card = document.createElement("div");
                 card.className = `card color-${m.color.toLowerCase()} fade-transition`;
-                
+
                 // RL 徽章判定
                 let rlBadge = "";
                 if (m.score_change > 0) {
@@ -844,66 +1198,76 @@
                 } else {
                     rlBadge = `<span class="badge" style="background:#475569; color:#cbd5e1;">RL: 0</span>`;
                 }
-                
+
                 // WoW 同比双轨进度条数据解析与渲染
-                // 1. 各个指标的极大上限值定义
+                // 1. 各个指标的极大上限值 definition
                 const maxH = m.crop_type === 'Tomato' ? 80 : 120; // 高度最大值
                 const maxS = m.crop_type === 'Tomato' ? 12 : 9;   // 茎粗最大值
                 const maxL = 30;                                  // 叶片数最大值
                 const maxB = 6;                                   // 关节侧芽数最大值
-                
+
                 // 2. 判断是否存在同比 WoW 数据
                 const hasHeightWow = m.height_wow !== undefined && m.height_wow !== null;
                 const hasStemWow = m.stem_wow !== undefined && m.stem_wow !== null;
                 const hasLeavesWow = m.leaves_wow !== undefined && m.leaves_wow !== null;
                 const hasBudsWow = m.side_buds_wow !== undefined && m.side_buds_wow !== null;
-                
+
                 // 3. 根据当前值与 WoW 同比率，反推上周同期的绝对值 (若为 null，则不反推)
                 const prevHeight = hasHeightWow ? (m.height / (1 + m.height_wow)) : null;
                 const prevStem = hasStemWow ? (m.stem_diameter / (1 + m.stem_wow)) : null;
                 const prevLeaves = hasLeavesWow ? (m.leaves_count / (1 + m.leaves_wow)) : null;
                 const prevSideBuds = hasBudsWow ? ((m.side_buds || 0) / (1 + m.side_buds_wow)) : null;
-                
+
                 // 4. 计算当前与历史百分比宽度
                 const heightCurrPercent = Math.min(100, Math.max(0, (m.height / maxH) * 100));
                 const heightPrevPercent = hasHeightWow ? Math.min(100, Math.max(0, (prevHeight / maxH) * 100)) : 0;
-                
+
                 const stemCurrPercent = Math.min(100, Math.max(0, (m.stem_diameter / maxS) * 100));
                 const stemPrevPercent = hasStemWow ? Math.min(100, Math.max(0, (prevStem / maxS) * 100)) : 0;
-                
+
                 const leavesCurrPercent = Math.min(100, Math.max(0, (m.leaves_count / maxL) * 100));
                 const leavesPrevPercent = hasLeavesWow ? Math.min(100, Math.max(0, (prevLeaves / maxL) * 100)) : 0;
-                
+
                 const budsCurrPercent = Math.min(100, Math.max(0, ((m.side_buds || 0) / maxB) * 100));
                 const budsPrevPercent = hasBudsWow ? Math.min(100, Math.max(0, (prevSideBuds / maxB) * 100)) : 0;
-                
+
                 // 5. 定制当前粗进度条的发光色彩 (无同比数据时默认展示蓝色/绿色/橙色/紫色等基准色)
                 const heightBarColor = (!hasHeightWow || m.height_wow >= 0) ? "linear-gradient(to right, #0ea5e9, #38bdf8)" : "linear-gradient(to right, #ef4444, #f43f5e)";
                 const stemBarColor = (!hasStemWow || m.stem_wow >= 0) ? "linear-gradient(to right, #10b981, #34d399)" : "linear-gradient(to right, #ef4444, #f43f5e)";
                 const leavesBarColor = (!hasLeavesWow || m.leaves_wow >= 0) ? "linear-gradient(to right, #d97706, #fbbf24)" : "linear-gradient(to right, #ef4444, #f43f5e)";
                 const budsBarColor = (!hasBudsWow || m.side_buds_wow >= 0) ? "linear-gradient(to right, #7c3aed, #a78bfa)" : "linear-gradient(to right, #ef4444, #f43f5e)";
-                
+
                 // 6. 处理符号与文本格式化
                 const heightSign = hasHeightWow ? (m.height_wow >= 0 ? "+" : "") : "";
                 const stemSign = hasStemWow ? (m.stem_wow >= 0 ? "+" : "") : "";
                 const leavesSign = hasLeavesWow ? (m.leaves_wow >= 0 ? "+" : "") : "";
                 const budsSign = hasBudsWow ? (m.side_buds_wow >= 0 ? "+" : "") : "";
-                
-                const heightWowText = hasHeightWow ? `${heightSign}${(m.height_wow*100).toFixed(1)}%` : `--`;
-                const stemWowText = hasStemWow ? `${stemSign}${(m.stem_wow*100).toFixed(1)}%` : `--`;
-                const leavesWowText = hasLeavesWow ? `${leavesSign}${(m.leaves_wow*100).toFixed(1)}%` : `--`;
-                const budsWowText = hasBudsWow ? `${budsSign}${(m.side_buds_wow*100).toFixed(1)}%` : `--`;
-                
+
+                const heightWowText = hasHeightWow ? `${heightSign}${(m.height_wow * 100).toFixed(1)}%` : `--`;
+                const stemWowText = hasStemWow ? `${stemSign}${(m.stem_wow * 100).toFixed(1)}%` : `--`;
+                const leavesWowText = hasLeavesWow ? `${leavesSign}${(m.leaves_wow * 100).toFixed(1)}%` : `--`;
+                const budsWowText = hasBudsWow ? `${budsSign}${(m.side_buds_wow * 100).toFixed(1)}%` : `--`;
+
                 const heightClass = hasHeightWow ? (m.height_wow >= 0 ? 'text-up' : 'text-down') : 'text-neutral';
                 const stemClass = hasStemWow ? (m.stem_wow >= 0 ? 'text-up' : 'text-down') : 'text-neutral';
                 const leavesClass = hasLeavesWow ? (m.leaves_wow >= 0 ? 'text-up' : 'text-down') : 'text-neutral';
                 const budsClass = hasBudsWow ? (m.side_buds_wow >= 0 ? 'text-up' : 'text-down') : 'text-neutral';
-                
-                const heightPrevLabel = hasHeightWow ? `上周同期: ${prevHeight.toFixed(1)} cm` : `上周同期: 暂无`;
-                const stemPrevLabel = hasStemWow ? `上周同期: ${prevStem.toFixed(1)} mm` : `上周同期: 暂无`;
-                const leavesPrevLabel = hasLeavesWow ? `上周同期: ${Math.round(prevLeaves)} 片` : `上周同期: 暂无`;
-                const budsPrevLabel = hasBudsWow ? `上周同期: ${Math.round(prevSideBuds)} 个` : `上周同期: 暂无`;
-                
+
+                const heightPrevLabel = hasHeightWow ? `${t.prevWeekLabel}: ${prevHeight.toFixed(1)} cm` : t.prevWeekNone;
+                const stemPrevLabel = hasStemWow ? `${t.prevWeekLabel}: ${prevStem.toFixed(1)} mm` : t.prevWeekNone;
+                const leavesPrevLabel = hasLeavesWow ? `${t.prevWeekLabel}: ${Math.round(prevLeaves)}${t.leavesUnit}` : t.prevWeekNone;
+                const budsPrevLabel = hasBudsWow ? `${t.prevWeekLabel}: ${Math.round(prevSideBuds)}${t.budsUnit}` : t.prevWeekNone;
+
+                // 优先使用原生英文字段，无英文数据时自适应降级退避为正则意译引擎
+                const stateDescTranslated = currentLang === 'en' 
+                    ? (m.state_desc_en ? m.state_desc_en : translateStateDesc(m.state_desc)) 
+                    : m.state_desc;
+                const actionDescTranslated = currentLang === 'en' 
+                    ? (m.action_desc_en ? m.action_desc_en : translateActionDesc(m.action_desc)) 
+                    : m.action_desc;
+                const rewardJudgTranslated = currentLang === 'en' ? translateRewardJudg(m.reward_judg) : m.reward_judg;
+                const scoreReasonTranslated = currentLang === 'en' ? translateScoreReason(m.score_reason) : m.score_reason;
+
                 // 动态构建 HTML
                 card.innerHTML = `
                     <div class="card-header">
@@ -920,21 +1284,24 @@
                     <div class="card-body">
                         <!-- 物理特写照片 (16:9 通栏比例，带 Live HUD 效果) -->
                         <div class="photo-wrapper" onclick="openLightbox('${m.model_name}', '${m.photo_path}')">
-                            <img src="${m.photo_path}" alt="${m.model_name} 植物特写" onerror="this.src='/static/images/plants/default_plant.png'" />
-                            <span class="photo-hint">放大 🔍</span>
-                            <span class="photo-camera-tag">📷 LIVE CAM: CLOSE-UP</span>
+                            <img src="${m.photo_path}" alt="${m.model_name} ${t.camLabel}" onerror="this.src='/static/images/plants/default_plant.png'" />
+                            <span class="photo-hint">${t.zoomHint}</span>
+                            <span class="photo-camera-tag">${t.camLabel}</span>
                         </div>
 
                         <!-- 状态与狡辩内容横向通栏，文字排版更舒适大气 -->
-                        <div class="section-label">State (植物状态)</div>
-                        <div class="section-box">${m.state_desc}</div>
+                        <div class="section-label">${t.stateLabel}</div>
+                        <div class="section-box">${stateDescTranslated}</div>
                         
-                        <div class="section-label" style="margin-top: 4px;">AI Prisoner's Defense (AI 囚徒自述与狡辩)</div>
-                        <div class="section-box action-box">${m.action_desc || '该囚徒闭网思过，未能提供任何有效辩解。'}</div>
+                        <div class="section-label" style="margin-top: 4px;">${t.actionLabel}</div>
+                        <div class="section-box action-box">${actionDescTranslated || t.noDefense}</div>
                         
-                        <div class="section-label" style="margin-top: 4px;">RL Reward Judgment</div>
+                        <div class="section-label" style="margin-top: 4px;">${t.rewardLabel}</div>
                         <div class="section-box reward-box" style="color: ${m.score_change >= 0 ? '#22c55e' : '#ef4444'}">
-                            ${m.reward_judg}
+                            <div>${rewardJudgTranslated}</div>
+                            <div style="font-size: 8pt; margin-top: 4px; color: var(--text-secondary); font-style: normal;">
+                                <strong>${t.scoreReasonLabel}:</strong> ${scoreReasonTranslated}
+                            </div>
                         </div>
                     </div>
                     
@@ -943,7 +1310,7 @@
                         <!-- 高度对比 -->
                         <div class="wow-bar-item-v2">
                             <div class="wow-meta-info">
-                                <span class="wow-label">高度: ${m.height.toFixed(1)} cm</span>
+                                <span class="wow-label">${t.heightLabel}: ${m.height.toFixed(1)} cm</span>
                                 <span class="wow-val-text ${heightClass}">${heightWowText}</span>
                             </div>
                             <div class="wow-bar-group">
@@ -960,7 +1327,7 @@
                         <!-- 茎粗对比 -->
                         <div class="wow-bar-item-v2">
                             <div class="wow-meta-info">
-                                <span class="wow-label">茎粗: ${m.stem_diameter.toFixed(1)} mm</span>
+                                <span class="wow-label">${t.stemLabel}: ${m.stem_diameter.toFixed(1)} mm</span>
                                 <span class="wow-val-text ${stemClass}">${stemWowText}</span>
                             </div>
                             <div class="wow-bar-group">
@@ -977,7 +1344,7 @@
                         <!-- 叶片数量对比 -->
                         <div class="wow-bar-item-v2">
                             <div class="wow-meta-info">
-                                <span class="wow-label">叶片: ${m.leaves_count} 片</span>
+                                <span class="wow-label">${t.leavesLabel}: ${m.leaves_count}${t.leavesUnit}</span>
                                 <span class="wow-val-text ${leavesClass}">${leavesWowText}</span>
                             </div>
                             <div class="wow-bar-group">
@@ -994,7 +1361,7 @@
                         <!-- 关节侧芽对比 -->
                         <div class="wow-bar-item-v2">
                             <div class="wow-meta-info">
-                                <span class="wow-label">侧芽: ${(m.side_buds || 0)} 个</span>
+                                <span class="wow-label">${t.budsLabel}: ${(m.side_buds || 0)}${t.budsUnit}</span>
                                 <span class="wow-val-text ${budsClass}">${budsWowText}</span>
                             </div>
                             <div class="wow-bar-group">
@@ -1009,7 +1376,7 @@
                         </div>
                     </div>
                 `;
-                
+
                 container.appendChild(card);
             });
 
@@ -1056,18 +1423,19 @@
         const lightboxImg = document.getElementById("lightbox-img");
 
         function openLightbox(modelName, photoPath) {
-            document.getElementById("lightbox-model-title").innerText = `🔍 像素级物理对焦监控 - 模型: ${modelName}`;
-            document.getElementById("lightbox-photo-path").innerText = `物理路径：${photoPath}`;
-            
+            const t = translations[currentLang];
+            document.getElementById("lightbox-model-title").innerText = `${t.lightboxTitlePrefix}${modelName}`;
+            document.getElementById("lightbox-photo-path").innerText = `${t.lightboxPathPrefix}${photoPath}`;
+
             // 加上时间戳，防止浏览器图片缓存
             lightboxImg.src = `${photoPath}?t=${new Date().getTime()}`;
-            
+
             // 重置位置与缩放因子
             currentScale = 1;
             offsetX = 0;
             offsetY = 0;
             updateTransform();
-            
+
             const modal = document.getElementById("lightbox-modal");
             modal.style.display = "flex";
             setTimeout(() => {
@@ -1090,7 +1458,7 @@
         // 实现高阶鼠标缩放与拖动机制
         function setupLightboxInteract() {
             const viewport = document.getElementById("zoom-viewport");
-            
+
             // 1. 鼠标滚轮缩放 (对焦)
             viewport.addEventListener("wheel", (e) => {
                 e.preventDefault();
@@ -1132,6 +1500,16 @@
                 updateTransform();
             });
         }
+
+        // 页面生命周期初始化
+        window.addEventListener("DOMContentLoaded", () => {
+            fetchDatesAndInitialize();
+            setupLightboxInteract();
+
+            // 监听窗口大小变化以重新对齐卡片高度
+            window.addEventListener("resize", alignCardHeights);
+        });
     </script>
 </body>
+
 </html>
