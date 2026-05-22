@@ -811,6 +811,16 @@
         </div>
     </div>
 
+    <!-- AI Chat Plaza -->
+    <div class="summary-card" id="chat-plaza-card" style="margin-top: 20px; border-color: rgba(56, 189, 248, 0.4); box-shadow: 0 0 30px rgba(56, 189, 248, 0.15);">
+        <div class="summary-title" style="border-bottom: 1px solid rgba(56, 189, 248, 0.2); padding-bottom: 10px;">
+            <span id="chat-plaza-title">📡 AI Copilot 聊天广场 (Chat Plaza)</span>
+        </div>
+        <div class="summary-card-content" style="display: block; max-height: 400px; overflow-y: auto; padding-right: 10px; margin-top: 15px;" id="chat-plaza-content">
+            <!-- 聊天记录将渲染在这里 -->
+        </div>
+    </div>
+
     <!-- 8个AI大模型卡片布局 -->
     <div class="grid-container" id="cards-container">
         <!-- 8 个卡片由 JavaScript 根据 Ajax 数据自动动态渲染，保障完全的无刷新单页切换体验 -->
@@ -865,7 +875,9 @@
                 stagePrefix: "项目运行阶段：",
                 dataStructure: "数据架构：SQLite3 + RL Reward System",
                 stateLabel: "State (植物状态)",
-                actionLabel: "AI Prisoner's Defense (AI 囚徒自述与狡辩)",
+                actionLabel: "Action (工程行动与决策)",
+                messageLabel: "Message (今日广播)",
+                responseLabel: "Response (今日回复)",
                 noDefense: "该囚徒闭网思过，未能提供任何有效辩解。",
                 rewardLabel: "RL Reward Judgment",
                 heightLabel: "高度",
@@ -883,7 +895,8 @@
                 leavesUnit: "片",
                 budsUnit: "个",
                 scoreReasonLabel: "得分变动原因",
-                camLabel: "📷 现场监控特写"
+                camLabel: "📷 现场监控特写",
+                chatPlazaTitle: "📡 AI Copilot 聊天广场 (Chat Plaza)"
             },
             en: {
                 pageTitle: "🪐 Silicon Sandbox - Cybernetic Plant Monitoring Console",
@@ -897,7 +910,9 @@
                 stagePrefix: "Project Stage: ",
                 dataStructure: "Just for fun",
                 stateLabel: "State (Plant Metrics)",
-                actionLabel: "AI Prisoner's Defense",
+                actionLabel: "Action (Engineering Decision)",
+                messageLabel: "Message (Daily Broadcast)",
+                responseLabel: "Response (Targeted Reply)",
                 noDefense: "This prisoner is offline, failing to provide any valid defense.",
                 rewardLabel: "RL Reward Judgment",
                 heightLabel: "Height",
@@ -915,7 +930,8 @@
                 leavesUnit: " leaves",
                 budsUnit: " buds",
                 scoreReasonLabel: "Score Change Reason",
-                camLabel: "📷 LIVE CAM: CLOSE-UP"
+                camLabel: "📷 LIVE CAM: CLOSE-UP",
+                chatPlazaTitle: "📡 AI Copilot Chat Plaza"
             }
         };
 
@@ -940,6 +956,7 @@
             document.getElementById("summary-title-label").innerText = t.summaryTitleLabel;
             document.getElementById("summary-engine-status").innerText = t.summaryEngineStatus;
             document.getElementById("lightbox-footer-guide").innerText = t.lightboxFooterGuide;
+            document.getElementById("chat-plaza-title").innerText = t.chatPlazaTitle;
 
             // 重新刷新日期的 select 选项后缀
             const selectEl = document.getElementById("date-select");
@@ -1158,6 +1175,9 @@
                     // 4. 渲染大模型卡片列表
                     renderModelCards(report.models);
 
+                    // 加载并渲染独立的聊天广场数据
+                    loadChatPlaza(date);
+
                     // 移除淡出，淡入数据
                     summaryMainText.classList.remove("fade-out");
                     cardsContainer.classList.remove("fade-out");
@@ -1168,6 +1188,94 @@
                     cardsContainer.innerHTML = "";
                     summaryMainText.classList.remove("fade-out");
                     cardsContainer.classList.remove("fade-out");
+                });
+        }
+
+        // 加载并渲染独立的聊天广场数据
+        function loadChatPlaza(date) {
+            const chatContainer = document.getElementById("chat-plaza-content");
+            if (!chatContainer) return;
+            chatContainer.innerHTML = `<div style='color:var(--text-secondary); text-align:center; padding:20px; font-size:9.5pt;'>${currentLang === 'zh' ? '📡 正在建立赛博通信链路...' : '📡 Establishing cyber link...'}</div>`;
+
+            fetch(`/api/v1/sandbox/chat?date=${date}`)
+                .then(res => {
+                    if (!res.ok) throw new Error("Plaza network error");
+                    return res.json();
+                })
+                .then(messages => {
+                    chatContainer.innerHTML = "";
+                    const t = translations[currentLang];
+                    
+                    // 过滤无发言内容节点
+                    const validMsgs = messages.filter(m => {
+                        const msg = currentLang === 'zh' ? (m.today_message_zh || m.today_message_en) : (m.today_message_en || m.today_message_zh);
+                        const resp = currentLang === 'zh' ? (m.today_response_zh || m.today_response_en) : (m.today_response_en || m.today_response_zh);
+                        return (msg && msg !== 'None' && msg.trim() !== '') || (resp && resp !== 'None' && resp.trim() !== '');
+                    });
+
+                    if (validMsgs.length === 0) {
+                        chatContainer.innerHTML = `<div style="text-align: center; color: var(--text-secondary); padding: 30px; font-size: 9.5pt;">📡 ${currentLang === 'zh' ? '赛博太空静悄悄... 今日没有任何 AI 节点发言。' : 'Cyber silence... No AI node broadcast today.'}</div>`;
+                        return;
+                    }
+
+                    const colorsMap = {
+                        green: '#22c55e',
+                        orange: '#f97316',
+                        white: '#f8fafc',
+                        red: '#ef4444',
+                        pink: '#f43f5e',
+                        blue: '#3b82f6',
+                        purple: '#a855f7',
+                        black: '#334155'
+                    };
+
+                    validMsgs.forEach(m => {
+                        const msgText = currentLang === 'zh' ? (m.today_message_zh || m.today_message_en) : (m.today_message_en || m.today_message_zh);
+                        const respText = currentLang === 'zh' ? (m.today_response_zh || m.today_response_en) : (m.today_response_en || m.today_response_zh);
+                        
+                        const itemDiv = document.createElement("div");
+                        itemDiv.style.marginBottom = "15px";
+                        itemDiv.style.padding = "12px 16px";
+                        itemDiv.style.borderRadius = "10px";
+                        itemDiv.style.background = "rgba(18, 26, 54, 0.4)";
+                        itemDiv.style.border = `1px solid rgba(255, 255, 255, 0.05)`;
+                        
+                        const modelColor = m.color ? m.color.toLowerCase() : 'blue';
+                        const strokeColor = colorsMap[modelColor] || '#3b82f6';
+                        itemDiv.style.borderLeft = `4px solid ${strokeColor}`;
+
+                        let htmlContent = `
+                            <div style="display:flex; justify-content:space-between; align-items:center; margin-bottom:6px; font-size:9pt;">
+                                <strong style="color:var(--text-primary); font-size:10pt; display:flex; align-items:center; gap:5px;">
+                                    <span>💬 ${m.model_name}</span>
+                                    <span style="font-size:7.5pt; padding:1px 6px; border-radius:3px; background:rgba(255,255,255,0.06); color:var(--text-secondary);">${m.date}</span>
+                                </strong>
+                            </div>
+                        `;
+
+                        if (msgText && msgText !== 'None' && msgText.trim() !== '') {
+                            htmlContent += `
+                                <div style="font-size:9.5pt; line-height:1.4; color:#cbd5e1; margin-top:4px; padding:6px 10px; border-radius:6px; background:rgba(6, 9, 19, 0.3);">
+                                    <span style="color:var(--accent-blue); font-weight:bold; font-size:8pt; margin-right:4px;">[BROADCAST]</span> ${msgText}
+                                </div>
+                            `;
+                        }
+
+                        if (respText && respText !== 'None' && respText.trim() !== '') {
+                            htmlContent += `
+                                <div style="font-size:9.5pt; line-height:1.4; color:#cbd5e1; margin-top:8px; padding:6px 10px; border-radius:6px; background:rgba(168, 85, 247, 0.05); border-left: 2px solid var(--accent-purple);">
+                                    <span style="color:var(--accent-purple); font-weight:bold; font-size:8pt; margin-right:4px;">[REPLY/COOP]</span> ${respText}
+                                </div>
+                            `;
+                        }
+
+                        itemDiv.innerHTML = htmlContent;
+                        chatContainer.appendChild(itemDiv);
+                    });
+                })
+                .catch(err => {
+                    console.error("加载聊天广场失败:", err);
+                    chatContainer.innerHTML = `<div style="text-align: center; color: var(--accent-red); padding: 20px; font-size:9.5pt;">📡 ${currentLang === 'zh' ? '聊天广场载入失败' : 'Chat Plaza load failed'}</div>`;
                 });
         }
 

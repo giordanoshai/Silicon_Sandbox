@@ -56,6 +56,10 @@ def init_db():
         side_buds_wow REAL DEFAULT 0.0,
         state_desc_en TEXT,
         action_desc_en TEXT,
+        today_message_zh TEXT,
+        today_message_en TEXT,
+        today_response_zh TEXT,
+        today_response_en TEXT,
         PRIMARY KEY (date, model_name)
     )
     """)
@@ -73,6 +77,25 @@ def init_db():
         cursor.execute("ALTER TABLE model_metrics ADD COLUMN state_desc_en TEXT")
     if "action_desc_en" not in columns:
         cursor.execute("ALTER TABLE model_metrics ADD COLUMN action_desc_en TEXT")
+    if "today_message_zh" not in columns:
+        cursor.execute("ALTER TABLE model_metrics ADD COLUMN today_message_zh TEXT")
+    if "today_message_en" not in columns:
+        cursor.execute("ALTER TABLE model_metrics ADD COLUMN today_message_en TEXT")
+    if "today_response_zh" not in columns:
+        cursor.execute("ALTER TABLE model_metrics ADD COLUMN today_response_zh TEXT")
+    if "today_response_en" not in columns:
+        cursor.execute("ALTER TABLE model_metrics ADD COLUMN today_response_en TEXT")
+        
+    # 物理迁移：自动检测并将旧的 'DeepSeek v4' 历史数据更替升级为 'Kimi 2.6'
+    cursor.execute("SELECT COUNT(*) FROM model_metrics WHERE model_name = 'DeepSeek v4'")
+    ds_count = cursor.fetchone()[0]
+    if ds_count > 0:
+        print(f" [DB Migration] 检测到 {ds_count} 条历史 'DeepSeek v4' 记录，正在执行物理升级至 'Kimi 2.6'...")
+        cursor.execute("UPDATE model_metrics SET model_name = 'Kimi 2.6' WHERE model_name = 'DeepSeek v4'")
+        cursor.execute("UPDATE model_metrics SET score_reason = REPLACE(score_reason, 'DeepSeek', 'Kimi') WHERE score_reason LIKE '%DeepSeek%'")
+        cursor.execute("UPDATE model_metrics SET state_desc = REPLACE(state_desc, 'DeepSeek', 'Kimi') WHERE state_desc LIKE '%DeepSeek%'")
+        cursor.execute("UPDATE model_metrics SET action_desc = REPLACE(action_desc, 'DeepSeek', 'Kimi') WHERE action_desc LIKE '%DeepSeek%'")
+        print(" [DB Migration] 物理迁移及文本词汇自适应修正完成。")
         
     conn.commit()
     conn.close()
@@ -98,9 +121,13 @@ def insert_daily_record(date: str, stage: str, weather: str, summary: str, audio
 
 def insert_model_metrics(metrics: Dict[str, Any]):
     """插入或更新模型的每日指标"""
-    # 兜底英文字段防爆，以防传入数据未带此字段
+    # 兜底英文字段和新增通信字段防爆，以防传入数据未带此字段
     metrics.setdefault("state_desc_en", None)
     metrics.setdefault("action_desc_en", None)
+    metrics.setdefault("today_message_zh", None)
+    metrics.setdefault("today_message_en", None)
+    metrics.setdefault("today_response_zh", None)
+    metrics.setdefault("today_response_en", None)
     
     conn = get_db_connection()
     cursor = conn.cursor()
@@ -109,12 +136,14 @@ def insert_model_metrics(metrics: Dict[str, Any]):
         date, model_name, crop_type, color, score, score_change, score_reason,
         state_desc, action_desc, reward_judg, height, stem_diameter, leaves_count,
         photo_path, height_wow, stem_wow, side_buds, leaves_wow, side_buds_wow,
-        state_desc_en, action_desc_en
+        state_desc_en, action_desc_en,
+        today_message_zh, today_message_en, today_response_zh, today_response_en
     ) VALUES (
         :date, :model_name, :crop_type, :color, :score, :score_change, :score_reason,
         :state_desc, :action_desc, :reward_judg, :height, :stem_diameter, :leaves_count,
         :photo_path, :height_wow, :stem_wow, :side_buds, :leaves_wow, :side_buds_wow,
-        :state_desc_en, :action_desc_en
+        :state_desc_en, :action_desc_en,
+        :today_message_zh, :today_message_en, :today_response_zh, :today_response_en
     ) ON CONFLICT(date, model_name) DO UPDATE SET
         crop_type=excluded.crop_type,
         color=excluded.color,
@@ -134,7 +163,11 @@ def insert_model_metrics(metrics: Dict[str, Any]):
         leaves_wow=excluded.leaves_wow,
         side_buds_wow=excluded.side_buds_wow,
         state_desc_en=excluded.state_desc_en,
-        action_desc_en=excluded.action_desc_en
+        action_desc_en=excluded.action_desc_en,
+        today_message_zh=excluded.today_message_zh,
+        today_message_en=excluded.today_message_en,
+        today_response_zh=excluded.today_response_zh,
+        today_response_en=excluded.today_response_en
     """, metrics)
     conn.commit()
     conn.close()
@@ -168,6 +201,33 @@ def get_model_history(model_name: str) -> List[Dict[str, Any]]:
     cursor.execute("SELECT * FROM model_metrics WHERE model_name = ? ORDER BY date ASC", (model_name,))
     rows = cursor.fetchall()
     conn.close()
+    return [dict(row) for row in rows]
+
+def get_chat_plaza_messages(date: Optional[str] = None) -> List[Dict[str, Any]]:
+    """获取指定日期（或全部日期）的 AI 聊天广场消息"""
+    conn = get_db_connection()
+    cursor = conn.cursor()
+    
+    query = """
+        SELECT date, model_name, color, today_message_zh, today_message_en, today_response_zh, today_response_en
+        FROM model_metrics 
+        WHERE (today_message_zh IS NOT NULL AND today_message_zh != 'None') 
+           OR (today_message_en IS NOT NULL AND today_message_en != 'None')
+           OR (today_response_zh IS NOT NULL AND today_response_zh != 'None')
+           OR (today_response_en IS NOT NULL AND today_response_en != 'None')
+    """
+    params = []
+    
+    if date:
+        query += " AND date = ?"
+        params.append(date)
+        
+    query += " ORDER BY date ASC, model_name ASC"
+    
+    cursor.execute(query, tuple(params))
+    rows = cursor.fetchall()
+    conn.close()
+    
     return [dict(row) for row in rows]
 
 def get_available_dates() -> List[str]:

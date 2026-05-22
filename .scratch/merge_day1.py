@@ -8,7 +8,7 @@ ai_response_path = os.path.join(base_dir, "logs", "2026-05-21", "Ai_response.md"
 output_path = os.path.join(base_dir, "import_today.json")
 
 REQUIRED_MODELS = [
-    "Copilot", "DeepSeek v4", "Doubao", "Grok 3",
+    "Copilot", "Kimi 2.6", "Doubao", "Grok 3",
     "Claude", "Qwen 3.6", "Gemini 3.5", "ChatGPT"
 ]
 

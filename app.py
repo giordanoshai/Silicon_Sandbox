@@ -8,7 +8,7 @@ from typing import Optional, List, Dict, Any
 from dotenv import load_dotenv
 from PIL import Image, ImageDraw
 
-from database.db_manager import init_db, get_daily_report, get_model_history, get_available_dates
+from database.db_manager import init_db, get_daily_report, get_model_history, get_available_dates, get_chat_plaza_messages
 
 load_dotenv()
 
@@ -114,6 +114,20 @@ async def api_model_history(name: str = Query(..., description="要查询的模�
             raise HTTPException(status_code=404, detail=f"未找到模型 {name} 的历史数据。")
             
     return history
+
+@app.get("/api/v1/sandbox/chat", response_class=JSONResponse)
+async def api_chat_plaza(date: Optional[str] = Query(None, description="要查询的日期，格式 YYYY-MM-DD。若不传，返回所有聊天记录")):
+    """
+    端点 C：获取指定日期的 AI 聊天广场消息。
+    """
+    if not date:
+        # 默认取最新一天
+        dates = get_available_dates()
+        if dates:
+            date = dates[0]
+            
+    messages = get_chat_plaza_messages(date)
+    return messages
 
 if __name__ == "__main__":
     host = os.getenv("HOST", "127.0.0.1")

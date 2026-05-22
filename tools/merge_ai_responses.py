@@ -2,11 +2,16 @@ import os
 import re
 import json
 import sys
+import io
 from datetime import datetime
+
+# 强制 UTF-8 编码，防止 Windows 控制台 Emoji 编码报错
+sys.stdout = io.TextIOWrapper(sys.stdout.buffer, encoding='utf-8')
+sys.stderr = io.TextIOWrapper(sys.stderr.buffer, encoding='utf-8')
 
 # 8个模型的标准名称列表
 REQUIRED_MODELS = [
-    "Copilot", "DeepSeek v4", "Doubao", "Grok 3",
+    "Copilot", "Kimi 2.6", "Doubao", "Grok 3",
     "Claude", "Qwen 3.6", "Gemini 3.5", "ChatGPT"
 ]
 
@@ -109,7 +114,9 @@ def main():
             # 模糊匹配大模型名字
             matched_name = None
             for req_name in REQUIRED_MODELS:
-                if req_name.lower().replace(" ", "") == str(model_name).lower().replace(" ", ""):
+                req_norm = req_name.lower().replace(" ", "").replace(".", "")
+                model_norm = str(model_name).lower().replace(" ", "").replace(".", "")
+                if req_norm == model_norm or (req_name == "Kimi 2.6" and model_norm == "kimi"):
                     matched_name = req_name
                     break
             
@@ -139,20 +146,37 @@ def main():
         print(f" - {m:<15} : {status}")
     print(f"--------------------------------------------------")
         
+    # 允许通过命令行参数直接传入日期和天气，以支持自动化无交互执行
+    cli_date = None
+    cli_weather = None
+    for arg in sys.argv:
+        if arg.startswith("--date="):
+            cli_date = arg.split("=", 1)[1].strip()
+        elif arg.startswith("--weather="):
+            cli_weather = arg.split("=", 1)[1].strip()
+
     # 交互询问天气和日期
     today_str = datetime.now().strftime("%Y-%m-%d")
-    try:
-        date_input = input(f"📅 请确认/输入今日战报日期 (默认 {today_str}): ").strip()
-    except (KeyboardInterrupt, EOFError):
-        date_input = ""
-    date_str = date_input if date_input else today_str
+    if cli_date:
+        date_str = cli_date
+        print(f"📅 已通过命令行指定今日战报日期: {date_str}")
+    else:
+        try:
+            date_input = input(f"📅 请确认/输入今日战报日期 (默认 {today_str}): ").strip()
+        except (KeyboardInterrupt, EOFError):
+            date_input = ""
+        date_str = date_input if date_input else today_str
     
     default_weather = global_weather if global_weather else "暴晒强光（31℃）"
-    try:
-        weather_input = input(f"🌤️ 请确认/输入今日天气描述 (默认 '{default_weather}'): ").strip()
-    except (KeyboardInterrupt, EOFError):
-        weather_input = ""
-    weather_str = weather_input if weather_input else default_weather
+    if cli_weather:
+        weather_str = cli_weather
+        print(f"🌤️ 已通过命令行指定今日天气描述: {weather_str}")
+    else:
+        try:
+            weather_input = input(f"🌤️ 请确认/输入今日天气描述 (默认 '{default_weather}'): ").strip()
+        except (KeyboardInterrupt, EOFError):
+            weather_input = ""
+        weather_str = weather_input if weather_input else default_weather
     
     # 拼装数据
     merged_data = {

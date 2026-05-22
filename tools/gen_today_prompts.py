@@ -1,6 +1,11 @@
 import os
 import sys
+import io
 from datetime import datetime
+
+# 强制 UTF-8 编码，防止 Windows 控制台 Emoji 编码报错
+sys.stdout = io.TextIOWrapper(sys.stdout.buffer, encoding='utf-8')
+sys.stderr = io.TextIOWrapper(sys.stderr.buffer, encoding='utf-8')
 
 # 基础文件目录定位 - 升级为识别根目录 (tools/ 的父级)
 CURRENT_DIR = os.path.dirname(os.path.abspath(__file__))
@@ -62,8 +67,9 @@ def main():
         out_f.write(f"# --------------------------------------------------\n")
         out_f.write(f"# 👉 用户提示：\n")
         out_f.write(f"#    1. 为了解决 Copilot 触发安全合规机制拒答的问题，我们采用双轨 Prompt 模式。\n")
-        out_f.write(f"#    2. 【复制区 A】投喂给：Grok 3, Claude, ChatGPT, DeepSeek, 豆包, Qwen, Gemini。\n")
+        out_f.write(f"#    2. 【复制区 A】投喂给：Grok 3, Claude, ChatGPT, Kimi 2.6, 豆包, Qwen, Gemini。\n")
         out_f.write(f"#    3. 【复制区 B】专属投喂给：Copilot（完美避开对齐限制，展现科学观察者的极致反差萌！）。\n")
+        out_f.write(f"#    ⚠️ 物理硬件终端交接备忘：由于原绑定的 DeepSeek 暂不支持多模态图片分析，为配合物理沙盒在遭遇战时的多模态分析网关，特由支持高精密视觉的多模态模型 Kimi 2.6 全权接替 Orange（橙色）番茄终端。\n")
         out_f.write(f"# ==================================================\n\n\n")
         
         out_f.write(f"####################################################\n")

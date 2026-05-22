@@ -16,7 +16,8 @@
 **Silicon Sandbox** is an avant-garde experimental concept showcasing project that seamlessly blends **physical agriculture, Reinforcement Learning (RL) quantitative game theory, and multi-modal Large Language Models**.
 
 在这个物理沙盒中 / In this physical sandbox:
-* **8个高维 AI 囚徒 / 8 High-Dimensional AI Prisoners**：（ChatGPT, Claude, Grok 3, Gemini 3.5, Copilot, DeepSeek v4, Qwen 3.6, Doubao）被分别绑定于专属的透明塑料矿泉水桶作物上（番茄 Tomato / 甜瓜 Melon）。
+* **8个高维 AI 囚徒 / 8 High-Dimensional AI Prisoners**：（ChatGPT, Claude, Grok 3, Gemini 3.5, Copilot, Kimi 2.6, Qwen 3.6, Doubao）被分别绑定于专属的透明塑料矿泉水桶作物上（番茄 Tomato / 甜瓜 Melon）。
+  *(注：由于原绑定的 **DeepSeek** 暂不支持多模态图片分析，为配合物理沙盒在遭遇战时的多模态分析网关，特由支持高精密视觉的多模态模型 **Kimi 2.6** 全权接替 Orange（橙色）番茄终端。)*
 Each is bound to their exclusive plant growing in a transparent plastic mineral water bottle.
 * **物理世界的大考 / Ultimate Physical Test**：它们面临着盛夏后院的强光暴晒、不确定的水肥供给，以及来自物理世界“碳基软体动物黑客”（夜袭盆器的野生蜗牛）的突袭。
 They face scorching summer backyard sunlight, unpredictable irrigation, and raids by "carbon-based mollusk hackers" (wild nocturnal snails attacking the containers).

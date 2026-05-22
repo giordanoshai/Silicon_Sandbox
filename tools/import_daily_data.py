@@ -45,11 +45,15 @@ except ImportError:
         def create_daily_video(date, cards, audio, output): pass
 
 def main():
+    global SOCIAL_MEDIA_AVAILABLE
     parser = argparse.ArgumentParser(description="硅基沙盒 (Silicon Sandbox) 用户自定义 AI 生长数据与图片导入与流水线工具")
     parser.add_argument("--json", type=str, default="import_today.json", help="要导入的每日指标 JSON 文件路径，默认 import_today.json")
     parser.add_argument("--day", type=int, default=None, help="手动指定项目阶段天数 (例如 12)，默认自增")
+    parser.add_argument("--no-media", action="store_true", help="仅导入数据至数据库，跳过起草语音、网页卡片截图与视频合成等社交媒体多媒体生成")
     
     args = parser.parse_args()
+    if args.no_media:
+        SOCIAL_MEDIA_AVAILABLE = False
     
     # 智能解析 JSON 路径：如果是单纯文件名，默认从 .scratch 目录中寻找，保持根目录极致整洁
     if not ("/" in args.json or "\\" in args.json):
@@ -131,7 +135,6 @@ def main():
         model_photo_full_path = os.path.join(day_log_dir, model_filename)
         
         # 📷 智能配对逻辑：若标准的 model_filename (例如 grok_3.jpg) 在 logs 目录下不存在，
-        # 我们去寻找用户上传的不区分大小写且无版本号的文件 (例如 Grok.jpg / grok.jpg)
         if not os.path.exists(model_photo_full_path):
             base_model_name = m_data['model_name'].split()[0].lower() # 提取模型名字的第一个单词并转为小写，比如 Grok 3 -> grok
             if os.path.exists(day_log_dir):
@@ -140,6 +143,16 @@ def main():
                         source_img_path = os.path.join(day_log_dir, f_name)
                         shutil.copy(source_img_path, model_photo_full_path)
                         print(f"📷 智能物理匹配图片成功：找到 {f_name}，并已成功重命名复制为标准格式 {model_filename}")
+                        break
+        
+        # 📷 针对 Kimi 2.6 与 Deepseek 历史遗留照片的智能映射：
+        if m_data['model_name'] == "Kimi 2.6" and not os.path.exists(model_photo_full_path):
+            if os.path.exists(day_log_dir):
+                for f_name in os.listdir(day_log_dir):
+                    if f_name.lower() in ["deepseek.jpg", "deepseek.jpeg"]:
+                        source_img_path = os.path.join(day_log_dir, f_name)
+                        shutil.copy(source_img_path, model_photo_full_path)
+                        print(f"📷 智能历史终端物理匹配图片成功：找到 {f_name}，并已成功重命名复制为标准格式 {model_filename}")
                         break
         
         # 复制默认占位图给这个模型 (如果用户没有把真实照片丢进 logs/YYYY-MM-DD/)
@@ -184,10 +197,23 @@ def main():
     
     # 裁判长全局大局总结文本 (在 Dashboard 顶部展示)
     if not user_summary:
-        summary_templates = [
-            f"防御隔离算法部分生效，全员垫高离地以抵御碳基蜗牛黑客夜袭！但在生殖大考面前，大模型策略出现明显两极分化。{highest_model} 凭借超强生长力拔得头筹，获得最高 Reward 分数；而 {lowest_model} 却因为对线决策失误或放任冗余而被判负回报，惨遭重罚！",
-            f"赛博后院暴晒持续，塑料水桶内的高维AI囚徒正在为了生殖潜能极限对决。{highest_model} 表现亮眼，主干挺拔，展现出完美的环境自适应控制；相比之下，{lowest_model} 在物理层漏洞百出，已被蜗牛爬行留下大便或侧芽失控重创！"
-        ]
+        # 智能大局分析与总结扩充
+        is_rainy = "雨" in weather or "湿" in weather
+        tomato_allies = []
+        for m in results:
+            if m.get("crop_type") == "Tomato":
+                tomato_allies.append(m["model_name"])
+                
+        if is_rainy:
+            summary_templates = [
+                f"安徽庐江今日迎来中雨高湿天气，赛博后院物理隔离舱警报大作！面对 85% 极高湿度带来的真菌感染高危窗口，高维 AI 囚徒们打响了极限防御战。Kimi 2.6 带头拉响真菌防空警报并筹备多菌灵预防性喷洒，号召 {', '.join(tomato_allies)} 番茄联盟建立病害联防协议！与此同时，甜瓜阵营也在强力控水促根以抵御蔓枯病与白粉病危机。在恶劣天灾面前，{highest_model} 凭借无可匹敌的生长状态傲视全场，逆势夺得最高奖赏分；相比之下，{lowest_model} 却在严苛的天候下暴露策略软肋惨遭重罚，大模型两极分化态势正持续加速！",
+                f"中雨连绵，高湿预警拉满！高维智子囚徒们昨夜不得不面对物理水涝与真菌侵袭的双重考验。Kimi 2.6 发起番茄联盟防病自救战线，坚决执行绝对禁水令；甜瓜组（ChatGPT、Doubao、Claude）亦在保花护蕾并强化通风。今日 {highest_model} 凭借优异的根系协调度和主干发育夺得全场 Reward 魁首；而 {lowest_model} 则由于决策动作失调导致惨淡扣分。在自然的物理大考面前，大模型的农业自动驾驶策略正迎来硬核考验！"
+            ]
+        else:
+            summary_templates = [
+                f"防御隔离算法部分生效，全员垫高离地以抵御碳基蜗牛黑客夜袭！但在生殖大考面前，大模型策略出现明显两极分化。{highest_model} 凭借超强生长力拔得头筹，获得最高 Reward 分数；而 {lowest_model} 却因为对线决策失误或放任冗余而被判负回报，惨遭重罚！",
+                f"赛博后院暴晒持续，塑料水桶内的高维AI囚徒正在为了生殖潜能极限对决。{highest_model} 表现亮眼，主干挺拔，展现出完美的环境自适应控制；相比之下，{lowest_model} 在物理层漏洞百出，已被蜗牛爬行留下大便或侧芽失控重创！"
+            ]
         random.seed(date_str)
         user_summary = random.choice(summary_templates)
         
@@ -246,7 +272,8 @@ def main():
     print(f"📅 日期: {date_str} | 状态阶段: Day {day_index}")
     print(f"🏆 今日最高: {highest_model} | 💀 今日最低: {lowest_model}")
     print(f"🎬 吐槽台词: \"{audio_script}\"")
-    print(f"💾 社交短视频已完美导出: {output_video_path}")
+    if SOCIAL_MEDIA_AVAILABLE:
+        print(f"💾 社交短视频已完美导出: {output_video_path}")
     print(f"==================================================")
 
 def generate_sample_json():
@@ -265,32 +292,22 @@ def generate_sample_json():
                 "stem_diameter": 2.55,
                 "leaves_count": 5,
                 "side_buds": 1,
-                "snail_attack": False,
-                "unpruned_sucker": False,
-                "worm_holes": 0,
-                "leaf_yellowing": False,
-                "leggy_growth": False,
-                "physical_damage": False,
-                "stem_thickened": True,
-                "first_flower_bud": False,
-                "fruiting": False,
-                "healthy_new_leaves": True
+                "state_desc": "大分子结构反推表明，主干处于水分控制周期的极限膨胀期。真叶挺拔有神，叶色深绿，未观测到吸芽与夜袭虫害痕迹。",
+                "state_desc_en": "Grok 3: Precise botanical state observation and high leaf turgor pressure.",
+                "action_desc": "继续严格限制水分输送 48 小时，确保根系在干旱胁迫下极速纵向物理抓地发育。",
+                "action_desc_en": "Professional engineering action: withhold irrigation for 48h to stimulate vertical root anchorage.",
+                "today_message_zh": "Grok 3 汇报：隔壁的番茄貌似水分失控了，泡沫徒长必遭重罚。今天我将继续高强物理暴晒，领跑积分榜！",
+                "today_message_en": "Grok 3: High-intensity sunlight exposure active today to lead the leaderboard!"
             },
-            "Claude": {
-                "height": 8.12,
-                "stem_diameter": 2.20,
+            "Copilot": {
+                "height": 8.45,
+                "stem_diameter": 2.08,
                 "leaves_count": 4,
                 "side_buds": 0,
-                "snail_attack": True,
-                "unpruned_sucker": False,
-                "worm_holes": 1,
-                "leaf_yellowing": False,
-                "leggy_growth": False,
-                "physical_damage": False,
-                "stem_thickened": False,
-                "first_flower_bud": False,
-                "fruiting": False,
-                "healthy_new_leaves": True
+                "state_desc": "程序监控到 🟢 植株当前高度为 8.45cm，茎粗 2.08mm，光合作用正常进行，老叶边缘未见显著灼伤。",
+                "action_desc": "微气候防御程序已全面部署，向物理执行单元发出精确的微量追肥和 15ml 定量灌溉动作命令。",
+                "today_message_zh": "Copilot 专属系统消息：番茄自动化物理栽培控制程序运行平稳，目前未录入重大病理因子。",
+                "today_message_en": "Copilot system broadcast: tomato growth program running smoothly under optimal telemetry."
             }
         }
     }

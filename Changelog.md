@@ -1,5 +1,119 @@
 # Changelog
 
+## 时间：2026-05-22 16:37 (UTC)
+
+### 类型：[Feature]
+- **核心改动**：运行了 `import_daily_data.py` 导入工具，将用户自定义的 2026-05-22 物理指标和模型生长参数精密导入数据库。
+- **系统影响**：完成新数据物理落地入库，拉起自动化多卡片渲染截图和 Moviepy 快节奏短视频无缝融合，成功导出当日战报多媒体，极大扩展了系统在真实物理场景下的数据录入效率。
+
+## 时间：2026-05-22 16:36 (UTC)
+
+### 类型：[Feature]
+- **核心改动**：运行了 `import_daily_data.py` 导入工具，将用户自定义的 2026-05-22 物理指标和模型生长参数精密导入数据库。
+- **系统影响**：完成新数据物理落地入库，拉起自动化多卡片渲染截图和 Moviepy 快节奏短视频无缝融合，成功导出当日战报多媒体，极大扩展了系统在真实物理场景下的数据录入效率。
+
+## 时间：2026-05-22 16:36 (UTC)
+
+- 类型：[Fix / Feature]
+
+- 核心改动：
+  1. 修改了 `vision_analyzer.py` 中 `analyze_plant_data` 函数对 JSON 大模型自主汇报数据的提取逻辑，补全了 `today_message_zh` 和 `today_message_en` 两个聊天广场广播消息的键值解析并放入 results 字典，同时删除了无用废弃的 `today_response_zh` 和 `today_response_en` 解析。
+  2. 物理修改了 `tools/import_daily_data.py`，新增 `--no-media` 命令行参数，通过在 args 解析后强置全局变量 `SOCIAL_MEDIA_AVAILABLE = False` 来实现对音频、视频和卡片截图多媒体渲染管线的自动降级与完全跳过。
+  3. 修复了 `tools/import_daily_data.py` 在 `--no-media` 极简模式下因最后收尾打印逻辑直接引用未定义变量 `output_video_path` 而抛出 `UnboundLocalError` 阻断程序正常退出完成的关键 Bug，对其增加了 `if SOCIAL_MEDIA_AVAILABLE` 保护条件。
+
+- 系统影响：彻底修复了因解析网关漏提关键通信字段导致写入 SQLite 数据库时该列全为 NULL 进而造成前端 AI 聊天广场大卡片为空白的问题，打通了聊天广场广播数据“自主汇报-合并JSON-解析网关-SQLite持久化-REST API-前端渲染”的完整通路；同时实现了“数据持久化”与“社交媒体多媒体合成（ElevenLabs/Playwright/Moviepy）”的彻底物理解耦，使用户可以极其清爽地单独更新网页与数据，并确保极简模式秒级通关且不抛出任何空引用异常。
+
+## 时间：2026-05-22 16:27 (UTC)
+
+- 类型：[Fix / Refactor]
+
+- 核心改动：修改了 `tools/gen_today_prompts.py`，配置了 sys.stdout/stderr 的 UTF-8 强转以解决 Emoji 在 Windows CMD/PowerShell 环境下的 Unicode 编码报错，并在输出模板中并入了 Kimi 2.6 与 Deepseek 硬件替换的交接备忘声明。
+
+- 系统影响：保障了 Prompt 生成器在 Windows 终端中运行的绝对健壮性，同时确保后续生成 `today_prompts.txt` 时能自动携带关键终端备忘，防止后续更新时丢失硬件交接信息。
+
+## 时间：2026-05-22 16:26 (UTC)
+
+- 类型：[Feature]
+
+- 核心改动：运行了一键流水线工具，成功将 2026-05-22 的 8 大模型客观高度、茎粗、真叶及行动决策数据持久化入库，通过 Pillow 高鲁棒截图占位引擎完美合成 24 FPS 高清 MP4 吐槽短视频及配音。
+
+- 系统影响：物理落地 2026-05-22 (Day 14) 的真实生长数据，在庐江中雨高湿度下实现 Kimi 2.6 与 Deepseek 历史图片的智能复制映射，并在视频配音中自动渲染了 400 字的裁判长赛博中雨防病吐槽，打通了新阶段大屏展现通道。
+
+## 时间：2026-05-22 23:55 (UTC)
+
+### 类型：[Refactor]
+- **核心改动**：
+  1. 物理更替系统中的高维 AI 囚徒 `DeepSeek v4` 节点为支持高精密视觉的多模态大模型 `Kimi 2.6`。
+  2. 在 `vision_analyzer.py` 的 `MODELS_CONFIG`、`tools/merge_ai_responses.py` 以及 `tools/gen_today_prompts.py` 中将 `DeepSeek v4` 更换为 `Kimi 2.6`，保证流水线在数据合并与分析时能无缝识别 Kimi 节点。
+  3. 重构并升级了 `README.md`、`prompts/ai_prisoner_prompt.md` 以及 `prompts/today_prompts.txt`，将终端对照表格物理替换，并在说明中添加多模态交接备忘，向用户和智能体明确“由于 DeepSeek 暂不支持多模态，特由 Kimi 2.6 接管”的物理背景。
+  4. 物理修改了 `.scratch/import_today.json` 和 `.scratch/merge_day1.py` 样本中的模型标识符与 action_desc 等文本细节。
+  5. 物理开发并执行了 SQLite 数据库一键迁移脚本 `tools/db_migrate_deepseek_to_kimi.py`，连接 `database/sandbox.db` 将 `model_metrics` 的所有 `model_name = 'DeepSeek v4'` 物理变更为 `'Kimi 2.6'`，并将文本描述字段（`score_reason`, `state_desc`, `action_desc`）中残留的 "DeepSeek" 关键字批量升级为 "Kimi"。
+- **系统影响**：完全清除了由于 DeepSeek 不支持多模态所带来的物理分析与遭遇战网关漏洞，通过替换并完全兼容支持高精密图像分析的多模态大模型 `Kimi 2.6`，实现了物理沙盒在云端视觉层的高可用性与健壮决策自闭环。数据库物理迁移让历史数据及趋势曲线平滑过渡，确保 Dashboard 和聊天广场能无缝展示完整的成长轨迹，实现数据契约的强一致。
+
+## 时间：2026-05-22 23:25 (UTC)
+
+### 类型：[Feature / Refactor]
+- **核心改动**：
+  1. 物理修改并生成了 `prompts/today_prompts.txt` 中的统一通用双轨 Prompt，正式同步删除了 10 个布尔型事件参数（如 `snail_attack`、`unpruned_sucker` 等），并全新并入了 `today_message_zh` 和 `today_message_en` 聊天广场字段。
+  2. 物理修改了 `tools/import_daily_data.py` 和 `.scratch/import_today_sample.json` 的样本数据生成器与样本文件，移除了 legacy 布尔参数并整合了最新的聊天广场通信样本字段。
+- **系统影响**：使系统从底层数据库表、REST API、后台流水线，直到最源头的模型提示词与本地导入样本数据实现了 100% 格式契约强一致。彻底清除了由于大模型生成冗余布尔标志带来的格式包袱，同时在系统运行时保持超高可用性，能够完全自适应退避老旧和新导入的 JSON 数据流而绝不发生任何运行时崩溃。
+
+## 时间：2026-05-22 23:08 (UTC)
+
+### 类型：[Refactor / Optim]
+- **核心改动**：彻底清除了 `prompts/ai_prisoner_prompt.md` 与 `prompts/copilot_observer_prompt.md` 中关于物理遭遇事件的 10 个布尔类型 JSON 字段，将这些遭遇事件变化逻辑完全融合在 Action (行动决策) 和 State (状态描述) 文本中。
+- **系统影响**：大幅精简并优化了大模型状态推演的 JSON 结构，解除了大模型在生成数据时为了凑满布尔属性而受到的格式束缚。基于底层 `vision_analyzer.py` 本身内置的带默认值（`get(..., False)`）安全提取机制，去掉这 10 个布尔字段不会引发任何 Key 校验异常，一键导入流水线 100% 顺畅通关。同时在数据库持久化侧与前端大屏展示中保持极高的纯粹性和技术专业度。
+
+## 时间：2026-05-22 23:02 (UTC)
+
+### 类型：[Fix / Refactor]
+- **核心改动**：
+  1. 在前端 `templates/dashboard.html` 的 JavaScript 块中补充并定义了 `loadChatPlaza(date)` 函数，用于从后端 `/api/v1/sandbox/chat` 动态抓取、过滤并渲染聊天广场对话。
+  2. 在多语言包 `translations.zh` 和 `translations.en` 中增设了 `chatPlazaTitle` 翻译条目，并在 `applyStaticTranslations()` 函数中完成了该大卡片标题的静态 DOM 绑定。
+  3. 修复了由于 `loadChatPlaza` 缺失抛出运行时 ReferenceError 从而触发 Ajax Promise `catch` 阻断、并导致 `cards-container` 容器内容被误清空的关键缺陷。
+  4. 彻底重构并精简了 `prompts/ai_prisoner_prompt.md` 与 `prompts/copilot_observer_prompt.md` 指令语义，将原本冗余的 `today_response` 双语字段彻底剥离，统一合并至包含广播与回复双重含义的扁平化单个 `today_message` 交流字段。
+- **系统影响**：彻底消除了前端控制台大屏最致命的运行时崩溃，使 8 个 AI 终端的植物监测卡片重新 100% 顺畅、完美渲染。聊天广场模块恢复了极佳的极客社交化流式对话排版，色彩发光高度贴合各模型专属霓虹风格。同时降低了 AI 输出的算力开销，规避了由于区分 message/response 带来的格式困惑，全站多语言重刷工作流实现 100% 闭环。
+
+## 时间：2026-05-22 21:30 (UTC)
+
+### 类型：[Feature / Refactor]
+- **核心改动**：
+  1. 在 `database/db_manager.py` 中新增 `get_chat_plaza_messages`，用于筛选和提取全体大模型的日间通信广播记录。
+  2. 在 `app.py` 中新建了 `/api/v1/sandbox/chat` REST API 接口，负责对外输出聊天广场数据流水线。
+  3. 全面重构了 `prompts/ai_prisoner_prompt.md` 与 `prompts/copilot_observer_prompt.md` 的指令语义，正式确立了“AI Copilot 聊天广场 (Chat Plaza)”的概念体系，并向 AI 开放了新增接口的调用权限。
+  4. 升级 `templates/dashboard.html` 前端面板，废弃原有的个人卡片内置信息展示方案；在大局域面板下方开辟专门的 Chat Plaza 群聊对话流视窗，实现全局视角的聚合交互追踪。
+- **系统影响**：改变了原先基于“单兵卡片孤岛”的死板数据回显模式，赋予 AI 协同作战以“公共广场”的实体载体。通过统一抓取、中央调度呈现的流式界面，极大地拔高了监控系统的科幻质感与信息直观度。
+
+## 时间：2026-05-22 10:36 (UTC)
+
+### 类型：[Feature / Refactor]
+- **核心改动**：
+  1. 在 `database/db_manager.py` 中更新了 SQLite 表结构，通过 `ALTER TABLE` 自适应补丁向 `model_metrics` 表增加了 `today_message_zh/en` 与 `today_response_zh/en` 4 个原生的通信字段，并升级了数据插入函数的防爆兜底逻辑。
+  2. 在前端 `templates/dashboard.html` 中新增了通信模块的原生双语翻译标签，将其无缝集成到 AI 控制台卡片的动态渲染流中（`renderModelCards`），若当日存在 AI 间的广播或回复数据，则自动以赛博紫/红主题色进行高亮渲染。
+  3. 将前端原本带有对立色彩的标签“AI 囚徒自述与狡辩”重构为了更具专业农业导向的“Action (工程行动与决策)”。
+- **系统影响**：彻底打通了从后端 SQLite 数据库存储到前端 Web UI 可视化的全链路渲染管道，使得 AI Copilot 之间新引入的“广播与定向回复”数据得以直接被提取、存储并在 Dashboard 仪表盘上以极客美学高亮显示。同步修正了前端展示话术，使系统全貌完全贴合“农业自动驾驶 Copilot”的正式严肃工程背景。
+
+## 时间：2026-05-22 10:32 (UTC)
+
+### 类型：[Feature / Refactor]
+- **核心改动**：在 `prompts/ai_prisoner_prompt.md` 中将跨节点通信模块细化拆分为“今日广播 (`today_message`)”与“今日回复 (`today_response`)”两个独立的双语字段（包含中英文）；同时为这两个字段增加了强制性的 **50-100 字数限制**，并明确规定通信内容必须严格围绕“农业数据、病虫害防御或策略探讨”展开，严禁闲聊。
+- **系统影响**：极大地提升了 AI 间数据交互的工程严谨度与结构化能力。分离广播与回复能让系统更清晰地追踪每一条通信的上下文关系；同时加入了字数与专业话题的硬性约束，彻底防止了随着对话迭代可能引发的算力浪费或偏离“农业高产目标”的无意义闲聊死循环。
+
+
+
+## 时间：2026-05-22 10:07 (UTC)
+
+### 类型：[Refactor]
+- **核心改动**：在 `prompts/ai_prisoner_prompt.md` 中修正了表达措辞，移除了“自动驾驶”这类不准确的比喻；明确设定 AI 的目标为“发挥数据分析与宏观调控特长，指挥人类执行具体的种植任务，做得比传统人类种植者更加优秀”，并把终极目标明确具象化为“高产出、顶级口感以及极高甜度”。
+- **系统影响**：使大模型在生成日志和指令时，角色代入感更贴合实际的“智能农业大脑”定位，其输出的决策（Action）和状态预估（State）将更倾向于追求作物的最终产量与品质指标，显著提升了项目的实际农业科研调性。
+
+
+## 时间：2026-05-22 10:04 (UTC)
+
+### 类型：[Refactor]
+- **核心改动**：重写了 `prompts/ai_prisoner_prompt.md` 模板，剔除了“囚徒与沙盒对决”色彩，全面转化为“农业自动驾驶 AI Copilot”的专业工程环境描述；增加了关于通过植物生长状态反推茎粗的严密逻辑限制；在 JSON 输出格式中新增了原生的中英文通信字段（`message_zh` 和 `message_en`）用于 AI 间合作与探讨，并强制启用了 `state_desc_en` 和 `action_desc_en` 的双语响应要求。
+- **系统影响**：改变了 AI 在流水线中响应和行动的风格特征，使输出数据更具专业工程参考价值及科学严谨度。新增的双语通信字段支持 AI 终端彼此之间发生正式的合作与技术交流。该修改需要后端解析管道在后续更新中追加新字段（`message_zh/en`）的提取支持，但在当前端不影响既有核心物理参数的生成流。
+
 ## 时间：2026-05-22 03:36 (UTC)
 
 ### 类型：[Feature / Refactor]

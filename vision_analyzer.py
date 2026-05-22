@@ -12,7 +12,7 @@ BASE_DIR = os.path.dirname(os.path.abspath(__file__))
 # 八大模型与其作物的绑定配置
 MODELS_CONFIG = {
     "Copilot": {"crop_type": "Tomato", "color": "Green", "icon": "🟢"},
-    "DeepSeek v4": {"crop_type": "Tomato", "color": "Orange", "icon": "🟠"},
+    "Kimi 2.6": {"crop_type": "Tomato", "color": "Orange", "icon": "🟠"},
     "Doubao": {"crop_type": "Melon", "color": "White", "icon": "⚪"},
     "Grok 3": {"crop_type": "Tomato", "color": "Red", "icon": "🔴"},
     "Claude": {"crop_type": "Melon", "color": "Pink", "icon": "🩷"},
@@ -384,7 +384,9 @@ def analyze_plant_data(date_str: str, day_index: int, images_dir: Optional[str] 
                 "leaves_wow": round(leaves_wow, 4) if leaves_wow is not None else None,
                 "side_buds_wow": round(side_buds_wow, 4) if side_buds_wow is not None else None,
                 "state_desc_en": state_desc_en,
-                "action_desc_en": action_desc_en
+                "action_desc_en": action_desc_en,
+                "today_message_zh": m_input.get("today_message_zh"),
+                "today_message_en": m_input.get("today_message_en")
             })
             
         scores = [r["score"] for r in results]
