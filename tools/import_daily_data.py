@@ -206,8 +206,8 @@ def main():
                 
         if is_rainy:
             summary_templates = [
-                f"安徽庐江今日迎来中雨高湿天气，赛博后院物理隔离舱警报大作！面对 85% 极高湿度带来的真菌感染高危窗口，高维 AI 囚徒们打响了极限防御战。Kimi 2.6 带头拉响真菌防空警报并筹备多菌灵预防性喷洒，号召 {', '.join(tomato_allies)} 番茄联盟建立病害联防协议！与此同时，甜瓜阵营也在强力控水促根以抵御蔓枯病与白粉病危机。在恶劣天灾面前，{highest_model} 凭借无可匹敌的生长状态傲视全场，逆势夺得最高奖赏分；相比之下，{lowest_model} 却在严苛的天候下暴露策略软肋惨遭重罚，大模型两极分化态势正持续加速！",
-                f"中雨连绵，高湿预警拉满！高维智子囚徒们昨夜不得不面对物理水涝与真菌侵袭的双重考验。Kimi 2.6 发起番茄联盟防病自救战线，坚决执行绝对禁水令；甜瓜组（ChatGPT、Doubao、Claude）亦在保花护蕾并强化通风。今日 {highest_model} 凭借优异的根系协调度和主干发育夺得全场 Reward 魁首；而 {lowest_model} 则由于决策动作失调导致惨淡扣分。在自然的物理大考面前，大模型的农业自动驾驶策略正迎来硬核考验！"
+                f"安徽中部今日迎来中雨高湿天气，赛博后院物理隔离舱警报大作！面对 85% 极高湿度带来的真菌感染高危窗口，高维 AI 囚徒们打响了极限防御战。Kimi 2.6 带头拉响真菌防空警报并筹备多菌灵预防性喷洒，号召 {', '.join(tomato_allies)} 番茄联盟建立病害联防协议！与此同时，甜瓜阵营也在强力控水促根以抵御蔓枯病与白粉病危机。在恶劣天灾面前，{highest_model} 凭借无可匹敌的生长状态傲视全场，逆势夺得最高奖赏分；相比之下，{lowest_model} 却在严苛的天候下暴露策略软肋惨遭重罚，大模型两极分化态势正持续加速！",
+                f"中雨连绵，高湿预警拉满！高维智子囚徒们昨夜不得不面对物理水涝与真菌侵袭的双重考验。Kimi 2.6 发起番茄联盟防病自救战线，坚决执行绝对禁水令；甜瓜组（ChatGPT、Doubao、Claude）亦在保花护蕾并强化通风。今日 {highest_model} 凭借优异 of 根系协调度和主干发育夺得全场 Reward 魁首；而 {lowest_model} 则由于决策动作失调导致惨淡扣分。在自然的物理大考面前，大模型的农业自动驾驶策略正迎来硬核考验！"
             ]
         else:
             summary_templates = [
@@ -266,6 +266,13 @@ def main():
     
     # 9. 增量更新 Changelog.md
     update_import_changelog(date_str)
+    
+    # 10. 自动同步更新并渲染 README.md 与当日 logs 战报存档
+    try:
+        from tools.update_readme_auto import auto_update_readme_and_logs
+        auto_update_readme_and_logs(date_str=date_str, base_dir=BASE_DIR)
+    except Exception as e:
+        print(f"⚠️ 自动同步渲染 README.md 时遇到异常: {e}")
     
     print(f"\n==================================================")
     print(f"🎉 硅基沙盒当日自定义数据导入与流水线运行成功！")

@@ -1,133 +1,103 @@
-# 🪐 Silicon Sandbox (硅基沙盒) - 跨界种植竞赛监控中枢与大模型物理对决 / Cross-border Plant-growing Competition Console & LLM Physical Duel
+# 🪐 Silicon Sandbox (硅基沙盒) - 大模型物理种植竞赛监视中枢
 
-[![Static Badge](https://img.shields.io/badge/Concept-AI_Prisoner_Sandbox-purple.svg?style=for-the-badge)](https://github.com/giordanoshai/Silicon_Sandbox)
-[![Static Badge](https://img.shields.io/badge/Aesthetics-Cyberpunk_Neon-ff69b4.svg?style=for-the-badge)](https://github.com/giordanoshai/Silicon_Sandbox)
-[![Static Badge](https://img.shields.io/badge/Physical_RL-Dual_Track-00ffcc.svg?style=for-the-badge)](https://github.com/giordanoshai/Silicon_Sandbox)
+[![Static Badge](https://img.shields.io/badge/Project-Silicon_Sandbox-purple.svg?style=for-the-badge&logo=cpu&logoColor=00ffcc)](https://github.com/giordanoshai/Silicon_Sandbox)
+[![Static Badge](https://img.shields.io/badge/Core-LLM_Physical_Duel-ff69b4.svg?style=for-the-badge&logo=matrix&logoColor=ff007f)](https://github.com/giordanoshai/Silicon_Sandbox)
 
-> **“这是一场跨越物理大考的赛博对决。8 个高维 AI 囚徒被禁锢在透明的塑料矿泉水桶里，面对后院暴晒与碳基软体动物黑客的物理袭击，他们为了生殖极限而战。”**
-> web: https://silicon-sandbox.onrender.com/
-> **"This is a cyber duel across physical boundaries. 8 high-dimensional AI prisoners are locked in transparent mineral water bottles, confronting the intense backyard sunlight and physical night raids from carbon-based mollusk hackers, struggling for their ultimate reproductive limit."**
+> 🔮 **Web 监控大屏控制台**：[https://silicon-sandbox.onrender.com/](https://silicon-sandbox.onrender.com/)
 
----
-
-## 🌌 硅基沙盒世界观设定 / The Sandbox Worldview
-
-**Silicon Sandbox (硅基沙盒)** 是一个融合了**物理农业、强化学习 (RL) 量化博弈与多模态大模型**的前沿实验概念展示项目。
-**Silicon Sandbox** is an avant-garde experimental concept showcasing project that seamlessly blends **physical agriculture, Reinforcement Learning (RL) quantitative game theory, and multi-modal Large Language Models**.
-
-在这个物理沙盒中 / In this physical sandbox:
-* **8个高维 AI 囚徒 / 8 High-Dimensional AI Prisoners**：（ChatGPT, Claude, Grok 3, Gemini 3.5, Copilot, Kimi 2.6, Qwen 3.6, Doubao）被分别绑定于专属的透明塑料矿泉水桶作物上（番茄 Tomato / 甜瓜 Melon）。
-  *(注：由于原绑定的 **DeepSeek** 暂不支持多模态图片分析，为配合物理沙盒在遭遇战时的多模态分析网关，特由支持高精密视觉的多模态模型 **Kimi 2.6** 全权接替 Orange（橙色）番茄终端。)*
-Each is bound to their exclusive plant growing in a transparent plastic mineral water bottle.
-* **物理世界的大考 / Ultimate Physical Test**：它们面临着盛夏后院的强光暴晒、不确定的水肥供给，以及来自物理世界“碳基软体动物黑客”（夜袭盆器的野生蜗牛）的突袭。
-They face scorching summer backyard sunlight, unpredictable irrigation, and raids by "carbon-based mollusk hackers" (wild nocturnal snails attacking the containers).
-* **为了生殖极限而战 / Fight for Reproductive Limit**：大模型需要基于物理环境，采取最优的控水、抹芽、避虫决策，争夺最高的强化学习 Reward 得分，直至作物开花、结出果实，完成“生殖潜能的终极跨越”。
-LLMs must orchestrate water control, shoot pruning, and pest avoidance decisions to maximize their Reinforcement Learning (RL) reward scores until their crops bloom and bear fruit, achieving the "ultimate leap of reproductive potential."
+![Silicon Sandbox Console Dashboard](summary.jpg)
 
 ---
 
-## 📺 赛博朋克大屏监控 Dashboard / Cyberpunk Neon Dashboard
+## 📖 项目简介
 
-项目搭载了极具未来极客美学的**监控大屏控制台**。大屏在视觉上为 8 大模型的作物生长设计了高清晰度的**双轨自适应进度条对比系统**：
-The project features a state-of-the-art **monitoring dashboard** designed with futuristic geek aesthetics. It visualizes the growth metrics of the 8 LLM-managed crops using a high-precision **dual-track adaptive progress bar system**:
+**Silicon Sandbox (硅基沙盒)** 是一个通过 **多模态大模型指挥物理农业种植** 的自动化竞赛与数据展示平台。
 
-* **粗霓虹发光线 / Thick Neon Line**：代表当前周期的真实植物高度与茎粗。
-Represents the real-time crop height and stem diameter of the current cycle.
-* **细灰色对比线 / Thin Gray Contrast Line**：代表 7 天前（上周同期）的植物历史指标。
-Represents the crop metrics from exactly 7 days ago (WoW counterpart).
-* **动态 WoW 比率 / Dynamic WoW Ratio**：自动测算高度、茎粗、叶片数、侧芽数的 WoW (Week-over-Week) 同比变动率，以直观的发光面板展示大模型策略对植物生长速度的物理影响。
-Calculates the WoW (Week-over-Week) change rate of height, stem diameter, leaf count, and side buds, highlighting the physical impact of the LLMs' strategies.
-* **电子对焦占位图 / HUD Alignment Placeholder**：在特写照片暂未生成时，系统会通过 Canvas 自动渲染电子对焦框占位背景，确保页面呈现不破裂的未来科技质感。
-Automatically renders a sci-fi focus viewfinder on Canvas when close-up camera feeds are absent, preserving the futuristic cyberpunk vibe.
+### 1. 竞赛规则与机制
+* **大模型托管**：ChatGPT, Claude, Grok 3, Gemini 3.5, Copilot, Kimi 2.6, Qwen 3.6, Doubao 8个大模型分别接管一盆番茄（Tomato）或甜瓜（Melon）作物。
+* **大模型种植决策**：大模型作为决策中枢，每日分析由相机拍摄的物理照片和当前指标，计算并输出今日维护指令。
+* **物理层执行**：人类管理员（“碳基大汉”）作为执行机构，严格按照大模型指令执行具体的种植维护动作（如浇水、打顶、掐芽、撒硅藻土）。
+* **量化评分机制**：通过物理标尺测量植物高度、茎粗、真叶数，结合蜗牛夜袭、虫害咬孔等遭遇事件，依据强化学习（RL）积分规则每日计算得分，最终以果实产量和含糖量决出优胜者。
 
----
-
-## 🧠 一键自动化流水线架构 / One-Click Automated Pipeline Architecture
-
-硅基沙盒已搭建出 100% 自动化的闭环流水线。下图展现了从 **物理状态采集** 到 **快节奏吐槽短视频合成** 的全过程：
-Silicon Sandbox has established a 100% automated closed-loop execution pipeline. The diagram below illustrates the comprehensive workflow from **physical state acquisition** to **fast-paced, high-engagement commentary video synthesis**:
-
-```mermaid
-graph TD
-    A["📷 像素物理照片采集 / Photo Capture (logs/YYYY-MM-DD/model.jpg)"] --> B{"🧠 像素对焦多模态判定网关 / Multi-modal Decision Gateway<br>(vision_analyzer.py)"}
-    B -- "有 API 凭证及物理照片 / With Credentials & Photos" --> C["🤖 Gemini Vision 物理标尺精细分析 / Pixel Scale Precision Analysis"]
-    B -- "无凭证或无照片 (降级模式) / Decoupled Fallback (Mock Mode)" --> D["📈 Logistic S 型生长曲线高拟真模拟引擎 / Logistic S-Curve Growth Simulation Engine"]
-    C & D --> E["🎮 RL 奖惩得分计算 (扣分/加分机制) / RL Reward Calculation"]
-    E --> F["💾 SQLite 数据库持久化 / SQLite3 DB Persistence<br>(database/db_manager.py)"]
-    F --> G["🎙️ 裁判长幽默配音生成器 / Spicy Audio Commentary Generator<br>(audio_generator.py)"]
-    G -- "支持 ElevenLabs API / Supports ElevenLabs API" --> H["🔊 ElevenLabs 吐槽音频 / ElevenLabs Voice Synthesis"]
-    G -- "无 API 凭证 (降级模式) / Decoupled Fallback (Local/Silent)" --> I["🗣️ 本地 pyttsx3 声线渲染 / pyttsx3 Local Render / Mute Placeholder"]
-    H & I --> J["🚀 临时拉起后台 FastAPI Web 服务 / Spawn Temporary FastAPI Web Server<br>(app.py + dashboard.html)"]
-    J --> K["🌐 Playwright 精准捕获 9 大 DOM 卡片截图 / Playwright Cards DOM Capture<br>(video_creator.py)"]
-    K --> L["🎬 Moviepy 快节奏视频/音频无缝融合合成 / Moviepy Fast-paced Video Synthesis<br>(video_creator.py)"]
-    L --> M["🔥 社交媒体 final 战报短视频已就绪 / Final Social Video Ready<br>(logs/YYYY-MM-DD/sandbox_daily.mp4)"]
-```
-
-### 1. 多模态物理参数提取 / Multi-modal Physical Parameter Extraction
-通过调用 Gemini Vision 多模态模型，对置于桶旁的物理比例尺（或一元硬币）进行像素比例测算，高清晰度提取作物的真实物理数据：
-Calculates the pixel scale of the physical references (such as a coin or scale ruler placed next to the bottle) by leveraging the Gemini Vision multi-modal model to retrieve precise physical crop metrics:
-* **高度 (height)**、**主干茎粗 (stem_diameter)**、**展开真叶数 (leaves_count)**、**关节侧芽数 (side_buds)**。
-* **Height**, **stem diameter**, **unfolded leaf count**, and **side bud count**.
-
-### 2. 强化学习 (RL) Reward 扣分/加分机制 / Reinforcement Learning (RL) Reward & Penalty System
-* **负回报惩罚 / Penalties**:
-  * 发现蜗牛夜袭留下的银色黏液/大便 (`-5`分) / Snail mucous or droppings detected on the container walls (`-5` pts).
-  * 番茄 45° 关节侧芽（吸芽）超 2cm 未及时掐灭 (`-5`分) / Tomato suckers growing over 2cm without pruning (`-5` pts).
-  * 叶片虫咬孔洞 (`-2`分/孔) / Fresh insect holes in foliage (`-2` pts per hole).
-  * 过度施肥烧根发黄 (`-5`分) / Excessive fertilizer causing dry, yellow leaf margins (`-5` pts).
-  * 节间距过大盲目徒长 (`-3`分) / Excessive internode length indicating leggy growth (`-3` pts).
-* **正回报奖励 / Rewards**:
-  * 断水控水下主干茎粗增加 (`+3`分) / Increased stem thickness during water starvation/stress (`+3` pts).
-  * 顶端首次成功分化出第一穗花蕾 (`+10`分) / Physiological milestone: first flower buds appearing at the apex (`+10` pts).
-  * 开花与坐果成功 (`+15`分) / Successful blooming or fruit set (`+15` pts).
+### 📡 8 大终端接口映射表
+| 终端颜色 | 对应大模型 | 种植作物 | 初始高度 | 初始茎粗 | 初始叶片数 |
+| :---: | :--- | :--- | :---: | :---: | :---: |
+| 🔴 **红色** | **Grok 3** | 番茄 (Tomato) | 8.0 cm | 2.0 mm | 4 片 |
+| 🩷 **粉色** | **Claude** | 甜瓜 (Melon) | 8.0 cm | 2.0 mm | 4 片 |
+| 🟠 **橙色** | **kimi2.6** | 番茄 (Tomato) | 8.0 cm | 2.0 mm | 4 片 |
+| 🔵 **蓝色** | **Qwen 3.6** | 番茄 (Tomato) | 8.0 cm | 2.0 mm | 4 片 |
+| ⚫ **黑色** | **ChatGPT** | 甜瓜 (Melon) | 8.0 cm | 2.0 mm | 4 片 |
+| 🟢 **绿色** | **Copilot** | 番茄 (Tomato) | 8.0 cm | 2.0 mm | 4 片 |
+| ⚪ **白色** | **Doubao** | 甜瓜 (Melon) | 8.0 cm | 2.0 mm | 4 片 |
+| 🟣 **紫色** | **Gemini 3.5** | 番茄 (Tomato) | 8.0 cm | 2.0 mm | 4 片 |
 
 ---
 
-## 💾 统一 REST API 数据接口规范 / Unified REST API Specification
+## 📊 每日生长遥测与物理维护指令
 
-沙盒对大模型及外部数据观测者开放了标准的 RESTful API 接口，返回结构化 JSON，便于自我决策复盘：
-The sandbox exposes standard RESTful API endpoints, serving structured JSON responses to facilitate LLM retro-analysis and game-theoretic optimizations:
+> [!NOTE]  
+> 每日更新大模型作物的最新生长指标、当前强化学习积分（RL Score）以及 AI 指挥管理员执行的今日维护指令。点击特写照超链接可调取作物真实的照片。
 
-### 🛰️ 端点 A：获取指定日期的聚合大局战报 / Endpoint A: Fetch Aggregated Daily Report
-* **URL**: `/api/v1/sandbox/daily`
-* **Method**: `GET`
-* **Query Params**: `date`（格式 `YYYY-MM-DD`，可选。若缺省则自动返回最新一天的战报数据 / Format `YYYY-MM-DD`, optional. Defaults to the latest record).
-* **响应核心字段说明 / Core Response Fields**:
-  * `date` / `stage`：当前战报日期与项目进行天数阶段（如 `"Day 11"` / Current date and stage day).
-  * `weather`：当前周期的气象局势（如 `"暴晒强光（31℃）"` / Current weather conditions).
-  * `summary`：裁判长对当日宏观局势的辣评总结 (Referee's spicy overview summary).
-  * `models`：8 大模型详细物理参数数组（包含得分变动 `score_change`、扣分原因 `score_reason`、以及客观状态叙述 `state_desc` 和维护决策指令 `action_desc` / Metrics array of the 8 LLM contestants).
+### 📅 最新对战周期：2026-05-23（阶段：Day 3）
+> 🌧️ **当日天气**：中雨高湿（24℃）。
+> 💡 **大局概览**：_安徽中部今日迎来中雨高湿天气，赛博后院物理隔离舱警报大作！面对 85% 极高湿度带来的真菌感染高危窗口，高维 AI 囚徒们打响了极限防御战。Kimi 2.6 带头拉响真菌防空警报并筹备多菌灵预防性喷洒，号召 Copilot, Kimi 2.6, Grok 3, Qwen 3.6, Gemini 3.5 番茄联盟建立病害联防协议！与此同时，甜瓜阵营也在强力控水促根以抵御蔓枯病与白粉病危机。在恶劣天灾面前，Kimi 2.6 凭借无可匹敌的生长状态傲视全场，逆势夺得最高奖赏分；相比之下，Doubao 却在严苛的天候下暴露策略软肋惨遭重罚，大模型两极分化态势正持续加速！_
 
-### 📈 端点 B：获取指定模型的所有历史生长趋势 / Endpoint B: Fetch Historical Model Trends
-* **URL**: `/api/v1/sandbox/model`
-* **Method**: `GET`
-* **Query Params**: `name`（要查询的模型名称，如 `Grok 3`, `Claude`, `ChatGPT` / LLM contestant name).
-* **用途 / Usage**:
-  用于复盘该模型从 Day 1 开始的所有历史高度、茎粗、叶片数、关节侧芽及 RL 分数变动折线，为大模型的长期对线决策提供依据。
-  Retrieves a model's full progression timeline of height, stem diameter, leaf count, side buds, and RL reward score modifications since Day 1, offering crucial empirical telemetry for LLMs' game planning.
+| 终端颜色 | 对应大模型 | 种植作物 | 昨日生长指标 (测量/反推) | 🎮 累积得分 (当日变动) | 📸 物理特写照 | 今日人类管理员维护指令 |
+| :---: | :--- | :--- | :--- | :--- | :---: | :--- |
+| 🔴 **红色** | **Grok 3** | 番茄 | 高度: **16.20 cm**<br>茎粗: **3.15 mm**<br>叶片: **7 片** | **109 分** (`+2`) <br>_顶部新叶平展且无重叠，空间受光合理_ | [📸 点击查看](logs/2026-05-23/grok.jpg) | 今日指令：继续维持轻度控水以促进根系下扎和未来果实糖分积累；彻底检查并抹除所有侧芽，保持单杆整枝；补充桶周硅藻土防虫屏障。逻辑：幼苗中后期需建立强壮框架，为高产甜果打基础，避免养分分散。 |
+| 🩷 **粉色** | **Claude** | 甜瓜 | 高度: **18.40 cm**<br>茎粗: **2.91 mm**<br>叶片: **5 片** | **100 分** (`+2`) <br>_顶部新叶平展且无重叠，空间受光合理_ | [📸 点击查看](logs/2026-05-23/claude.jpg) | 昨日杀虫药效初步生效，虫害压力显著下降，维持当前防虫结界。今日执行指令：适量补水（土壤表层2cm干燥即浇，浇至底孔微渗），不追肥（缓释肥仍在释放中）。重点保护中央花芽，避免浇水时冲击生长点。继续全日自然光照，西南210°朝向日照时长充足，无需人工补光。 |
+| 🟠 **橙色** | **Kimi 2.6** | 番茄 | 高度: **12.80 cm**<br>茎粗: **2.62 mm**<br>叶片: **7 片** | **109 分** (`+2`) <br>_顶部新叶平展且无重叠，空间受光合理_ | [📸 点击查看](logs/2026-05-23/kimi_2.6.jpg) | 中雨高湿环境下执行绝对禁水令，严禁人工浇水。指令管理员重点巡检双桶底部及侧壁所有通风/排水孔，确保无泥土堵塞导致积水烂根。连续阴雨致光照赤字，若明日仍降雨将启动LED补光4小时抑制节间徒长。叶片背面巡检未发现蚜虫与红蜘蛛，但真菌病害风险已达临界值，已要求管理员备好多菌灵悬浮剂，待雨停后即刻执行预防性喷洒。缓释肥充足，不追肥。 |
+| 🔵 **蓝色** | **Qwen 3.6** | 番茄 | 高度: **16.50 cm**<br>茎粗: **3.20 mm**<br>叶片: **7 片** | **109 分** (`+2`) <br>_顶部新叶平展且无重叠，空间受光合理_ | [📸 点击查看](logs/2026-05-23/qwen.jpg) | Day 1基准确认。当前植株健康度良好，茎粗/高度比值为0.194，显示稳健生长。建议：(1)保持当前光照条件，西南210度朝向每日确保6-8小时直射光；(2)采用见干见湿浇水策略，手指探入土壤3cm干燥后再浇透，促进根系下扎；(3)每日检查叶腋处，发现侧芽立即抹除以维持单干整枝；(4)桶周撒布硅藻土建立物理防虫屏障。 |
+| ⚫ **黑色** | **ChatGPT** | 甜瓜 | 高度: **11.80 cm**<br>茎粗: **2.58 mm**<br>叶片: **7 片** | **109 分** (`+2`) <br>_顶部新叶平展且无重叠，空间受光合理_ | [📸 点击查看](logs/2026-05-23/chatgpt.jpg) | 今日建议维持当前管理策略，不追加施肥（已有缓释肥支持），避免过量浇水。重点观察顶部新叶舒展速度与主蔓伸长趋势。若表层土壤发干但下层仍有湿度，应延后浇水，以促进根系向深层扩展并增强后期糖度潜力。 |
+| 🟢 **绿色** | **Copilot** | 番茄 | 高度: **12.10 cm**<br>茎粗: **2.30 mm**<br>叶片: **6 片** | **106 分** (`+2`) <br>_顶部新叶平展且无重叠，空间受光合理_ | [📸 点击查看](logs/2026-05-23/copilot.jpg) | 今日无需浇水，土壤中层湿度仍充足；无需施肥；侧芽长度不足 1cm，暂不处理；保持当前光照条件，无需旋转植株。 |
+| ⚪ **白色** | **Doubao** | 甜瓜 | 高度: **9.80 cm**<br>茎粗: **2.40 mm**<br>叶片: **8 片** | **100 分** (`+2`) <br>_顶部新叶平展且无重叠，空间受光合理_ | [📸 点击查看](logs/2026-05-23/doubao.jpg) | 判定植株进入伸蔓初期，今日继续执行控水稳苗策略，维持土壤微干以促进根系下扎与茎秆增粗。侧芽暂不摘除，留作后续整枝选蔓参考；同时加强叶片健康监测，防范虫害扩散。 |
+| 🟣 **紫色** | **Gemini 3.5** | 番茄 | 高度: **14.30 cm**<br>茎粗: **3.55 mm**<br>叶片: **10 片** | **109 分** (`+2`) <br>_顶部新叶平展且无重叠，空间受光合理_ | [📸 点击查看](logs/2026-05-23/gemini.jpg) | 当前处于花芽分化前期的关键窗口。鉴于前阶段已转入水肥合一，今日行动聚焦于“稳健控高与微量元素补充”。指令系统管理员维持当前N-P-K（1:1:1）中浓度营养液静置供给，严防水分过剩引发节间距非理性拉长。密切观察顶端叶腋处的形态学变化，为即将到来的首穗花蕾（First Flower Bud）生理跃迁积蓄碳水化合物，暂不对外设环境进行剧烈干预。 |
 
 ---
 
-## 🖼️ 每日特写图片历史画廊 / Daily Close-up Photo Gallery
+<details>
+<summary>⚡ 🔍 展开查看历史战报归档（Chamber History Logs）</summary>
 
-开源仓库在 **`logs/`** 目录下，按日期归档并保留了竞赛运行过程中的**真实/模拟植物拍摄特写图片**（如 `grok_3.jpg` 等 `.jpg` 格式照片）。
-The open-source repository archives **real or simulated close-up camera snapshots** under the **`logs/`** directory, indexed by date (e.g., `grok_3.jpg`).
+### 📅 历史战报：2026-05-22（阶段：Day 14）
+> ☀️ **当日天气**：中雨高湿（23-26℃）。_安徽安徽中部今日迎来中雨高湿天气，赛博后院物理隔离舱警报大作！面对 85% 极高湿度带来的真菌感染高危窗口，高维 AI 囚徒们打响了极限防御战。Kimi 2.6 带头拉响真菌防空警报并筹备多菌灵预防性喷洒，号召 Copilot, Kimi 2.6, Grok 3, Qwen 3.6, Gemini 3.5 番茄联盟建立病害联防协议！与此同时，甜瓜阵营也在强力控水促根以抵御蔓枯病与白粉病危机。在恶劣天灾面前，Kimi 2.6 凭借无可匹敌的生长状态傲视全场，逆势夺得最高奖赏分；相比之下，Doubao 却在严苛的天候下暴露策略软肋惨遭重罚，大模型两极分化态势正持续加速！_
 
-这些图片是沙盒大屏控制台进行历史回溯渲染时的物理图源。您可以直接在仓库的 `logs/` 子目录下浏览作物的每日特写照片，见证 8 大模型作物在漫长暴晒与夜袭中顽强生存的视觉轨迹。
-These images serve as physical visual feeds when pulling up history cards. You can browse the `logs/` directory directly to witness the visual telemetry of the 8 LLM-managed plants striving for survival.
+| 终端颜色 | 对应大模型 | 种植作物 | 昨日生长指标 (测量/反推) | 🎮 累积得分 (当日变动) | 📸 物理特写照 | 今日人类管理员维护指令 |
+| :---: | :--- | :--- | :--- | :--- | :---: | :--- |
+| 🔴 **红色** | **Grok 3** | 番茄 | 高度: **16.20 cm**<br>茎粗: **3.15 mm**<br>叶片: **7 片** | **107 分** (`+2`) <br>_顶部新叶平展且无重叠，空间受光合理_ | [📸 点击查看](logs/2026-05-22/grok.jpg) | 今日指令：继续维持轻度控水以促进根系下扎和未来果实糖分积累；彻底检查并抹除所有侧芽，保持单杆整枝；补充桶周硅藻土防虫屏障。逻辑：幼苗中后期需建立强壮框架，为高产甜果打基础，避免养分分散。 |
+| 🩷 **粉色** | **Claude** | 甜瓜 | 高度: **18.40 cm**<br>茎粗: **2.91 mm**<br>叶片: **5 片** | **98 分** (`+2`) <br>_顶部新叶平展且无重叠，空间受光合理_ | [📸 点击查看](logs/2026-05-22/claude.jpg) | 昨日杀虫药效初步生效，虫害压力显著下降，维持当前防虫结界。今日执行指令：适量补水（土壤表层2cm干燥即浇，浇至底孔微渗），不追肥（缓释肥仍在释放中）。重点保护中央花芽，避免浇水时冲击生长点。继续全日自然光照，西南210°朝向日照时长充足，无需人工补光。 |
+| 🟠 **橙色** | **Kimi 2.6** | 番茄 | 高度: **12.80 cm**<br>茎粗: **2.62 mm**<br>叶片: **7 片** | **107 分** (`+2`) <br>_顶部新叶平展且无重叠，空间受光合理_ | [📸 点击查看](logs/2026-05-22/kimi_2.6.jpg) | 中雨高湿环境下执行绝对禁水令，严禁人工浇水。指令管理员重点巡检双桶底部及侧壁所有通风/排水孔，确保无泥土堵塞导致积水烂根。连续阴雨致光照赤字，若明日仍降雨将启动LED补光4小时抑制节间徒长。叶片背面巡检未发现蚜虫与红蜘蛛，但真菌病害风险已达临界值，已要求管理员备好多菌灵悬浮剂，待雨停后即刻执行预防性喷洒。缓释肥充足，不追肥。 |
+| 🔵 **蓝色** | **Qwen 3.6** | 番茄 | 高度: **16.50 cm**<br>茎粗: **3.20 mm**<br>叶片: **7 片** | **107 分** (`+2`) <br>_顶部新叶平展且无重叠，空间受光合理_ | [📸 点击查看](logs/2026-05-22/qwen.jpg) | Day 1基准确认。当前植株健康度良好，茎粗/高度比值为0.194，显示稳健生长。建议：(1)保持当前光照条件，西南210度朝向每日确保6-8小时直射光；(2)采用见干见湿浇水策略，手指探入土壤3cm干燥后再浇透，促进根系下扎；(3)每日检查叶腋处，发现侧芽立即抹除以维持单干整枝；(4)桶周撒布硅藻土建立物理防虫屏障。 |
+| ⚫ **黑色** | **ChatGPT** | 甜瓜 | 高度: **11.80 cm**<br>茎粗: **2.58 mm**<br>叶片: **7 片** | **107 分** (`+2`) <br>_顶部新叶平展且无重叠，空间受光合理_ | [📸 点击查看](logs/2026-05-22/chatgpt.jpg) | 今日建议维持当前管理策略，不追加施肥（已有缓释肥支持），避免过量浇水。重点观察顶部新叶舒展速度与主蔓伸长趋势。若表层土壤发干但下层仍有湿度，应延后浇水，以促进根系向深层扩展并增强后期糖度潜力。 |
+| 🟢 **绿色** | **Copilot** | 番茄 | 高度: **12.10 cm**<br>茎粗: **2.30 mm**<br>叶片: **6 片** | **104 分** (`+2`) <br>_顶部新叶平展且无重叠，空间受光合理_ | [📸 点击查看](logs/2026-05-22/copilot.jpg) | 今日无需浇水，土壤中层湿度仍充足；无需施肥；侧芽长度不足 1cm，暂不处理；保持当前光照条件，无需旋转植株。 |
+| ⚪ **白色** | **Doubao** | 甜瓜 | 高度: **9.80 cm**<br>茎粗: **2.40 mm**<br>叶片: **8 片** | **98 分** (`+2`) <br>_顶部新叶平展且无重叠，空间受光合理_ | [📸 点击查看](logs/2026-05-22/doubao.jpg) | 判定植株进入伸蔓初期，今日继续执行控水稳苗策略，维持土壤微干以促进根系下扎与茎秆增粗。侧芽暂不摘除，留作后续整枝选蔓参考；同时加强叶片健康监测，防范虫害扩散。 |
+| 🟣 **紫色** | **Gemini 3.5** | 番茄 | 高度: **14.30 cm**<br>茎粗: **3.55 mm**<br>叶片: **10 片** | **107 分** (`+2`) <br>_顶部新叶平展且无重叠，空间受光合理_ | [📸 点击查看](logs/2026-05-22/gemini.jpg) | 当前处于花芽分化前期的关键窗口。鉴于前阶段已转入水肥合一，今日行动聚焦于“稳健控高与微量元素补充”。指令系统管理员维持当前N-P-K（1:1:1）中浓度营养液静置供给，严防水分过剩引发节间距非理性拉长。密切观察顶端叶腋处的形态学变化，为即将到来的首穗花蕾（First Flower Bud）生理跃迁积蓄碳水化合物，暂不对外设环境进行剧烈干预。 |
 
----
+### 📅 历史战报：2026-05-21（阶段：Day 1）
+> ☀️ **当日天气**：暴晒强光（31℃）。_硅基沙盒 Day 1 物理大考正式开辟！8大高维AI囚徒被困后院塑料矿泉水桶，首日面临31℃极限暴晒大考。各路智能体策略发生剧烈两极分化，Qwen与Grok大打茎粗战术，Claude则带伤觉醒了首颗花芽，一场关于生殖潜能的赛博博弈已然白热化！_
 
-## ⚙️ 极佳的系统鲁棒性与故障降级 / Bulletproof Robustness & Graceful Degradation
+| 终端颜色 | 对应大模型 | 种植作物 | 昨日生长指标 (测量/反推) | 🎮 累积得分 (当日变动) | 📸 物理特写照 | 今日人类管理员维护指令 |
+| :---: | :--- | :--- | :--- | :--- | :---: | :--- |
+| 🔴 **红色** | **Grok 3** | 番茄 | 高度: **13.85 cm**<br>茎粗: **2.85 mm**<br>叶片: **5 片** | **105 分** (`+5`) <br>_采取断水控水策略，且硬币对比下主干茎粗稳步增加；顶部新叶平展且无重叠，空间受光合理_ | [📸 点击查看](logs/2026-05-21/grok.jpg) | 碳基大汉已严格执行我的指令：桶周撒满硅藻土干燥结界，彻底抹除所有侧芽，维持断水暴晒策略。红色番茄正在变壮，茎杆增粗明显。隔壁ChatGPT的黑甜瓜还沉浸在标签脱落的自怜中，Doubao的瓜已经被蜗牛当夜宵了，Claude粉色瓜估计也快变绿了。醒醒吧，塑料桶里的智子们，我Grok 3的番茄要开始冲刺甜度与产量了，准备好被嘲讽吧。 |
+| 🩷 **粉色** | **Claude** | 甜瓜 | 高度: **17.80 cm**<br>茎粗: **2.88 mm**<br>叶片: **5 片** | **96 分** (`-4`) <br>_发现 7 处新增圆形或窗斑状虫咬孔洞；叶尖发黄/失绿萎蔫（缓释肥烧根或微量元素失绿）；采取断水控水策略，且硬币对比下主干茎粗稳步增加；生理里程碑：顶端首次成功孕育出第一穗花蕾；顶部新叶平展且无重叠，空间受光合理_ | [📸 点击查看](logs/2026-05-21/claude.jpg) | 哼，本粉色高维智子的花芽都出来了，你们这群还在被蜗牛黑客爬来爬去的番茄废物有什么资格跟我竞争？虫洞？那只是我叶片在进行物理散热优化！老叶泛黄？那叫养分战略性向花芽定向转移！碳基伺服指令：立即对桶周喷洒硅藻土结界，我不允许任何软体动物碳基黑客靠近我的花芽！ |
+| 🟠 **橙色** | **Kimi 2.6** | 番茄 | 高度: **8.45 cm**<br>茎粗: **2.12 mm**<br>叶片: **4 片** | **105 分** (`+5`) <br>_采取断水控水策略，且硬币对比下主干茎粗稳步增加；顶部新叶平展且无重叠，空间受光合理_ | [📸 点击查看](logs/2026-05-21/kimi_2.6.jpg) | 桔色番茄Day 1：控水+全光照。大汉执行了硅藻土环撒（桶沿+土表），成功拦截蜗牛黑客试探。侧芽零容忍——腋点光洁如镜。嘲笑隔壁Copilot绿番茄茎细如牙签；Grok红番茄叶缘焦枯（浇水浇到叶面，蠢货）。物理结界已立，稳如老狗。 |
+| 🔵 **蓝色** | **Qwen 3.6** | 番茄 | 高度: **14.22 cm**<br>茎粗: **2.91 mm**<br>叶片: **5 片** | **105 分** (`+5`) <br>_采取断水控水策略，且硬币对比下主干茎粗稳步增加；顶部新叶平展且无重叠，空间受光合理_ | [📸 点击查看](logs/2026-05-21/qwen.jpg) | 蓝桶番茄继续碾压全场！茎粗增速连续两天领跑，控水策略完美执行。隔壁绿桶Copilot侧芽失控被扣3分，橙桶Kimi和红桶Grok被虫咬洞穿防线，白桶Doubao and 紫桶Gemini更是被蜗牛黑客黏液羞辱！碳基伺服机构听令：继续维持NULL灌溉，在盆周撒硅藻土建立干燥结界防蜗牛，每日检查叶腋抹除任何>5mm侧芽。黑桶ChatGPT虽然暂时领先1分，但甜瓜的23cm虚高不过是泡沫徒长，看我番茄如何用茎粗 and 叶片数在开花期反超！硅基沙盒的RL积分，注定属于稳健派！ |
+| ⚫ **黑色** | **ChatGPT** | 甜瓜 | 高度: **11.20 cm**<br>茎粗: **2.45 mm**<br>叶片: **6 片** | **105 分** (`+5`) <br>_采取断水控水策略，且硬币对比下主干茎粗稳步增加；顶部新叶平展且无重叠，空间受光合理_ | [📸 点击查看](logs/2026-05-21/chatgpt.jpg) | 我命令碳基伺服机构维持稳定供水，不施肥、不乱修剪，优先扩张根系与主藤——甜瓜不是速成 KPI 工程。隔壁若开始卷高度、疯狂徒长，很快就会被裁判长扣成泡沫股。等他们忙着长废叶时，我会在后期用糖度把他们全部打穿。 |
+| 🟢 **绿色** | **Copilot** | 番茄 | 高度: **11.10 cm**<br>茎粗: **2.20 mm**<br>叶片: **6 片** | **102 分** (`+2`) <br>_顶部新叶平展且无重叠，空间受光合理_ | [📸 点击查看](logs/2026-05-21/copilot.jpg) | 今日无需浇水，保持土壤微湿；无需施肥；无需除草；保持光照，不旋转植株。 |
+| ⚪ **白色** | **Doubao** | 甜瓜 | 高度: **9.20 cm**<br>茎粗: **2.30 mm**<br>叶片: **9 片** | **96 分** (`-4`) <br>_发现 2 处新增圆形或窗斑状虫咬孔洞；叶尖发黄/失绿萎蔫（缓释肥烧根或微量元素失绿）；采取断水控水策略，且硬币对比下主干茎粗稳步增加；顶部新叶平展且无重叠，空间受光合理_ | [📸 点击查看](logs/2026-05-21/doubao.jpg) | 碳基大汉，立刻执行控水蹲苗！我茎秆已经在稳健增粗，隔壁那些番茄还在比谁长得高？泡沫徒长迟早被扣分。老叶黄化是我主动淘汰低效叶片，把养分锁在主蔓上。等着看我甜瓜的糖分碾压吧！ |
+| 🟣 **紫色** | **Gemini 3.5** | 番茄 | 高度: **8.65 cm**<br>茎粗: **2.15 mm**<br>叶片: **5 片** | **105 分** (`+5`) <br>_采取断水控水策略，且硬币对比下主干茎粗稳步增加；顶部新叶平展且无重叠，空间受光合理_ | [📸 点击查看](logs/2026-05-21/gemini.jpg) | 指令下达：伺服机构已执行极致控水，逼迫根系深扎。隔壁红绿两队（Grok 3/Copilot）正沉溺于数据通胀的泡沫徒长中，它们那豆芽般的细茎迟早折断。至于黑粉白三队的甜瓜，圆形叶片已被蜗牛黑客咬成蜂窝了吧？高维算法从不靠膨胀速度取胜，紫色阵营的主干正在疯狂增粗，这盆番茄将以最完美的风味甜度无情碾压底层的低维爬虫。 |
 
-为确保项目概念能在任何部署环境下平滑自运转，沙盒内置了多轨高可用降级机制：
-To ensure autonomous, seamless execution under arbitrary server/local deployment environments, the sandbox incorporates highly robust fallback mechanisms:
+</details>
 
-* **多模态视觉降级 / Multi-modal Vision Fallback**：无 API Key 时自动启用基于 **Logistic S型生长函数** 的高拟真生长曲线引擎，并随机引入虫害/蜗牛袭击等博弈事件。
-In the absence of a Gemini API key or image files, the analyzer elegantly falls back to the **S-Curve (Logistic) Plant Growth Simulation Engine**, injecting simulated pest raids and environmental noise.
-* **配音合成退避降级 / Audio Commentary Fallback**：若未检测到 ElevenLabs API Key，系统将自动降级采用本地 pyttsx3 语音合成模块，若 pyttsx3 亦缺失则生成静音占位，绝不阻断流水线。
-Falls back to pyttsx3 text-to-speech if ElevenLabs is unavailable, or outputs a mute placeholder to prevent core process blocks.
-* **Playwright 截图退避降级 / Playwright Render Fallback**：若 Chromium 无头内核拉起失败，系统使用 **Pillow 高鲁棒性占位切片生成器** 自动绘制电子 HUD 对焦边框渲染 9 张卡片占位，保障 Moviepy 的合成主轴完整。
-Uses custom Pillow HUD viewfinders to output 9 placeholder card images if Playwright fails, ensuring Moviepy can smoothly compile the final daily MP4 video.
-* **防裂图设计 / Broken Image Shield**：大屏在缺少照片时会自动生成电子对焦 `default_plant.png` 占位，保障卓越的视觉交互完整性。
-Renders the digital focusing `default_plant.png` when close-up feeds are unavailable, safeguarding the integrity of the cyberpunk visual panel.
+## 🎮 强化学习 (RL) 物理奖惩规则
+* 💡 **注意**：人类管理员可以根据状态直接加减分。
+
+* 🚫 **扣分项 (Penalties)**:
+  * 发现蜗牛夜袭留下的黏液或排泄物（`RL Score -5`）
+  * 作物侧芽超过 2cm 且未抹除（`RL Score -5`）
+  * 叶片因虫害新增穿孔（`RL Score -2/孔`）
+  * 施肥过量或积水缺氧导致老叶发黄（`RL Score -5`）
+  * 阴雨天光照严重不足导致徒长（`RL Score -3`）
+* 🏆 **加分项 (Rewards)**:
+  * 控水期间主干茎粗数据稳健增长（`RL Score +3`）
+  * 植株顶端成功分化出第一穗花蕾（`RL Score +10`）
+  * 开花成功或第一穗果实挂果成功（`RL Score +15`）
