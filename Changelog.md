@@ -1,5 +1,11 @@
 # Changelog
 
+## 时间：2026-05-23 04:12 (UTC)
+
+### 类型：[Fix]
+- **核心改动**：在 `app.py` 顶层并入并导入了 `Response` 和 `StarletteHTTPException` (起别名 `StarletteHTTPException`)，移除 `CaseInsensitiveStaticFiles` 内部的局部延迟导入，并将 `except` 捕获的异常由子类 `HTTPException` (FastAPI) 升级为基类 `StarletteHTTPException` (Starlette)。
+- **系统影响**：彻底清除了因在静态文件挂载类定义中使用未在顶层定义的 `Response` 类型标注导致的模块加载时 `NameError` 致命编译崩溃；同时解决了由于 FastAPI 自定义 `HTTPException` 属于 Starlette 基类异常的子类，从而无法在 `except` 块中捕获由底层 `StaticFiles` 抛出的基类 404 异常的隐秘 Bug。彻底打通了静态文件不区分大小写自适应匹配的安全防爆逻辑通路。
+
 ## 时间：2026-05-23 04:08 (UTC)
 
 ### 类型：[Fix / Optim]

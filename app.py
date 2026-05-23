@@ -4,6 +4,8 @@ from fastapi import FastAPI, Request, Query, HTTPException
 from fastapi.staticfiles import StaticFiles
 from fastapi.templating import Jinja2Templates
 from fastapi.responses import HTMLResponse, JSONResponse
+from starlette.responses import Response
+from starlette.exceptions import HTTPException as StarletteHTTPException
 from typing import Optional, List, Dict, Any
 from dotenv import load_dotenv
 from PIL import Image, ImageDraw
@@ -61,12 +63,11 @@ class CaseInsensitiveStaticFiles(StaticFiles):
     async def get_response(self, path: str, scope) -> Response:
         try:
             return await super().get_response(path, scope)
-        except HTTPException as exc:
+        except StarletteHTTPException as exc:
             if exc.status_code == 404:
                 # 📷 跨平台兼容降级：针对 Windows 开发环境下文件名首字母大写、但代码/数据库使用小写，
                 # 导致在 Linux (Render) 云端部署时因严格区分大小写而触发 404 的经典缺陷，
                 # 在 404 时主动在磁盘上进行不区分大小写的文件名精准配对
-                from starlette.responses import Response
                 full_path = os.path.join(self.directory, path)
                 dir_name = os.path.dirname(full_path)
                 base_name = os.path.basename(full_path).lower()
