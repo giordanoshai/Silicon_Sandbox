@@ -56,9 +56,33 @@ if not os.path.exists(DEFAULT_PLANT_PATH):
     except Exception as e:
         print(f"绘制占位图失败: {e}")
 
+# --- 赛博大屏高可用：支持大小写不敏感的静态文件挂载类 ---
+class CaseInsensitiveStaticFiles(StaticFiles):
+    async def get_response(self, path: str, scope) -> Response:
+        try:
+            return await super().get_response(path, scope)
+        except HTTPException as exc:
+            if exc.status_code == 404:
+                # 📷 跨平台兼容降级：针对 Windows 开发环境下文件名首字母大写、但代码/数据库使用小写，
+                # 导致在 Linux (Render) 云端部署时因严格区分大小写而触发 404 的经典缺陷，
+                # 在 404 时主动在磁盘上进行不区分大小写的文件名精准配对
+                from starlette.responses import Response
+                full_path = os.path.join(self.directory, path)
+                dir_name = os.path.dirname(full_path)
+                base_name = os.path.basename(full_path).lower()
+                if os.path.exists(dir_name):
+                    try:
+                        for file in os.listdir(dir_name):
+                            if file.lower() == base_name:
+                                matched_relative = os.path.join(os.path.dirname(path), file).replace("\\", "/")
+                                return await super().get_response(matched_relative, scope)
+                    except Exception:
+                        pass
+            raise exc
+
 # 挂载静态文件目录
-app.mount("/static", StaticFiles(directory=STATIC_DIR), name="static")
-app.mount("/logs", StaticFiles(directory=LOGS_DIR), name="logs")
+app.mount("/static", CaseInsensitiveStaticFiles(directory=STATIC_DIR), name="static")
+app.mount("/logs", CaseInsensitiveStaticFiles(directory=LOGS_DIR), name="logs")
 
 # 模板文件目录
 templates = Jinja2Templates(directory=os.path.join(BASE_DIR, "templates"))
