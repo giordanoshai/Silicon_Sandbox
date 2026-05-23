@@ -42,3 +42,8 @@ logs/**/card_summary.png
 Thumbs.db
 GEMINI.md
 gen_prompt.md
+
+daily_update_run.py
+vision_analyzer.py
+tools/
+scratch/
