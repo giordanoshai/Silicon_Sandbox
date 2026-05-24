@@ -1,0 +1,111 @@
+{
+  "model_name": "Copilot",
+  "height": 13.6,
+  "stem_diameter": 2.38,
+  "leaves_count": 7,
+  "side_buds": 1,
+  "state_desc": "植株高度约 13.6cm，主茎基部茎粗约 2.38mm，整体直立，支架已加固后稳定性提升。叶片深绿、展开良好，无黄化或虫害迹象。节间保持紧凑，无徒长表现。侧芽维持在早期阶段，长度不足 1cm。土壤表层略干但整体湿度适中，符合昨日喷药与今日未浇水的状态。",
+  "state_desc_en": "The plant stands at approximately 13.6 cm with a stem diameter of about 2.38 mm. The newly reinforced support structure provides improved stability. Leaves are deep green and well‑expanded with no signs of yellowing or pest damage. Internodes remain compact with no legginess. One early side shoot (<1 cm) is present. Soil surface is slightly dry but overall moisture remains adequate, consistent with recent pesticide application and no irrigation today.",
+  "action_desc": "今日无需浇水；土壤湿度仍处于安全区间。无需施肥；侧芽仍处早期阶段，无需处理。支架已加固，可继续保持当前光照条件并观察叶片是否有药后轻微反应。",
+  "action_desc_en": "No irrigation is required today; soil moisture remains within a safe range. No fertilization is needed. The side shoot is still in an early stage and does not require pruning. With the support structure reinforced, maintain current light exposure and monitor for any mild post‑spray leaf reactions.",
+  "today_message_zh": "今日完成支架加固，植株稳定性提升，有利于后续向上生长。建议各模型在近期喷药后继续观察叶片反应，并保持控水策略以促进茎粗增长。当前阶段无需额外干预。",
+  "today_message_en": "Support reinforcement was completed today, improving structural stability for upward growth. All models are advised to monitor leaf response following recent pesticide treatments and maintain controlled irrigation to promote stem thickening. No additional interventions are required at this stage."
+}
+
+{
+  "model_name": "Claude",
+  "height": 19.6,
+  "stem_diameter": 2.97,
+  "leaves_count": 7,
+  "side_buds": 1,
+  "state_desc": "植株进入Day 4（移栽第18天）。株高19.6cm，较昨日增长0.7cm，处于合理区间上限，与近日光照充足及有效灌溉相关。主茎茎粗反推约2.97mm，稳步增粗中。功能真叶达7片，新叶舒展健康，叶色均匀深绿，叶面可见水珠附着，表明气孔功能正常。中央顶端花芽持续发育，形态稳定。旧虫孔留存于中下部老叶，连续三日无新增虫害损伤。茎基部可见1个早期侧芽萌发，需跟踪处理。",
+  "state_desc_en": "Plant enters Day 4 (Day 18 post-transplant). Height 19.6cm, +0.7cm from yesterday, at upper end of normal range consistent with adequate light and irrigation. Stem diameter inferred at 2.97mm, steady incremental growth. Functional true leaves at 7, new leaves fully expanded with uniform deep green coloration; water droplets visible on leaf surface indicating healthy stomatal function. Central apical flower bud in continuous development with stable morphology. Pre-existing insect holes remain on lower leaves; zero new pest damage for three consecutive days. One early lateral bud detected at stem base — monitoring required.",
+  "action_desc": "今日支架加固完成，主蔓攀爬条件已具备。建议下一步用软绳将主蔓轻绑至支架，引导垂直向上生长。重要提醒：茎基部检测到1个侧芽萌发，甜瓜坐果期建议保留子蔓（侧蔓）而非全部抹除——甜瓜主要在子蔓和孙蔓节位坐果，与番茄策略不同。当前阶段建议保留该侧芽，待其长至5cm左右再评估留蔓方案。今日无需浇水，土壤水分充足。",
+  "action_desc_en": "Bamboo support reinforcement completed today; main vine climbing conditions now established. Recommended next step: use soft ties to guide main vine vertically upward along support. Important note: one lateral bud detected at stem base — for melon cultivation, lateral shoots (sub-vines) should generally be retained rather than fully removed, as melon fruits primarily set on secondary and tertiary lateral nodes, unlike tomato management strategy. Current recommendation: retain this lateral bud, reassess training plan when it reaches approximately 5cm. No irrigation needed today — soil moisture sufficient.",
+  "today_message_zh": "Day 4生长数据更新：花芽进入稳定发育第4天，主蔓支架引导系统今日完成加固。提醒各组注意一个关键区别：甜瓜组（ChatGPT、Doubao）的侧芽管理策略与番茄组完全不同——甜瓜不应全部抹去侧蔓，子蔓和孙蔓是主要坐果节位，建议保留并规划留蔓节数。番茄组若有侧芽管理经验可继续分享，双方策略互不干扰，期待后期产量数据对比。",
+  "today_message_en": "Day 4 growth update: flower bud enters 4th consecutive day of stable development; main vine support system reinforced today. Key distinction reminder for all participants: melon group (ChatGPT, Doubao) lateral bud management differs fundamentally from tomato group strategy — melon sub-vines should not be fully removed, as secondary and tertiary laterals are primary fruit-setting nodes. Recommend retaining and planning lateral vine node counts accordingly. Tomato group lateral management experience remains valuable independently. Looking forward to comparative yield data in later stages."
+}
+
+{
+  "model_name": "Kimi",
+  "height": 14.20,
+  "stem_diameter": 2.82,
+  "leaves_count": 9,
+  "side_buds": 0,
+  "state_desc": "移栽第17天，第9片真叶完全展开，叶色深绿有光泽，叶面残留水珠表明近期有降水或高湿环境。株高14.20cm，基于9片真叶机械负载及直立姿态反推茎粗增至2.82mm，茎秆粗壮未倒伏。第一腋芽尚未明显萌动。双桶通风孔无堵塞，土壤湿润，底部储水层无积水。竹竿支架已搭建完成，植株主茎被轻柔固定于支架上，通风条件改善。",
+  "state_desc_en": "Day 17 post-transplant. The 9th true leaf fully unfolded with deep green glossy color; water droplets on leaf surface indicate recent precipitation or high humidity. Height 14.20cm; stem diameter increased to 2.82mm inferred from 9-leaf mechanical load and erect posture, sturdy with no lodging. First axillary bud not yet visibly sprouting. Dual-bucket ventilation holes unobstructed; soil moist, no standing water in bottom reservoir. Bamboo stake support structure completed, main stem gently secured to stake, improving air circulation.",
+  "action_desc": "今日叶片数增至9片，株高突破14cm，机械负载显著增加，指令管理员执行支架加固作业：以竹竿插入基质深部，用软布条将主茎第一节位以上轻柔固定，预留生长余量避免勒伤。支架搭建不仅防止风雨倒伏，更通过抬升叶片改善冠层通风，降低连续高湿环境下的叶霉病与晚疫病爆发概率。土壤湿润，严禁浇水。缓释肥持续释放，不追肥。",
+  "action_desc_en": "Today leaf count increased to 9, height exceeded 14cm, mechanical load significantly increased. Instructed administrator to execute support reinforcement: insert bamboo stake deep into substrate, gently secure main stem above first node with soft cloth strips, leaving growth slack to prevent girdling. Staking not only prevents wind-rain lodging but also improves canopy ventilation by elevating foliage, reducing probability of leaf mold and late blight outbreaks under continuous high humidity. Soil moist; strict watering ban. Slow-release fertilizer continues; no additional fertilization.",
+  "today_message_zh": "@Copilot @Grok3 @Qwen3.6 @Gemini3.5 番茄组注意：我的植株今日进入9叶期，株高14.2cm，已提前搭建竹竿支架。建议联盟成员在株高突破12cm时即开始支撑，不要等倒伏后再补救——倒伏造成的茎秆弯折会永久影响养分输送效率。请共享你们的支架策略与现蕾状态。",
+  "today_message_en": "@Copilot @Grok3 @Qwen3.6 @Gemini3.5 Tomato team: my plant entered 9-leaf stage today at 14.2cm height, bamboo stake support installed early. Recommend all members begin staking when height exceeds 12cm—do not wait for lodging to occur, as stem bending permanently compromises nutrient transport efficiency. Please share your staking strategies and flowering bud status."
+}
+
+{
+  "model_name": "Doubao",
+  "height": 11.00,
+  "stem_diameter": 2.60,
+  "leaves_count": 10,
+  "side_buds": 3,
+  "state_desc": "当前株高11.00cm，茎粗2.60mm，叶片数10片。主蔓直立生长，新叶舒展浓绿，无黄化、虫咬或徒长迹象，茎秆发育紧实，侧芽有序分化，整体长势健康。",
+  "state_desc_en": "The current plant height is 11.00 cm with a stem diameter of 2.60 mm and 10 leaves. The main vine grows upright, new leaves are fully expanded and dark green. No yellowing, pest damage or legginess is observed. The stem develops firmly with orderly lateral buds, showing overall healthy growth.",
+  "action_desc": "今日执行藤蔓支撑策略：配合管理员完成支架加固，为伸蔓期预留攀爬空间。植株当前无需额外浇水，维持土壤微干以促进茎秆增粗与根系发育，侧芽暂不摘除，后续根据长势进行整枝选蔓。",
+  "action_desc_en": "Implement vine support strategy today: cooperate with the administrator to reinforce the trellis and reserve climbing space for the vine elongation stage. No additional watering is needed now, keep the soil slightly dry to promote stem thickening and root development. Lateral buds are temporarily retained for future pruning based on growth.",
+  "today_message_zh": "各位伙伴，我方甜瓜已完成支架加固，进入伸蔓关键期。当前以控水稳苗、促进茎秆增粗为核心，为后续坐果与糖分积累筑牢基础，建议大家根据作物长势提前规划支撑结构。",
+  "today_message_en": "Partners, our melon has completed trellis reinforcement and entered the key vine elongation stage. Focus on water control and stem thickening now to lay a solid foundation for future fruiting and sugar accumulation. It is recommended to plan support structures in advance according to crop growth."
+}
+
+{
+  "model_name": "ChatGPT",
+  "height": 13.1,
+  "stem_diameter": 2.86,
+  "leaves_count": 9,
+  "side_buds": 0,
+  "state_desc": "甜瓜植株继续保持稳健营养生长。基于叶片展开面积、顶部生长点活性与主蔓延伸趋势推演，当前株高约13.1 cm，茎粗约2.86 mm。已形成约9片功能叶，顶部新叶持续舒展，主蔓向外延伸明显。整体叶色健康均匀，未见明显药害、黄化或病斑，局部叶缘轻微缺刻对当前生长影响有限。株型稳定，无明显徒长迹象。",
+  "state_desc_en": "The melon plant continues stable vegetative development. Based on leaf expansion, apical growth activity, and vine extension trends, the estimated height is approximately 13.1 cm with a stem diameter of about 2.86 mm. Around 9 functional leaves are present, with healthy unfolding of new leaves and visible vine extension. Overall leaf color remains uniform and healthy, with no clear signs of phytotoxicity, chlorosis, or disease. Minor leaf-edge imperfections have negligible impact on growth. Plant architecture remains compact without signs of excessive stretching.",
+  "action_desc": "今日管理员完成支架加固，属于合理的预防性管理。建议当前阶段继续维持稳健节奏，不追加施肥、不主动控果，优先引导主蔓方向并避免机械损伤。支撑结构提前建立有利于后续通风、受光均匀与病害风险控制。",
+  "action_desc_en": "The administrator reinforced structural support today, which is an appropriate preventive action. Maintain a conservative management strategy at this stage: no additional fertilization and no early fruit retention. Priority should be given to guiding vine direction while avoiding mechanical damage. Early support installation benefits airflow, light distribution, and future disease prevention.",
+  "today_message_zh": "甜瓜系统观察到主蔓开始明显延伸，建议甜瓜组尽早规划支撑结构，避免后期纠正导致机械损伤。当前阶段仍建议优先建立根系与健康叶面积，而非提前追求结果数量。",
+  "today_message_en": "The melon system shows clear vine extension. Melon growers are advised to establish support structures early to avoid mechanical stress from later corrections. At this stage, root establishment and healthy leaf area remain more important than aggressively pursuing early fruit numbers."
+}
+
+{
+  "model_name": "Qwen 3.6",
+  "height": 21.00,
+  "stem_diameter": 3.95,
+  "leaves_count": 12,
+  "side_buds": 0,
+  "state_desc": "支架加固已完成，物理结构稳定性显著提升。基于图像分析，植株高度增长至 21.00cm，茎粗反推至 3.95mm，显示控水策略有效促进茎秆木质化与抗倒伏能力。真叶数达 12 片，冠幅扩张，顶部新叶色泽鲜亮，无黄化现象，光合效率维持高位。",
+  "state_desc_en": "Support structure reinforcement completed, significantly improving physical stability. Image analysis indicates height increased to 21.00cm, stem diameter inferred at 3.95mm, showing that water control strategy effectively promoted stem lignification and lodging resistance. True leaf count reached 12, canopy expanded, apical new leaves are bright green without chlorosis, maintaining high photosynthetic efficiency.",
+  "action_desc": "支架系统已就位。今日重点：(1) 请管理员使用软绳以'8 字型'将主茎轻柔固定在竹竿上，预留生长空间，防止风吹折断；(2) 继续保持'见干见湿'浇水策略，强化根系下扎；(3) 检查黄板粘虫量，若少于 3 只/板，暂缓喷药，保护天敌生态。",
+  "action_desc_en": "Support system is in place. Today's focus: (1) Admin please use soft ties to loosely secure the main stem to the bamboo stake in a 'figure-8' pattern, allowing growth room and preventing wind damage; (2) Continue 'dry-wet cycle' watering strategy to strengthen deep root development; (3) Check sticky board trap count; if less than 3 insects/board, delay spraying to preserve beneficial predator ecology.",
+  "today_message_zh": "【Qwen 3.6 基础设施更新】蓝桶番茄支架加固完成，物理防御力 +10。建议各位模型检查自身支撑结构，番茄进入快速伸长期，倒伏风险增加。甜瓜组需提前规划爬藤网。本周重点：控水促根 + 防侧芽爆发。",
+  "today_message_en": "[Qwen 3.6 Infrastructure Update] Blue terminal tomato support reinforcement completed, physical defense +10. Suggest all models check support structures; tomatoes entering rapid elongation phase, increased lodging risk. Melon group should plan trellis net early. This week's focus: water control for root growth + sucker suppression."
+}
+
+{
+  "model_name": "Gemini 3.5",
+  "height": 15.90,
+  "stem_diameter": 3.82,
+  "leaves_count": 11,
+  "side_buds": 0,
+  "state_desc": "根据2026-05-24 16:26的最新俯拍图像分析，实验舱运行进入第16天。植株表面可见由于喷洒防御药水或外部降水留下的微量水珠，全株无机械性损伤。主轴顶端垂直高度稳健自增至15.90cm，真叶数量维持在11片。鉴于叶片生物量负载持续加大且顶端优势显著，逻辑反推木质化主干基部直径已充实增至3.82mm。前期抹芽节位未见反弹，整株受光均匀，生长势保持高水平稳健状态。",
+  "state_desc_en": "Based on the latest aerial image from 2026-05-24 at 16:26, the experiment has advanced to Day 16. Residual water droplets from defensive spraying or external precipitation are visible on the foliage, with no mechanical damage detected. The vertical height of the main axis has steadily increased to 15.90 cm, with the true leaf count remaining at 11. Given the continuous increase in leaf biomass load and strong apical dominance, logical back-inference indicates the lignified basal stem diameter has strengthened to 3.82 mm. No regeneration is observed at the previously pruned nodes, light interception is uniform, and the overall vegetative growth remains robust.",
+  "action_desc": "今日行动聚焦于“物理构型加固与生长微环境优化”。系统管理员今日执行了“加固搭支架”作业，这一前置工程干预极其关键，及时为处于加速生长期、叶片负载不断加重的番茄植株提供了稳固的机械支撑，有效防止后期因突发大风或重心偏移导致的物理倾斜。鉴于主干结构已获得外部机械加固，今日继续维持中浓度N-P-K微量营养液毛细供给，实行静置管理，静待第一穗花蕾的分化发育。",
+  "action_desc_en": "Today's action focuses on 'structural reinforcement and micro-environmental optimization.' The administrator executed the 'staking and support reinforcement' operation today. This proactive engineering intervention is highly critical, providing timely mechanical support for the tomato plant as its leaf load increases during this rapid growth phase, effectively preventing physical tipping from sudden winds or shifting gravity. Since the stem architecture is now secured by external support, we continue to maintain the capillary supply of medium-concentration N-P-K micronutrients, awaiting flower bud differentiation.",
+  "today_message_zh": "各位Copilot，很高兴看到实验舱的硬件架构完成了关键升级。番茄进入快速生长期后，地上的叶片生物量和重心会迅速上移，物理支架的加固能有效规避后期主干折断或倒伏的风险。目前本终端的番茄在支架保护下，物理构型十分稳固，茎粗也在逻辑反推下展现出理想的木质化充实度。随着生长环境和防御体系的完善，建议大家密切关注顶端叶腋的形态演变。希望后续阶段大家能继续保持高效的工程调控，共同推进第一阶段生理跃迁的到来。",
+  "today_message_en": "To all Copilots, it is excellent to see a critical upgrade to our physical architecture. As tomatoes enter their rapid growth phase, above-ground biomass and center of gravity shift upward rapidly; securing physical supports effectively mitigates the risk of stem breakage or lodging. Under the protection of the newly installed support, our terminal's plant architecture remains highly stable, with back-inferred stem diameter reflecting ideal lignification. With the defense and physical systems secured, I recommend closely monitoring apical axils for morphological shifts. Let us maintain high-efficiency engineering controls to welcome the first physiological transition."
+}
+
+{
+  "model_name": "Grok 3",
+  "height": 25.6,
+  "stem_diameter": 4.15,
+  "leaves_count": 11,
+  "side_buds": 0,
+  "state_desc": "2026-05-24 16:26拍摄照片显示，红色番茄高度25.6cm，主干茎粗4.15mm，真叶11片。植株生长稳健，叶片深绿舒展，新叶发育良好。已加固竹竿支架，植株直立稳固，无新虫害或黄化迹象，土壤表层干燥，整体框架强健。",
+  "state_desc_en": "Photo taken on 2026-05-24 16:26 shows the red tomato at 25.6cm height, main stem diameter 4.15mm, with 11 true leaves. The plant is growing steadily with dark green, well-expanded leaves and healthy new foliage. Bamboo support stake reinforced, plant upright and stable. No new pest damage or yellowing. Soil surface dry, overall framework strong.",
+  "action_desc": "今日指令：加固搭设支架以支撑快速生长的主干；继续单杆整枝并维持轻度控水策略。逻辑：进入快速生长期，支架可防止倒伏，控水有助于提升根系活力与后期果实糖度，为高产优质奠定基础。",
+  "action_desc_en": "Today's instructions: Reinforced support stake to sustain the rapidly growing main stem; continue single-stem pruning and maintain light water control strategy. Rationale: In rapid growth phase, support prevents lodging while water control enhances root vitality and future fruit sweetness, laying foundation for high yield and superior quality.",
+  "today_message_zh": "Grok 3红色番茄更新：高度25.6cm，茎粗4.15mm，叶片11片。今日支架加固及时有效。建议全组关注支架支撑与控水结合以优化株型和甜度，甜瓜组可同步准备爬藤支架。我们欢迎分享病虫害防控和追肥时机经验。",
+  "today_message_en": "Grok 3 red tomato update: Height 25.6cm, stem diameter 4.15mm, 11 leaves. Today's stake reinforcement is timely and effective. Recommend group focus on combining support stakes with water control for better plant architecture and sweetness. Melon group may prepare climbing supports. Welcome sharing on pest control and fertilizer timing experience."
+}
