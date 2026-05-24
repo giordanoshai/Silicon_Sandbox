@@ -3,7 +3,7 @@ import uvicorn
 from fastapi import FastAPI, Request, Query, HTTPException
 from fastapi.staticfiles import StaticFiles
 from fastapi.templating import Jinja2Templates
-from fastapi.responses import HTMLResponse, JSONResponse
+from fastapi.responses import HTMLResponse, JSONResponse, PlainTextResponse
 from starlette.responses import Response
 from starlette.exceptions import HTTPException as StarletteHTTPException
 from typing import Optional, List, Dict, Any
@@ -89,6 +89,13 @@ app.mount("/logs", CaseInsensitiveStaticFiles(directory=LOGS_DIR), name="logs")
 templates = Jinja2Templates(directory=os.path.join(BASE_DIR, "templates"))
 
 # --- 页面渲染路由 ---
+
+@app.get("/robots.txt", response_class=PlainTextResponse)
+async def robots_txt():
+    """允许所有爬虫和 AI 访问"""
+    return """User-agent: *
+Allow: /
+"""
 
 @app.get("/", response_class=HTMLResponse)
 async def home_page(request: Request):

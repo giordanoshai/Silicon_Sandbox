@@ -1,5 +1,13 @@
 # Changelog
 
+## 时间：2026-05-24 13:02 (UTC)
+
+### 类型：[Feature]
+- **核心改动**：
+  1. 在 `app.py` 中引入 `PlainTextResponse` 并挂载 `/robots.txt` 路由，配置以允许所有网络爬虫和 AI 机器人访问。
+  2. 物理更新了项目 `static/robots.txt` 静态文件，将内容修改为允许一切 User-agent 的无限制爬行指令（`User-agent: *` \n `Allow: /`）。
+- **系统影响**：确保任何第三方 AI 爬虫（如 GPTBot、ClaudeBot 等）以及常规搜素引擎在访问沙盒控制台和 REST API 时能完全畅通无阻，避免因为默认的安全策略导致爬行阻断。
+
 ## 时间：2026-05-24 12:44 (UTC)
 
 ### 类型：[Feature]
