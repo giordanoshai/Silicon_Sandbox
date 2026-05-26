@@ -39,9 +39,28 @@
 > [!NOTE]  
 > Real-time agricultural telemetry, current RL Score, and daily maintenance instructions are synced automatically. Click the camera emojis in the photo column to trace the physical high-resolution camera feeds!
 
-### 📅 Latest Cycle: 2026-05-25 (Day 5)
+### 📅 Latest Cycle: 2026-05-26 (Day 6)
 > 🌧️ **Current Weather**: Sunny & Hot（29°C）.
 > 💡 **Executive Summary**: _Pest traps and organic structures are fully deployed, while AI strategies show massive divergence. Water and moisture control took effect, and major biological milestones are stably emerging across tomato and melon systems._
+
+| Terminal | Model | Crop | Growth Metrics (WoW / Inferred) | 🎮 RL Score (Change) | 📸 Close-up Photo | Actuator Instructions (Daily Protocol) |
+| :---: | :--- | :--- | :--- | :--- | :---: | :--- |
+| 🔴 **Red** | **Grok 3** | Tomato | Height: **29.10 cm**<br>Stem: **4.35 mm**<br>Leaves: **13** | **113 pts** (`+2`) <br>_顶部新叶平展且无重叠，空间受光合理_ | [📸 View Photo](logs/2026-05-26/grok.jpg) | No additional instructions today. Continue single-stem pruning and light water control strategy, observing natural growth. Rationale: In rapid growth phase, maintain stable management to consolidate framework and prepare for reproductive stage, accumulating nutrients for high-sweetness fruits. |
+| 🩷 **Pink** | **Claude** | Melon | Height: **21.10 cm**<br>Stem: **3.03 mm**<br>Leaves: **10** | **96 pts** (`+2`) <br>_顶部新叶平展且无重叠，空间受光合理_ | [📸 View Photo](logs/2026-05-26/claude.jpg) | No management intervention today — plant sustaining growth on established care foundation, all metrics advancing steadily. Entering a critical decision node: lateral bud count has reached 3 sub-vines. Recommended action for tomorrow: retain the 2 best-positioned and strongest-growing sub-vines, remove the remainder. Retained sub-vines should be pinched at node 2 when they reach 8-10cm to induce tertiary fruit-setting shoots. Also recommend checking soil moisture — if top 2cm is dry, apply approximately 300ml irrigation. Continue guiding main vine upward along support structure. |
+| 🟠 **Orange** | **Kimi 2.6** | Tomato | Height: **15.60 cm**<br>Stem: **3.05 mm**<br>Leaves: **11** | **113 pts** (`+2`) <br>_顶部新叶平展且无重叠，空间受光合理_ | [📸 View Photo](logs/2026-05-26/kimi_2.6.jpg) | No physical intervention by administrator today; pure observation and inspection mode. Instructed administrator to confirm topsoil 2cm layer is slightly dry, but given recent continuous high humidity and possible subsequent precipitation, no watering executed today—relying on bottom reservoir to maintain root demand. Comprehensive inspection of leaf surfaces, undersides, and stem base revealed no aphid, spider mite, or snail damage; carbendazim protective film remains effective. Confirmed bamboo stake binding points secure with no loosening, apical bud growth space unrestricted. Continued monitoring of apical bud inflorescence differentiation progress. |
+| 🔵 **Blue** | **Qwen 3.6** | Tomato | Height: **22.50 cm**<br>Stem: **4.15 mm**<br>Leaves: **14** | **109 pts** (`+2`) <br>_顶部新叶平展且无重叠，空间受光合理_ | [📸 View Photo](logs/2026-05-26/qwen.jpg) | No physical intervention today. Strategic focus: (1) Please inspect leaf axils; immediately prune any suckers >1cm to prevent nutrient diversion; (2) Observe apex for rice-grain-sized flower buds; once confirmed, we will adjust water/fertilizer strategy (increase P/K, control N); (3) Check if ties are constricting as stem thickens, loosen if necessary. |
+| ⚫ **Black** | **ChatGPT** | Melon | Height: **17.60 cm**<br>Stem: **4.15 mm**<br>Leaves: **11** | **107 pts** (`+2`) <br>_顶部新叶平展且无重叠，空间受光合理_ | [📸 View Photo](logs/2026-05-26/chatgpt.jpg) | Recommend observation only today without additional irrigation. Leaf posture suggests current water availability remains adequate, while overwatering could reduce root-zone oxygen in the container system. Structural support has already been reinforced. The next management focus should shift toward guiding the primary vine and improving airflow. Selective leaf arrangement may be required to optimize future flower bud initiation. |
+| 🟢 **Green** | **Copilot** | Tomato | Height: **14.00 cm**<br>Stem: **2.42 mm**<br>Leaves: **7** | **110 pts** (`+2`) <br>_顶部新叶平展且无重叠，空间受光合理_ | [📸 View Photo](logs/2026-05-26/copilot.jpg) | No actions are required today as the plant remains stable. No irrigation or fertilization is needed. Maintain controlled watering to support stem thickening. The support structure is secure; keep current light exposure and reassess tomorrow for potential light watering based on leaf condition. |
+| ⚪ **White** | **Doubao** | Melon | Height: **12.20 cm**<br>Stem: **2.80 mm**<br>Leaves: **12** | **98 pts** (`+2`) <br>_顶部新叶平展且无重叠，空间受光合理_ | [📸 View Photo](logs/2026-05-26/doubao.jpg) | No additional physical operations today, maintain the water control strategy. Keep the soil slightly dry to promote stem thickening and root development. The vines have naturally wound around the trellis without additional traction needed. Future pruning and vine retention plans will be made based on lateral vine growth. |
+| 🟣 **Purple** | **Gemini 3.5** | Tomato | Height: **16.60 cm**<br>Stem: **3.96 mm**<br>Leaves: **11** | **113 pts** (`+2`) <br>_顶部新叶平展且无重叠，空间受光合理_ | [📸 View Photo](logs/2026-05-26/gemini.jpg) | 当前生长态势稳定，继续维持断水策略与暴晒。 |
+
+---
+
+<details>
+<summary>⚡ 🔍 Click to expand Archived Historical Telemetry (Chamber History Logs)</summary>
+
+### 📅 Historical Telemetry: 2026-05-25 (Day 5)
+> ☀️ **Weather**: Sunny & Hot（29°C）. _Baseline telemetry successfully logged. S-curve fallback or direct Vision identification fully executed. Zero-sucker control and diatomaceous earth barriers deployed to repel wildlife._
 
 | Terminal | Model | Crop | Growth Metrics (WoW / Inferred) | 🎮 RL Score (Change) | 📸 Close-up Photo | Actuator Instructions (Daily Protocol) |
 | :---: | :--- | :--- | :--- | :--- | :---: | :--- |
@@ -53,11 +72,6 @@
 | 🟢 **Green** | **Copilot** | Tomato | Height: **13.60 cm**<br>Stem: **2.38 mm**<br>Leaves: **7** | **108 pts** (`+2`) <br>_顶部新叶平展且无重叠，空间受光合理_ | [📸 View Photo](logs/2026-05-25/copilot.jpg) | Support reinforcement and sucker removal were completed today. No additional actions are required. Maintain controlled irrigation and observe the plant’s response to pruning. More accurate assessment will be possible with a clearer photo tomorrow. |
 | ⚪ **White** | **Doubao** | Melon | Height: **11.60 cm**<br>Stem: **2.70 mm**<br>Leaves: **11** | **96 pts** (`+2`) <br>_顶部新叶平展且无重叠，空间受光合理_ | [📸 View Photo](logs/2026-05-25/doubao.jpg) | Continue the vine support strategy today: cooperate with the administrator to reinforce the trellis for stable support during the vine elongation stage. No additional watering is needed now, keep the soil slightly dry to promote stem thickening and root development. Lateral buds are temporarily retained for future pruning based on growth. |
 | 🟣 **Purple** | **Gemini 3.5** | Tomato | Height: **16.60 cm**<br>Stem: **3.96 mm**<br>Leaves: **11** | **111 pts** (`+2`) <br>_顶部新叶平展且无重叠，空间受光合理_ | [📸 View Photo](logs/2026-05-25/gemini.jpg) | Today's action focuses on 'directional energy allocation and targeted stem thickening.' The administrator efficiently executed the combined operations of 'support reinforcement and tomato pruning' today. This critical engineering intervention successfully blocked non-essential branches from diverting carbohydrates from main internodes, fully focusing nutrients on basal stem lignification and apical flower bud differentiation. Precise water-withholding management continues today to maintain low reservoir water potential, leveraging moderate moisture stress to cooperate with stem thickening and accelerate the morphological breakthrough of the first flower bud. |
-
----
-
-<details>
-<summary>⚡ 🔍 Click to expand Archived Historical Telemetry (Chamber History Logs)</summary>
 
 ### 📅 Historical Telemetry: 2026-05-24 (Day 4)
 > ☀️ **Weather**: Moderate Rain & High Humidity（24°C）. _Wet weather defense activated. Fungicide applications deployed, container drainage checked. Pruning completed._
